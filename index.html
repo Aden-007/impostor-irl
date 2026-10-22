@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>Impostor IRL</title>
+<style>
+:root{
+  --bg:#0b1020; --bg2:#121936; --card:#161d3b; --line:#262f5a;
+  --text:#e9edff; --muted:#93a0cf; --accent:#7c5cff; --ok:#22c55e; --bad:#ef4444; --warn:#f59e0b;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{min-height:100vh;background:radial-gradient(1200px 600px at 50% -200px,#232c66 0%,var(--bg) 60%)}
+#app{max-width:560px;margin:0 auto;padding:16px 16px 110px}
+h1{font-size:28px;margin:8px 0 2px;letter-spacing:.5px}
+h2{font-size:15px;margin:0 0 10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+p{margin:6px 0}
+.muted{color:var(--muted)} .small{font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0}
+.row{display:flex;gap:10px;align-items:center}
+.row.wrap{flex-wrap:wrap}
+.grow{flex:1}
+.btn{appearance:none;border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:700;color:#fff;background:var(--accent);cursor:pointer;min-height:48px;width:100%}
+.btn.inline{width:auto}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.ok{background:var(--ok)} .btn.bad{background:var(--bad)} .btn.warn{background:var(--warn);color:#201400}
+.btn.sel{outline:3px solid #fff}
+.btn.sm{min-height:38px;padding:8px 12px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input[type=text]{width:100%;background:#0e1430;border:1px solid var(--line);color:var(--text);border-radius:12px;padding:13px 14px;font:inherit;min-height:48px}
+input[type=text]:focus{outline:2px solid var(--accent);border-color:transparent}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#0e1430;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.code{font:800 44px/1 ui-monospace,Menlo,monospace;letter-spacing:8px;text-align:center;margin:6px 0}
+.banner{border-radius:14px;padding:12px 14px;margin:12px 0;font-size:14px;background:#2a2147;border:1px solid #4b3a8c}
+.banner.warn{background:#3a2b0b;border-color:#7a5a12}
+.banner.dead{background:#2b2b34;border-color:#555}
+.banner.win{background:#0f3a24;border-color:#1f7a4a;font-size:18px;text-align:center;font-weight:700}
+.banner.lose{background:#3a1313;border-color:#7a2222;font-size:18px;text-align:center;font-weight:700}
+.tabs{display:flex;gap:8px;margin:10px 0}
+.tab{flex:1;text-align:center;padding:10px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-weight:700;cursor:pointer}
+.tab.on{background:var(--accent);color:#fff;border-color:transparent}
+.bar{height:22px;background:#0e1430;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#16a34a,#4ade80);transition:width .8s ease}
+.pct{font-weight:800;font-size:13px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.task{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:#0e1430;border:1px solid var(--line);margin:8px 0}
+.task .ic{font-size:28px;width:40px;text-align:center}
+.task .tx{flex:1;min-width:0}
+.task .tx b{display:block}
+.task .tx span{display:block;font-size:13px;color:#c8d0f5}
+.task .tx small{display:block;color:var(--muted);margin-top:2px}
+.task .st{font-size:24px;color:var(--muted)}
+.task.done{border-color:#1f7a4a;background:#0c2a1c}
+.task.done .st{color:var(--ok)} .task.done b{text-decoration:line-through;opacity:.8}
+.role{text-align:center;border-radius:14px;padding:16px;margin:0}
+.role.crew{background:#0f3a5a;border:1px solid #2a6aa0}
+.role.imp{background:#4a1212;border:1px solid #a02a2a}
+.role b{font-size:22px;display:block}
+.person{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.person:last-child{border-bottom:0}
+.person.dead .nm{text-decoration:line-through;opacity:.55}
+.person .nm{flex:1}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#0e1430;border:1px solid var(--line);color:var(--muted)}
+.tag.imp{background:#4a1212;border-color:#a02a2a;color:#ffb4b4}
+.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:5}
+.dock .in{max-width:560px;margin:0 auto}
+.ov{position:fixed;inset:0;background:rgba(5,8,20,.88);z-index:20;display:flex;align-items:center;justify-content:center;padding:18px}
+#meetov .ov{z-index:30}
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;width:100%;max-width:420px;text-align:center;max-height:94vh;overflow:auto}
+#qr-reader{width:100%;min-height:240px;border-radius:12px;overflow:hidden;background:#000}
+.big{font-size:64px;line-height:1}
+.alarm{background:#3a1313;border-color:#ef4444;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 12px rgba(239,68,68,.25)}}
+#toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#0e1430;border:1px solid var(--line);padding:10px 16px;border-radius:12px;z-index:60;display:none;max-width:90vw;text-align:center}
+details summary{cursor:pointer;font-weight:700;padding:6px 0}
+.trow{margin:10px 0;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.trow .l1{display:flex;gap:8px;align-items:center}
+.trow input[type=checkbox]{width:22px;height:22px;flex:none}
+.trow input[type=text]{min-width:0;min-height:40px;padding:8px 10px}
+.trow .l2{margin-top:6px}
+.chk{display:flex;gap:10px;align-items:center;margin:10px 0}
+.chk input{width:22px;height:22px}
+a{color:#a99bff}
+.qrbox{display:flex;justify-content:center;background:#fff;border-radius:12px;padding:12px;width:fit-content;margin:10px auto}
+/* print sheet */
+body.print{background:#fff;color:#000}
+body.print #app{max-width:none;padding:10px}
+.sheetgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pcard{border:2px dashed #888;border-radius:10px;padding:10px;text-align:center;page-break-inside:avoid;color:#000}
+.pcard .qrc{display:flex;justify-content:center}
+.pname{font-size:20px;font-weight:800;margin-top:6px}
+.pcode{font:700 22px ui-monospace,Menlo,monospace;letter-spacing:4px}
+.psm{font-size:12px;color:#444}
+@media print{.no-print{display:none!important} .pcard{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<div id="overlay"></div>
+<div id="meetov"></div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+'use strict';
+const CFG = window.APP_CONFIG || {};
+const PER = CFG.tasksPerPlayer || 4;
+
+/* ------------------------------------------------------------------ */
+/*  Tasks. `v` = challenge variants; one is picked at random each time  */
+/*  a player does the task. {3-6} = random number, |20 = wait 20 secs.  */
+/*  IDs must stay unique. Names can also be changed by the host in-app. */
+/* ------------------------------------------------------------------ */
+const TASKS = [
+  {id:'wiring', icon:'🔌', name:'Fix Wiring', desc:'Reconnect the wires.', v:[
+    'Tap your fingers on the wall in a 1-2-3 pattern, {4-8} times.',
+    'Touch your thumb to each fingertip, left then right hand, {3-5} rounds.',
+    'Wiggle all ten fingers like live wires for 10 seconds.|10',
+    'Spell “WIRES” in the air with your elbow.']},
+  {id:'swipe', icon:'💳', name:'Swipe Card', desc:'Swipe at the right speed.', v:[
+    'Mime a card swipe: slow, normal, then too fast – 3 tries.',
+    'Do {3-6} slow-motion card swipes and count them out loud.',
+    'Swipe an imaginary card across your palm {4-7} times without a mistake.',
+    'Swipe, then say “Accepted” in your best robot voice.']},
+  {id:'garbage', icon:'🗑️', name:'Empty Garbage', desc:'Take out the trash.', v:[
+    'Mime lifting a heavy bag and dropping it – {3-5} times.',
+    'Crumple an imaginary paper and shoot it {3-6} times.',
+    'Do {5-8} calf raises while pulling an imaginary lever.',
+    'Squat {4-8} times, then shout “Trash out!”']},
+  {id:'fuel', icon:'⛽', name:'Fuel Engines', desc:'Fill the tanks.', v:[
+    'Do {5-10} slow squats, “carrying” a heavy fuel can.',
+    'Hold a plank for 20 seconds while “fuelling”.|20',
+    'Walk heel-to-toe for {6-10} steps carrying “fuel”.',
+    'Do {8-12} slow arm circles to pump the fuel.']},
+  {id:'download', icon:'⬇️', name:'Download Data', desc:'Wait for the download.', v:[
+    'Stand still and look up for 20 seconds while “downloading”.|20',
+    'Stay perfectly still for 15 seconds. No laughing!|15',
+    'Hum a progress-bar tune for 20 seconds.|20',
+    'Count backwards from {20-30} slowly while “downloading”.']},
+  {id:'upload', icon:'⬆️', name:'Upload Data', desc:'Send the data home.', v:[
+    'Hold both arms up like an antenna for 20 seconds.|20',
+    'Slowly raise your hands over 10 seconds, then say “Uploaded.”|10',
+    'Spin once clockwise and once anticlockwise while “syncing”.',
+    'Stand on one leg for 15 seconds, then switch legs.|15']},
+  {id:'o2', icon:'🌬️', name:'Clean O₂ Filter', desc:'Clear the filter.', v:[
+    'Take {3-5} deep breaths: in for 4, out for 4.',
+    'Blow out an imaginary candle {5-8} times.',
+    'Pick {5-10} imaginary leaves from the air and throw them away.',
+    'Fan yourself with both hands for 10 seconds.|10']},
+  {id:'align', icon:'🎯', name:'Align Engine', desc:'Line it up.', v:[
+    'Stand on one foot with your other foot lined up to your knee for 10 seconds.|10',
+    'Touch your left knee with your right elbow {4-8} times.',
+    'Balance an imaginary spoon on your nose for 10 seconds.|10',
+    'Hold your arms perfectly level for 10 seconds.|10']},
+  {id:'calibrate', icon:'🎛️', name:'Calibrate Distributor', desc:'Tune the dials.', v:[
+    'Press three “buttons” in the air: up, left, right – {2-4} times.',
+    'Turn an imaginary dial right, then left, {3-5} times.',
+    'Clap {2-4} times, snap {2-4} times, stomp {2-4} times.',
+    'Recite three numbers of your choice backwards.']},
+  {id:'course', icon:'🧭', name:'Chart Course', desc:'Plot the route.', v:[
+    'Point north, east, south, west, then face the nearest exit.',
+    'Trace a route in the air from here to the nearest door.',
+    'Walk {8-15} steps in a straight line, turn and walk back.',
+    'Turn slowly in a full circle, pointing at four landmarks.']},
+  {id:'shields', icon:'🛡️', name:'Prime Shields', desc:'Power up the shields.', v:[
+    'Cross your arms over your chest for 10 seconds.|10',
+    'Raise an imaginary shield and block {5-9} attacks.',
+    'Do {4-8} high-knee lifts to prime the shields.',
+    'Hold your palms forward like a force field for 15 seconds.|15']},
+  {id:'steering', icon:'🕹️', name:'Stabilize Steering', desc:'Keep it steady.', v:[
+    'Walk {6-10} steps in a wavy line, steering with both hands.',
+    'Hold an imaginary wheel steady for 15 seconds.|15',
+    'Turn the wheel left {2-4} times and right {2-4} times, calling each turn.',
+    'Balance on tiptoes for 10 seconds without wobbling.|10']},
+  {id:'asteroids', icon:'☄️', name:'Clear Asteroids', desc:'Blast them away.', v:[
+    '“Shoot” {5-10} asteroids by punching the air.',
+    'Dodge left and right {5-8} times.',
+    'Do {4-8} jumping jacks to clear the field.',
+    'Throw {5-8} imaginary rocks away from you.']},
+  {id:'reactor', icon:'☢️', name:'Start Reactor', desc:'Fire up the core.', v:[
+    'Repeat after yourself: clap, clap, stomp – {3-5} times.',
+    'Tap head, shoulders, knees, toes – {2-4} rounds.',
+    'Rub your hands together to “warm up” the reactor for 15 seconds.|15',
+    'Do {5-8} slow-motion jumping jacks.']},
+  {id:'plants', icon:'🪴', name:'Water Plants', desc:'Keep them alive.', v:[
+    'Mime watering a plant and count {5-10} drops out loud.',
+    'Crouch like a seed and slowly “grow” upward over 10 seconds.|10',
+    'Gently “pour” water in a circle {3-5} times.',
+    'Wave your arms like leaves in the wind for 10 seconds.|10']},
+  {id:'power', icon:'⚡', name:'Divert Power', desc:'Reroute the power.', v:[
+    'Flip an imaginary switch {3-6} times, then say “Power diverted.”',
+    'Do {4-8} wall push-ups (hands on a wall, lean in).',
+    'Hold both hands up and “charge up” for 10 seconds.|10',
+    'Stomp {5-9} times like you’re rerouting power.']}
+];
+const BYID = Object.fromEntries(TASKS.map(t => [t.id, t]));
+const LIMITS = [0,10,15,20,30,45,60,90,120];   // game time limit options (minutes, 0 = off)
+const MEETING_LIMITS = [30,60,90,120,180,300]; // seconds
+const KILL_LIMITS = [10,15,20,30,45,60]; // seconds
+
+/* ------------------------------ helpers ---------------------------- */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function hash(str){ // cyrb53
+  let h1=0xdeadbeef, h2=0x41c6ce57;
+  for(let i=0;i<str.length;i++){const ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+  h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return 4294967296*(2097151&h2)+(h1>>>0);
+}
+function makeToken(id){
+  let n = hash((CFG.taskSalt||'x')+':'+id), s='';
+  for(let i=0;i<6;i++){ s += ALPHA[n % 32]; n = Math.floor(n/32); }
+  return s;
+}
+const TOKENS = Object.fromEntries(TASKS.map(t => [t.id, makeToken(t.id)]));
+const TOKEN2TASK = Object.fromEntries(TASKS.map(t => [TOKENS[t.id], t.id]));
+const rnd = n => Math.floor(Math.random()*n);
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];} return a; };
+const randRoom = () => Array.from({length:4},()=>ALPHA[rnd(ALPHA.length)]).join('');
+const randPin = () => String(1000 + rnd(9000));
+const colorOf = name => `hsl(${hash(name)%360} 70% 60%)`;
+const BASE = location.origin + location.pathname.replace(/index\.html$/,'');
+const qs = new URLSearchParams(location.search);
+const PRINT = qs.get('print') === '1';
+const rolesOn = m => !m || m.roles !== false;
+const tname = (m, id) => (m && m.names && m.names[id]) || BYID[id].name;
+
+function fillNums(s){ return s.replace(/\{(\d+)-(\d+)\}/g, (_, a, b) => { a=+a; b=+b; return String(a + rnd(b-a+1)); }); }
+function pickVariant(t, playerId){
+  // Give each player a fresh variation for each scan, but avoid showing the
+  // exact same variant twice in a row for the same task during this round.
+  const round = S.g?.meta?.round || 1;
+  const key = `irl.taskVariant.${S.session?.room || 'local'}.${round}.${playerId || 'guest'}.${t.id}`;
+  const stored = sessionStorage.getItem(key);
+  const previous = stored === null ? -1 : Number(stored);
+  const choices = t.v.map((_, i) => i).filter(i => !Number.isInteger(previous) || previous < 0 || previous >= t.v.length || i !== previous);
+  const index = choices[rnd(choices.length)];
+  sessionStorage.setItem(key, String(index));
+  const [text, secs] = t.v[index].split('|');
+  // Number ranges are rolled independently, so even the same wording can
+  // have a different count or duration when the task is opened again.
+  return {text: fillNums(text), secs: secs ? +secs : 0};
+}
+
+function loadScript(src){
+  return new Promise((res, rej) => {
+    if ([...document.scripts].some(s => s.src === src)) return res();
+    const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('load '+src));
+    document.head.appendChild(s);
+  });
+}
+let toastTimer;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.style.display='none', 3200);
+}
+const vibrate = p => { try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} };
+
+/* ---------------------------- DB adapters -------------------------- */
+const clone = v => v === undefined ? null : JSON.parse(JSON.stringify(v));
+function makeDemo(){
+  const KEY='irl.demo.tree', subs=new Set();
+  const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
+  const save=t=>localStorage.setItem(KEY,JSON.stringify(t));
+  const keys=p=>p.split('/').filter(Boolean);
+  const getIn=(t,p)=>keys(p).reduce((a,k)=>a==null?undefined:a[k],t);
+  const setIn=(t,p,v)=>{const ks=keys(p);let o=t;for(let i=0;i<ks.length-1;i++){if(typeof o[ks[i]]!=='object'||o[ks[i]]===null)o[ks[i]]={};o=o[ks[i]];}
+    const k=ks[ks.length-1]; if(v===null||v===undefined)delete o[k]; else o[k]=v;};
+  const emit=()=>subs.forEach(f=>f());
+  window.addEventListener('storage',e=>{ if(e.key===KEY) emit(); });
+  return {
+    demo:true,
+    async get(p){return clone(getIn(load(),p));},
+    async set(p,v){const t=load();setIn(t,p,clone(v));save(t);emit();},
+    async update(p,o){const t=load();for(const k in o)setIn(t,p+'/'+k,clone(o[k]));save(t);emit();},
+    async transaction(p, updater){const t=load(), cur=clone(getIn(t,p));const next=updater(cur);if(next===undefined)return {committed:false,snapshot:cur};setIn(t,p,clone(next));save(t);emit();return {committed:true,snapshot:clone(next)};},
+    watch(p,cb){const f=()=>cb(clone(getIn(load(),p)));subs.add(f);setTimeout(f,0);return()=>subs.delete(f);}
+  };
+}
+async function makeFirebase(){
+  const v='10.12.2';
+  await loadScript(`https://www.gstatic.com/firebasejs/${v}/firebase-app-compat.js`);
+  await loadScript(`https://www.gstatic.com/firebasejs/${v}/firebase-database-compat.js`);
+  firebase.initializeApp(CFG.firebase);
+  const db = firebase.database();
+  return {
+    demo:false,
+    async get(p){const s=await db.ref(p).get();return s.val();},
+    set:(p,v)=>db.ref(p).set(v),
+    update:(p,o)=>db.ref(p).update(o),
+    async transaction(p, updater){const result=await db.ref(p).transaction(updater, undefined, false);return {committed:result.committed,snapshot:result.snapshot.val()};},
+    watch(p,cb){const r=db.ref(p);const f=r.on('value',s=>cb(s.val()));return()=>r.off('value',f);}
+  };
+}
+
+/* ------------------------------ state ------------------------------ */
+let DB, store, unsub = null;
+const S = { session:null, g:undefined, tab:'host', reveal:false, shown:0, pendingTok:null,
+            ending:false, closing:false, timeUp:false, task:null, taskTimer:null, impScreen:false, sheriffScreen:false,
+            meetInit:undefined, lastOpen:undefined, resultSeen:undefined };
+const saveSession = () => S.session ? store.setItem('irl.session', JSON.stringify(S.session)) : store.removeItem('irl.session');
+const path = (...p) => 'games/' + S.session.room + (p.length ? '/' + p.join('/') : '');
+
+/* --------------------------- game logic ---------------------------- */
+function pickTasks(ids, usage, combos){
+  let first = null;
+  for(let a=0;a<80;a++){
+    const jit = a < 40 ? 0.99 : 1.99;   // <1 = strictly balanced, >1 = looser
+    const pick = ids.map(id => ({id, s:(usage[id]||0)+Math.random()*jit}))
+      .sort((x,y)=>x.s-y.s).slice(0,PER).map(x=>x.id).sort();
+    first = first || pick;
+    if(!combos.has(pick.join(','))) return pick;
+  }
+  return first;
+}
+function usageOf(players){
+  const usage={}, combos=new Set();
+  Object.values(players||{}).forEach(p => { const ids=Object.keys(p.tasks||{}); ids.forEach(i=>usage[i]=(usage[i]||0)+1); if(ids.length) combos.add(ids.sort().join(',')); });
+  return {usage, combos};
+}
+const enabledIds = meta => TASKS.map(t=>t.id).filter(id => !(meta.off && meta.off[id]));
+
+function derive(g){
+  const players = Object.entries((g && g.players) || {}).map(([k,p]) => ({k, ...p})).sort((a,b)=>(a.joined||0)-(b.joined||0));
+  const crew = players.filter(p => p.role !== 'impostor');
+  let total=0, done=0;
+  crew.forEach(p => { const ids=Object.keys(p.tasks||{}); total+=ids.length; done+=ids.filter(i=>p.done&&p.done[i]).length; });
+  return {players, total, done, pct: total ? done/total : 0};
+}
+
+async function createGame(){
+  let room;
+  for(let i=0;i<20;i++){ room=randRoom(); if(!(await DB.get('games/'+room+'/meta'))) break; }
+  await DB.set('games/'+room+'/meta', {created:Date.now(), status:'lobby', roles:true, impostors:CFG.defaultImpostors ?? 2,
+                                      limit:0, confirmEject:false, anonymousVotes:false, meetingLimit:60, killCooldown:30, roleSheriff:true, roleMedic:true, roleMayor:true, hostPin:randPin(), round:1});
+  S.session = {room, host:true, me:null, name:null}; S.tab='host';
+  saveSession(); subscribe();
+}
+async function resumeHost(room, pin){
+  room = (room||'').trim().toUpperCase(); pin = (pin||'').trim();
+  const meta = await DB.get('games/'+room+'/meta');
+  if(!meta) return toast('Room not found');
+  if(String(meta.hostPin) !== pin) return toast('Wrong host PIN');
+  S.session = {room, host:true, me:null, name:null}; S.tab='host';
+  saveSession(); subscribe();
+}
+
+async function join(room, name, asHost){
+  room = (room||'').trim().toUpperCase(); name = (name||'').trim().replace(/\s+/g,' ');
+  if(room.length !== 4) return toast('Room code is 4 characters');
+  if(!name) return toast('Enter your name');
+  if(name.length > 16) return toast('Name is too long (max 16)');
+  const key = name.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]/g,'') || ('p'+hash(name).toString(36));
+  let g;
+  try { g = await DB.get('games/'+room); } catch(e){ return toast('Could not reach the game server'); }
+  if(!g || !g.meta) return toast('Room not found – check the code');
+  const existing = g.players && g.players[key];
+  if(existing){
+    if(!confirm(`"${existing.name}" is already in this game.\n\nTap OK if that's you and you're rejoining.`)) return;
+  } else {
+    if(g.meta.status === 'ended') return toast('This game has already ended');
+    if(Object.keys(g.players||{}).length >= (CFG.maxPlayers||20)) return toast('This game is full');
+    const p = {name, joined:Date.now()};
+    if(g.meta.status === 'playing'){            // late joiner: assign immediately
+      const {usage, combos} = usageOf(g.players);
+      const pick = pickTasks(enabledIds(g.meta), usage, combos);
+      p.role = 'crew'; p.tasks = Object.fromEntries(pick.map(i=>[i,true]));
+    }
+    await DB.set(`games/${room}/players/${key}`, p);
+  }
+  store.setItem('irl.name', name);
+  S.session = {room, me:key, name: existing ? existing.name : name, host: !!(asHost || (S.session && S.session.host && S.session.room===room))};
+  S.tab = S.session.host ? 'host' : 'play';
+  saveSession(); subscribe();
+}
+
+async function startGame(){
+  const g = S.g; const m = g.meta;
+  const players = Object.keys(g.players||{});
+  const ids = enabledIds(m);
+  if(players.length < 2) return toast('Need at least 2 players');
+  if(ids.length < PER) return toast(`Enable at least ${PER} tasks`);
+  const imp = rolesOn(m) ? Math.max(0, Math.min(m.impostors ?? 2, Math.floor((players.length-1)/2))) : 0;
+  const impSet = new Set(shuffle(players).slice(0, imp));
+  const usage = {}, combos = new Set(), up = {};
+  const startedAt = Date.now();
+  // A role is stored as one string per player. Assign each enabled special role
+  // to a different non-impostor key so no player can receive two roles.
+  const crewKeys = shuffle(players.filter(k => !impSet.has(k)));
+  const special = {};
+  const enabledRoles = rolesOn(m) ? shuffle([['sheriff',m.roleSheriff!==false],['medic',m.roleMedic!==false],['mayor',m.roleMayor!==false]].filter(x=>x[1]).map(x=>x[0])) : [];
+  shuffle(crewKeys).slice(0, enabledRoles.length).forEach((k,i) => { special[k] = enabledRoles[i]; });
+  shuffle(players).forEach(k => {
+    const pick = pickTasks(ids, usage, combos);
+    pick.forEach(i => usage[i]=(usage[i]||0)+1);
+    combos.add(pick.join(','));
+    up[`players/${k}/role`] = impSet.has(k) ? 'impostor' : (special[k] || 'crew');
+    up[`players/${k}/tasks`] = Object.fromEntries(pick.map(i=>[i,true]));
+    // Each impostor starts their own cooldown when the round begins.
+    up[`players/${k}/killCooldownStartedAt`] = impSet.has(k) ? startedAt : null;
+    ['done','dead','ejected','meetUsed','medicUsed','mayorUsed','sheriffUsed','killUsed'].forEach(f => up[`players/${k}/${f}`] = null);
+  });
+  up['meta/status']='playing'; up['meta/winner']=null; up['meta/startedAt']=startedAt;
+  up['meta/endsAt'] = m.limit > 0 ? Date.now() + m.limit*60000 : null;
+  up['meeting']=null;
+  await DB.update(path(), up);
+}
+async function newRound(){
+  const up = {};
+  Object.keys(S.g.players||{}).forEach(k => { ['role','tasks','done','dead','ejected','meetUsed','medicUsed','mayorUsed','sheriffUsed','killUsed'].forEach(f => up[`players/${k}/${f}`]=null); });
+  up['meta/status']='lobby'; up['meta/winner']=null; up['meta/endsAt']=null; up['meta/lastKillAt']=null; up['meta/round']=(S.g.meta.round||1)+1; up['meeting']=null;
+  Object.keys(S.g.players||{}).forEach(k => up[`players/${k}/killCooldownStartedAt`]=null);
+  S.ending=false; S.timeUp=false;
+  await DB.update(path(), up);
+}
+const endGame = winner => { if(!S.session?.host) return Promise.resolve(); return DB.update(path(), {'meta/status':'ended','meta/winner':winner}); };
+
+/* ----------------------- meetings & voting ------------------------- */
+async function callMeeting(kind, asHost){
+  const g = S.g, s = S.session;
+  if(asHost && !s?.host) return toast('Only the host can call a host meeting');
+  if(!g || !g.meta || g.meta.status !== 'playing') return toast("The game isn't running");
+  if(!asHost && (!s || !s.me || !g.players || !g.players[s.me])) return toast('Join the game first');
+  if(!rolesOn(g.meta)) return toast('Meetings are off when roles are off');
+  if(g.meeting && g.meeting.status === 'open') return toast('A meeting is already in progress');
+  const me = s.me && g.players && g.players[s.me];
+  const up = {meeting:{id:Date.now()+'-'+rnd(1e6), by: asHost ? 'Host' : (me ? me.name : 'Host'), kind, status:'open', at:Date.now(), endsAt:Date.now()+Math.max(10,Number(g.meta.meetingLimit)||60)*1000}};
+  if(!asHost){
+    if(!me) return;
+    if(me.dead) return toast("Eliminated players can't call meetings");
+    if(kind === 'meeting'){
+      if(me.meetUsed) return toast('You already used your emergency meeting');
+      up[`players/${s.me}/meetUsed`] = true;
+    }
+  }
+  await DB.update(path(), up);
+}
+async function vote(target){
+  const g = S.g, s = S.session; const me = g && s && s.me && g.players && g.players[s.me];
+  if(!g || g.meta.status!=='playing' || !me || me.dead || !g.meeting || g.meeting.status !== 'open') return;
+  const alive = derive(g).players.filter(p=>!p.dead);
+  if(target!=='skip' && !alive.some(p=>p.k===target)) return toast('That player is not eligible to receive a vote');
+  await DB.transaction(path(), current => { if(!current || current.meta?.status!=='playing' || current.meeting?.status!=='open') return; const voter=current.players?.[s.me]; if(!voter || voter.dead) return; const aliveNow=Object.entries(current.players||{}).filter(([k,p])=>!p.dead); if(target!=='skip' && !aliveNow.some(([k])=>k===target)) return; current.meeting.votes=current.meeting.votes||{}; current.meeting.votes[s.me]=target; return current; });
+}
+async function selfKill(){
+  const g = S.g, s = S.session; const me = g && s.me && g.players && g.players[s.me];
+  if(!me || me.dead || !g.meeting || g.meeting.status !== 'open') return;
+  await DB.update(path(), {[`players/${s.me}/dead`]:true, [`meeting/votes/${s.me}`]:null});
+}
+async function closeMeeting(){
+  if(!S.g || !S.g.meeting || S.g.meeting.status!=='open' || !S.session?.host) return;
+  const roomPath=path();
+  const result=await DB.transaction(roomPath, current=>{
+    if(!current || current.meta?.status!=='playing' || current.meeting?.status!=='open') return;
+    const players=Object.entries(current.players||{}).map(([k,p])=>({k,...p}));
+    const alive=players.filter(p=>!p.dead), votes=current.meeting.votes||{}, counts={};
+    alive.forEach(p=>{const v=votes[p.k];if(v&&(v==='skip'||alive.some(a=>a.k===v)))counts[v]=(counts[v]||0)+1;});
+    let top=null,max=0,tie=false;
+    Object.entries(counts).forEach(([k,n])=>{if(n>max){max=n;top=k;tie=false;}else if(n===max)tie=true;});
+    const ejected=(top&&top!=='skip'&&!tie)?top:null;
+    const res={ejected:ejected||null,name:ejected?current.players[ejected].name:null};
+    if(ejected){current.players[ejected].dead=true;current.players[ejected].ejected=true;if(current.meta.confirmEject)res.role=current.players[ejected].role==='impostor'?'impostor':'crew';}
+    const after=players.filter(p=>!p.dead&&p.k!==ejected);
+    if(players.some(p=>p.role==='impostor')){const aImp=after.filter(p=>p.role==='impostor').length,aCrew=after.length-aImp;if(aImp===0){current.meta.status='ended';current.meta.winner='crew';}else if(aImp>=aCrew){current.meta.status='ended';current.meta.winner='impostor';}}
+    current.meeting.status='closed';current.meeting.result=res;return current;
+  });
+  if(!result.committed){ S.closing=false; toast('Meeting was already resolved or the game has ended'); }
+}
+
+/* ---------------------------- game clock --------------------------- */
+function clockText(m){
+  if(!m.endsAt) return '';
+  const r = Math.max(0, Math.round((m.endsAt - Date.now())/1000));
+  const h = Math.floor(r/3600), mm = String(Math.floor(r%3600/60)).padStart(2,'0'), ss = String(r%60).padStart(2,'0');
+  return (h ? h+':' : '') + mm + ':' + ss;
+}
+function tickClock(){
+  const g = S.g;
+  tickMeetingClock();
+  if(!g || !g.meta){ return; }
+  const cooldownLabel = $('#kill-cooldown');
+  const sessionMe = S.session && g.players && g.players[S.session.me];
+  if(cooldownLabel && sessionMe && sessionMe.role==='impostor') {
+    const started = Number(sessionMe.killCooldownStartedAt || g.meta.startedAt || Date.now());
+    const left = Math.max(0, Math.ceil((started + (Number(g.meta.killCooldown)||30)*1000 - Date.now())/1000));
+    cooldownLabel.textContent = left ? left+'s' : 'READY';
+    document.querySelectorAll('[data-kill-button]').forEach(b => { b.disabled = left > 0; });
+  }
+  if(g.meta.status !== 'playing' || !g.meta.endsAt){ S.timeUp = false; return; }
+  const c = $('#clock'); if(c) c.textContent = '⏱ ' + clockText(g.meta);
+  if(Date.now() >= g.meta.endsAt && !S.timeUp){ S.timeUp = true; endGame(rolesOn(g.meta) ? 'impostor' : 'time'); }
+}
+function tickMeetingClock(){
+  const g=S.g, mt=g&&g.meeting; if(!mt||mt.status!=='open') return;
+  const left=Math.max(0,Math.ceil(((mt.endsAt||Date.now())-Date.now())/1000));
+  const el=$('#meeting-clock'); if(el) el.textContent='⏱ '+left+'s remaining';
+  if(left<=0 && !S.closing){ S.closing=true; closeMeeting(); }
+}
+setInterval(tickClock, 1000);
+
+/* ---------------------- QR verification flow ----------------------- */
+function parseToken(txt){
+  txt = (txt||'').trim();
+  try { const u = new URL(txt); const t = u.searchParams.get('t'); if(t) return t.toUpperCase(); } catch(e){}
+  return /^[A-Za-z0-9]{6}$/.test(txt) ? txt.toUpperCase() : null;
+}
+function showResult(ok, icon, title, msg){
+  vibrate(ok ? [60,40,60] : [200]);
+  const ov = $('#overlay');
+  ov.innerHTML = `<div class="ov" data-act="close-result"><div class="sheet"><div class="big">${icon}</div><h1>${esc(title)}</h1><p class="muted">${esc(msg)}</p><button class="btn ${ok?'ok':'ghost'}" style="margin-top:12px">OK</button></div></div>`;
+  clearTimeout(showResult.t); showResult.t = setTimeout(()=>{ if(ov.querySelector('[data-act=close-result]')) ov.innerHTML=''; }, 3500);
+}
+// returns null if the scan is OK to proceed, otherwise {ok,icon,title,msg}
+function scanProblem(id){
+  const g = S.g, s = S.session, t = BYID[id];
+  if(!g || !g.meta) return {ok:false, icon:'⚠️', title:'Game not found', msg:'This room no longer exists.'};
+  if(g.meta.status === 'lobby') return {ok:false, icon:'⏳', title:'Not started yet', msg:'Wait for the host to start the game.'};
+  if(g.meta.status === 'ended') return {ok:false, icon:'🏁', title:'Game over', msg:'This round has ended.'};
+  if(g.meeting && g.meeting.status === 'open') return {ok:false, icon:'🚨', title:'Meeting in progress', msg:'Tasks are paused until the meeting ends.'};
+  const me = g.players && g.players[s.me];
+  if(!me) return {ok:false, icon:'⚠️', title:'Not in game', msg:'You are not in this game.'};
+  if(!(me.tasks && me.tasks[id])) return {ok:false, icon:'🚫', title:'Not your task', msg:"This isn't one of your tasks. Keep moving."};
+  if(me.done && me.done[id]) return {ok:true, icon:'✔️', title:'Already done', msg:`${tname(g.meta,id)} is already complete.`};
+  return null;
+}
+async function handleToken(tok){
+  const id = TOKEN2TASK[tok];
+  if(!id) return showResult(false,'❓','Unknown code',"That QR isn't part of this game.");
+  const s = S.session;
+  if(!s || !s.me){ S.pendingTok = tok; sessionStorage.setItem('irl.pending', tok); toast('Join the game first – your scan will be applied'); render(); return; }
+  if(S.g === undefined){ S.pendingTok = tok; return; }
+  const p = scanProblem(id);
+  if(p) return showResult(p.ok, p.icon, p.title, p.msg);
+  openTask(id);
+}
+function openTask(id){
+  const m = S.g.meta, t = BYID[id], v = pickVariant(t, S.session?.me);
+  clearInterval(S.taskTimer);
+  S.task = {id, text:v.text, secs:v.secs};
+  $('#overlay').innerHTML = `<div class="ov"><div class="sheet"><div class="big">${t.icon}</div><h1>${esc(tname(m,id))}</h1>
+    <p style="font-size:18px;margin:10px 0">${esc(v.text)}</p>
+    <button class="btn ok" id="taskdone" data-act="task-done" style="margin-top:12px" ${v.secs?'disabled':''}>${v.secs?`Wait ${v.secs}s…`:'✔ I did it'}</button>
+    <button class="btn ghost" data-act="task-cancel" style="margin-top:8px">Cancel</button></div></div>`;
+  if(v.secs){
+    const end = Date.now() + v.secs*1000;
+    S.taskTimer = setInterval(() => {
+      const b = $('#taskdone'); if(!b){ clearInterval(S.taskTimer); return; }
+      const left = Math.ceil((end - Date.now())/1000);
+      if(left <= 0){ clearInterval(S.taskTimer); b.disabled = false; b.textContent = '✔ I did it'; }
+      else b.textContent = `Wait ${left}s…`;
+    }, 250);
+  }
+}
+function cancelTask(){ clearInterval(S.taskTimer); S.task = null; $('#overlay').innerHTML = ''; }
+async function finishTask(){
+  const tk = S.task, s = S.session; if(!tk || !s || !s.me) return;
+  clearInterval(S.taskTimer); S.task = null; $('#overlay').innerHTML = '';
+  const p = scanProblem(tk.id);
+  if(p) return showResult(p.ok, p.icon, p.title, p.msg);
+  await DB.set(path('players', s.me, 'done', tk.id), Date.now());
+  showResult(true, BYID[tk.id].icon, 'Task complete!', tname(S.g.meta, tk.id));
+}
+
+let scanner = null;
+async function openScanner(){
+  const ov = $('#overlay');
+  ov.innerHTML = `<div class="ov"><div class="sheet">
+    <h2>Scan task QR</h2>
+    <div id="qr-reader"></div>
+    <p class="small muted" id="scanmsg">Point the camera at the QR code.</p>
+    <form data-form="code" class="row" style="margin-top:8px">
+      <input type="text" name="code" placeholder="…or type the 6-letter code" maxlength="6" autocapitalize="characters" autocomplete="off">
+      <button class="btn inline sm" type="submit">Go</button>
+    </form>
+    <button class="btn ghost" data-act="close-scan" style="margin-top:10px">Close</button></div></div>`;
+  try{
+    await loadScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+    scanner = new Html5Qrcode('qr-reader');
+    await scanner.start({facingMode:'environment'}, {fps:10, qrbox:{width:220,height:220}}, txt => {
+      const tok = parseToken(txt); if(tok){ closeScanner().then(()=>handleToken(tok)); }
+    }, () => {});
+  }catch(e){
+    const m = $('#scanmsg'); if(m) m.textContent = 'Camera unavailable – type the code printed under the QR, or use your phone’s normal camera app.';
+  }
+}
+async function closeScanner(){
+  try{ if(scanner){ await scanner.stop(); scanner.clear(); } }catch(e){}
+  scanner = null; $('#overlay').innerHTML = '';
+}
+
+/* ----------------------------- subscribe --------------------------- */
+function subscribe(){
+  if(unsub){ unsub(); unsub=null; }
+  S.g = undefined; S.meetInit = undefined; S.lastOpen = undefined; S.resultSeen = undefined; S.closing = false; S.timeUp = false;
+  const mo = $('#meetov'); if(mo) mo.innerHTML = '';
+  if(!S.session){ render(); return; }
+  unsub = DB.watch(path(), g => { S.g = g; onData(); });
+  render();
+}
+function onData(){
+  const g = S.g, s = S.session;
+  if(g && g.meta){
+    // removed from game
+    if(s.me && !(g.players && g.players[s.me])){
+      toast('You were removed from the game'); s.me = null; s.name = null; saveSession();
+      if(!s.host){ S.session = null; saveSession(); subscribe(); return; }
+    }
+    const d = derive(g);
+    // Win detection after tasks, kills, or sheriff actions (idempotent).
+    if(g.meta.status==='playing' && s?.host && !S.ending){
+      if(d.total>0 && d.done>=d.total){ S.ending=true; endGame('crew'); }
+      else if(rolesOn(g.meta) && d.players.some(p=>p.role==='impostor')){
+        const alive=d.players.filter(p=>!p.dead), imps=alive.filter(p=>p.role==='impostor').length, crew=alive.length-imps;
+        if(imps===0){ S.ending=true; endGame('crew'); }
+        else if(imps>=crew){ S.ending=true; endGame('impostor'); }
+      }
+    }
+    if(g.meta.status!=='playing') S.ending = false;
+    // auto-close a meeting once every living player has voted
+    const mt = g.meeting;
+    if(mt && mt.status==='open' && g.meta.status==='playing' && !S.closing){
+      const alive = d.players.filter(p => !p.dead), votes = mt.votes || {};
+      if(alive.length && alive.every(p => votes[p.k]) && s.host){ S.closing = true; closeMeeting(); }
+    }
+    if(!mt || mt.status!=='open') S.closing = false;
+    // pending scan
+    if(S.pendingTok && s.me){ const t=S.pendingTok; S.pendingTok=null; sessionStorage.removeItem('irl.pending'); handleToken(t); }
+  }
+  renderMeeting();
+  scheduleRender();
+}
+
+function renderMeeting(){
+  const el = $('#meetov'); if(!el) return;
+  const g = S.g, s = S.session, mt = g && g.meeting;
+  if(!s || !g || !g.meta || !mt || g.meta.status === 'lobby'){ el.innerHTML=''; return; }
+  if(S.meetInit === undefined){ S.meetInit = true; if(mt.status === 'closed') S.resultSeen = mt.id; }
+  const d = derive(g), me = s.me && g.players && g.players[s.me];
+  if(mt.status === 'open'){
+    if(S.lastOpen !== mt.id){
+      S.lastOpen = mt.id; vibrate([400,150,400,150,400]);
+      if(S.task) cancelTask();
+    }
+    const alive = d.players.filter(p => !p.dead), votes = mt.votes || {};
+    const voted = alive.filter(p => votes[p.k]).length;
+    const mine = me && votes[s.me];
+    let body = '';
+    if(me && !me.dead){
+      body += `<h2 style="margin-top:12px">Vote to eject</h2>` +
+        alive.filter(p => p.k !== s.me).map(p => `<button class="btn ghost ${mine===p.k?'sel':''}" style="margin:5px 0" data-act="vote" data-v="${esc(p.k)}"><span class="dot" style="background:${colorOf(p.name)}"></span> ${esc(p.name)}</button>`).join('') +
+        `<button class="btn ghost ${mine==='skip'?'sel':''}" style="margin:5px 0" data-act="vote" data-v="skip">⏭ Skip vote</button>` +
+        `<button class="btn ghost sm" style="margin-top:12px" data-act="selfkill">☠ I was killed – confirm I'm out</button>`;
+    } else if(me){
+      body += `<p class="muted" style="margin-top:12px">You're eliminated. You can watch, but not vote.</p>`;
+    }
+    if(me && !me.dead && me.role==='mayor' && !me.mayorUsed) body += `<div class="banner"><b>👑 Mayor power</b><p class="small">Choose one player to eject immediately as a unanimous vote. One use per round.</p>${alive.filter(p=>p.k!==s.me).map(p=>`<button class="btn warn sm" style="margin:4px 0" data-act="mayor-eject" data-v="${esc(p.k)}">👑 Decree: eject ${esc(p.name)}</button>`).join('')}</div>`;
+    if(!g.meta.anonymousVotes){ const voteLines=alive.filter(p=>votes[p.k]).map(p=>`<div class="person"><span class="nm">${esc(p.name)}</span><span class="tag">${votes[p.k]==='skip'?'Skipped':esc((g.players[votes[p.k]]||{}).name||'Unknown')}</span></div>`).join(''); if(voteLines) body += `<details style="text-align:left;margin-top:10px"><summary>Vote details (not anonymous)</summary>${voteLines}</details>`; }
+    if(s.host) body += `<button class="btn warn" style="margin-top:12px" data-act="closemeet">Close meeting &amp; count votes</button>`;
+    el.innerHTML = `<div class="ov"><div class="sheet alarm"><div class="big">🚨</div>
+      <h1>${mt.kind==='body' ? 'BODY REPORTED' : 'EMERGENCY MEETING'}</h1>
+      <p>Called by <b>${esc(mt.by)}</b></p>
+      <p class="small muted">Gather and discuss in person, then vote here.<br><b>${voted} of ${alive.length}</b> votes in. ${g.meta.anonymousVotes?'Votes are anonymous.':'Vote details are visible.'}<br><b id="meeting-clock">⏱ ${Math.max(0,Math.ceil(((mt.endsAt||Date.now()+60000)-Date.now())/1000))}s remaining</b></p>${body}</div></div>`;
+  } else if(S.resultSeen !== mt.id){
+    const r = mt.result || {};
+    const ended = g.meta.status === 'ended';
+    const roleLine = r.ejected && r.role ? `<p>${esc(r.name)} was ${r.role==='impostor'?'an <b>Impostor</b>':'<b>not</b> an Impostor'}.</p>` : '';
+    const winLine = ended ? `<p style="font-weight:700">${g.meta.winner==='crew' ? '🎉 Crewmates win!' : '🔪 Impostors win!'}</p>` : '';
+    el.innerHTML = `<div class="ov"><div class="sheet"><div class="big">${r.ejected?'🚪':'🤝'}</div>
+      <h1>${r.ejected ? esc(r.name)+' was ejected' : 'No one was ejected'}</h1>
+      ${r.ejected ? '' : '<p class="muted">Tie or skipped vote.</p>'}${roleLine}${winLine}
+      <button class="btn" style="margin-top:12px" data-act="meet-ok">Continue</button></div></div>`;
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+/* ------------------------------ render ----------------------------- */
+let dirty=false;
+const typing = () => { const a=document.activeElement; return a && a.tagName==='INPUT' && a.type==='text' && $('#app').contains(a); };
+function scheduleRender(){ if(typing()){ dirty=true; return; } render(); }
+document.addEventListener('focusout', () => setTimeout(()=>{ if(dirty && !typing()){ dirty=false; render(); } }, 250));
+
+function render(){
+  const app = $('#app'); dirty=false;
+  if(PRINT){ renderPrint(); return; }
+  const s = S.session;
+  if(!s){ app.innerHTML = homeView(); return; }
+  if(S.g === undefined){ app.innerHTML = `<div class="card muted">Connecting…</div>`; return; }
+  const g = S.g;
+  if(!g || !g.meta){
+    app.innerHTML = `<div class="card"><h1>Room not found</h1><p class="muted">This game doesn't exist (anymore).</p><button class="btn" data-act="leave">Back</button></div>`; return;
+  }
+  const d = derive(g);
+  const me = s.me && g.players && g.players[s.me];
+  const tab = (s.host && me) ? S.tab : (s.host ? 'host' : 'play');
+  let html = `<div class="top"><span class="chip">Room <b>${esc(s.room)}</b></span>
+      <span class="chip">${me ? `<span class="dot" style="background:${colorOf(me.name)}"></span>${esc(me.name)}` : 'Host'}</span>
+      ${s.host ? '' : `<button class="btn ghost sm inline" data-act="leave">Leave</button>`}</div>`;
+  if(s.host && me){
+    html += `<div class="tabs"><button class="tab ${tab==='host'?'on':''}" data-act="tab" data-v="host">Host controls</button><button class="tab ${tab==='play'?'on':''}" data-act="tab" data-v="play">My tasks</button></div>`;
+  }
+  if(g.meta.status !== 'lobby') html += progressView(g, d);
+  html += tab==='host' ? hostView(g, d, me) : playView(g, d, me);
+  app.innerHTML = html;
+  const fill = $('.fill'); if(fill){ const to = Math.round(d.pct*100); requestAnimationFrame(()=>requestAnimationFrame(()=>{ fill.style.width = to+'%'; })); S.shown = to; }
+  if(tab==='host' && $('#joinqr')) drawJoinQR(s.room);
+}
+
+function progressView(g, d){
+  const pct = Math.round(d.pct*100), w = g.meta.winner;
+  const win = g.meta.status==='ended' ? (w==='crew'
+      ? `<div class="banner win">🎉 Crewmates win – all tasks completed!</div>`
+      : w==='impostor' ? `<div class="banner lose">🔪 Impostors win!</div>`
+      : w==='time' ? `<div class="banner lose">⏰ Time's up – the tasks weren't finished.</div>`
+      : `<div class="banner">The host ended the game.</div>`) : '';
+  const clock = g.meta.status==='playing' && g.meta.endsAt ? `<span id="clock">⏱ ${clockText(g.meta)}</span>` : '';
+  return `${win}<div class="card"><div class="pct"><span>TOTAL TASKS COMPLETED</span>${clock}<span>${pct}%</span></div>
+    <div class="bar"><div class="fill" style="width:${S.shown||0}%"></div></div></div>`;
+}
+
+function homeView(){
+  const pending = S.pendingTok || sessionStorage.getItem('irl.pending');
+  const room = (qs.get('room')||'').toUpperCase().slice(0,4);
+  return `<h1>🛰️ Impostor IRL</h1><p class="muted">Real-life crewmate tasks, live shared progress.</p>
+    ${DB.demo ? `<div class="banner warn"><b>Demo mode.</b> Firebase isn't configured, so data only syncs between tabs on this device. See README.md.</div>` : ''}
+    ${pending ? `<div class="banner">You scanned a task QR. Join a game and it will be logged automatically.</div>` : ''}
+    <form class="card" data-form="join">
+      <h2>Join a game</h2>
+      <label>Room code</label><input type="text" name="room" value="${esc(room)}" maxlength="4" autocapitalize="characters" autocomplete="off" placeholder="ABCD">
+      <label>Your name</label><input type="text" name="name" value="${esc(store.getItem('irl.name')||'')}" maxlength="16" autocomplete="off" placeholder="e.g. Priya">
+      <button class="btn" style="margin-top:14px" type="submit">Join</button>
+    </form>
+    <div class="card"><h2>Organiser?</h2><button class="btn ghost" data-act="create">Host a new game</button>
+    <p class="small muted" style="margin-top:8px"><a href="?print=1" target="_blank">Open printable task QR sheet</a></p>
+    <details><summary class="small">Resume hosting a game</summary>
+      <form data-form="resume"><label>Room code</label><input type="text" name="room" maxlength="4" autocapitalize="characters" autocomplete="off">
+      <label>Host PIN</label><input type="text" name="pin" maxlength="4" inputmode="numeric" autocomplete="off">
+      <button class="btn ghost" style="margin-top:10px" type="submit">Resume</button></form></details></div>`;
+}
+
+function playView(g, d, me){
+  const m = g.meta; if(!me) return '';
+  const roles = rolesOn(m);
+  if(m.status==='lobby'){
+    return `<div class="card"><h1>Waiting for the host…</h1><p class="muted">You're in. Tasks${roles?' and roles are':' are'} handed out when the game starts.</p></div>` + rosterView(g,d,me,false);
+  }
+  if(m.status==='ended') return rosterView(g,d,me,true);
+  const imp = me.role==='impostor';
+  const myTasks = Object.keys(me.tasks||{}).filter(i=>BYID[i]);
+  let html = '';
+  if(roles){
+    const roleNames={impostor:'🔪 IMPOSTOR',sheriff:'🤠 SHERIFF',medic:'🩺 MEDIC',mayor:'👑 MAYOR',crew:'🧑‍🚀 CREWMATE'};
+    const roleTips={impostor:'Your tasks are decoys. Use your kill screen when the cooldown is ready.',sheriff:'You may attempt one kill. If your target is a crewmate, you die instead.',medic:'Revive one dead crewmate by sacrificing yourself. One use per round.',mayor:'During a meeting, decree one player ejected as a unanimous vote. One use per round.',crew:'Finish your tasks and spot the impostors.'};
+    html += `<div class="card"><div class="role ${S.reveal ? (imp?'imp':'crew') : ''}" ${S.reveal?'':'style="background:#0e1430;border:1px dashed var(--line)"'}>
+      ${S.reveal ? `<b>${roleNames[me.role]||roleNames.crew}</b><span class="small">${roleTips[me.role]||roleTips.crew}</span><button class="btn ghost sm" style="margin-top:10px" data-act="reveal">Hide role</button>` : `<button class="btn ghost" data-act="reveal">👁 Tap to reveal my role</button>`}</div></div>`;
+  } else {
+    html += `<div class="banner">No roles this game – everyone is crew. Finish all the tasks together!</div>`;
+  }
+  if(me.dead) html += `<div class="banner dead">☠ You're eliminated. You can still finish your tasks, but you can't vote or call meetings.</div>`;
+  if(imp && !me.dead){ html += `<div class="card"><div class="row"><b class="grow">Impostor controls</b><button class="btn ${S.impScreen?'bad':'ghost'} sm inline" data-act="impscreen">${S.impScreen?'Switch to fake tasks':'Switch to impostor screen'}</button></div>${S.impScreen?impostorScreen(g,d,me):'<p class="small muted">Stay on fake tasks to blend in, or switch to the kill screen when ready.</p>'}</div>`; }
+  if(S.reveal && me.role==='sheriff' && !me.dead){ html += `<div class="card"><div class="row"><b class="grow">Sheriff controls</b><button class="btn ${S.sheriffScreen?'bad':'ghost'} sm inline" data-act="sheriffscreen">${S.sheriffScreen?'Switch to tasks':'Switch to sheriff screen'}</button></div>${S.sheriffScreen?sheriffScreen(g,d,me):'<p class="small muted">Switch to the sheriff screen to inspect living players and use your one shot.</p>'}</div>`; }
+  if(S.reveal && me.role==='medic' && !me.dead && !me.medicUsed){ const deadCrew=d.players.filter(p=>p.dead&&p.role!=='impostor'); html += `<div class="card"><h2>🩺 Medic ability</h2><p class="small muted">Revive one dead crewmate. You sacrifice yourself.</p>${deadCrew.length?deadCrew.map(p=>`<button class="btn ghost sm" style="margin:4px 0" data-act="medic-revive" data-v="${esc(p.k)}">❤️ Revive ${esc(p.name)} (sacrifice self)</button>`).join(''):'<p class="muted small">No dead crewmates to revive yet.</p>'}</div>`; }
+  if(!((imp && S.impScreen) || (me.role==='sheriff' && S.sheriffScreen))){
+    html += `<h2>Your tasks (${myTasks.filter(i=>me.done&&me.done[i]).length}/${myTasks.length})</h2>`;
+    html += myTasks.map(id => {
+      const t = BYID[id], done = me.done && me.done[id]; const loc = m.locs && m.locs[id];
+      return `<div class="task ${done?'done':''}"><div class="ic">${t.icon}</div><div class="tx"><b>${esc(tname(m,id))}</b><span>📍 ${esc(loc||'Find the QR code')}</span><small>${esc(t.desc)}</small></div><div class="st">${done?'✔':'○'}</div></div>`;
+    }).join('');
+  }
+  if(roles && !me.dead){
+    html += `<div class="row wrap" style="margin-top:12px">
+      <button class="btn warn sm grow" data-act="meeting" data-kind="meeting" ${me.meetUsed?'disabled':''}>🚨 Emergency meeting${me.meetUsed?' (used)':''}</button>
+      <button class="btn ghost sm grow" data-act="meeting" data-kind="body">🗣 Report body</button></div>
+      <p class="small muted">You can only mark yourself eliminated during a meeting.</p>`;
+  }
+  html += rosterView(g,d,me,false);
+  if(!((imp && S.impScreen) || (me.role==='sheriff' && S.sheriffScreen))) html += `<div class="dock"><div class="in"><button class="btn" data-act="scan" style="font-size:18px">📷 Scan task QR</button></div></div>`;
+  return html;
+}
+
+function impostorScreen(g,d,me){
+  const cooldownStart = Number(me.killCooldownStartedAt || g.meta.startedAt || Date.now());
+  const left=Math.max(0,Math.ceil((cooldownStart+(Number(g.meta.killCooldown)||30)*1000-Date.now())/1000));
+  const targets=d.players.filter(p=>!p.dead&&p.role!=='impostor');
+  return `<div class="banner lose">🔪 Impostor mode</div><p class="small muted">Your kill cooldown: <b id="kill-cooldown">${left?left+'s':'READY'}</b></p><p class="small muted">Choose a target below. Only mark a kill when you are physically nearby.</p>${targets.map(p=>`<button class="btn ghost sm" style="margin:4px 0" data-act="impostor-kill" data-kill-button="1" data-v="${esc(p.k)}" ${left?'disabled':''}>☠ Kill ${esc(p.name)}</button>`).join('')}`;
+}
+
+function sheriffScreen(g,d,me){
+  const used=!!me.sheriffUsed;
+  const targets=d.players.filter(p=>!p.dead&&p.k!==S.session.me);
+  return `<div class="banner lose">🤠 Sheriff mode</div><p class="small muted">You have one shot per round. If you shoot an impostor, they die. If you shoot a crewmate, you die instead.</p>${used?'<p class="small muted">Your shot has been used.</p>':targets.length?targets.map(p=>`<button class="btn ghost sm" style="margin:4px 0" data-act="sheriff-kill" data-v="${esc(p.k)}">🔫 Shoot ${esc(p.name)}</button>`).join(''):'<p class="small muted">No living targets.</p>'}`;
+}
+
+function rosterView(g, d, me, reveal){
+  const roles = rolesOn(g.meta);
+  return `<div class="card"><h2>Crew (${d.players.length})</h2>${d.players.map(p=>
+    `<div class="person ${p.dead?'dead':''}"><span class="dot" style="background:${colorOf(p.name)}"></span><span class="nm">${esc(p.name)}${me&&p.k===S.session.me?' (you)':''}</span>
+     ${reveal && roles && p.role ? `<span class="tag ${p.role==='impostor'?'imp':''}">${p.role==='impostor'?'impostor':'crew'}</span>` : ''}
+     ${p.ejected?'<span class="tag">ejected</span>':p.dead?'<span class="tag">☠</span>':''}</div>`).join('') || '<p class="muted">No one yet.</p>'}</div>`;
+}
+
+function hostView(g, d, me){
+  const m = g.meta, s = S.session, roles = rolesOn(m);
+  const link = `${BASE}?room=${s.room}`;
+  let html = `<div class="card"><div class="row"><span class="grow small muted">Host PIN – lets you recover host controls</span><b style="font:800 20px ui-monospace,monospace;letter-spacing:3px">${esc(m.hostPin||'—')}</b></div></div>`;
+  const qr = `<div class="qrbox"><div id="joinqr"></div></div>
+      <p class="small muted" style="text-align:center;word-break:break-all">${esc(link)}</p>
+      <button class="btn ghost" data-act="copy" data-v="${esc(link)}">Copy invite link</button>`;
+  if(m.status==='lobby') html += `<div class="card"><h2>Invite players</h2><div class="code">${esc(s.room)}</div>${qr}</div>`;
+  else html += `<div class="card"><details><summary>Join code &amp; QR for late joiners (${esc(s.room)})</summary>${qr}</details></div>`;
+  html += `<div class="card"><h2>Players (${d.players.length})</h2>${d.players.map(p=>
+    `<div class="person"><span class="dot" style="background:${colorOf(p.name)}"></span><span class="nm">${esc(p.name)}</span>
+     ${roles&&p.role==='impostor'?'<span class="tag imp">impostor</span>':''}${p.dead?'<span class="tag">☠</span>':''}
+     ${p.dead?`<button class="btn ghost sm inline" data-act="revive" data-v="${esc(p.k)}">Revive</button>`:''}
+     <button class="btn ghost sm inline" data-act="kick" data-v="${esc(p.k)}">✕</button></div>`).join('') || '<p class="muted">Waiting for players to join…</p>'}</div>`;
+  if(!me){
+    html += `<form class="card" data-form="hostjoin"><h2>Playing too?</h2><label>Your name</label>
+      <input type="text" name="name" maxlength="16" placeholder="Your name" value="${esc(store.getItem('irl.name')||'')}"><button class="btn" style="margin-top:10px" type="submit">Join as a player</button></form>`;
+  }
+  if(m.status==='lobby'){
+    const lim = m.limit || 0;
+    html += `<div class="card"><h2>Game setup</h2>
+      <label class="chk"><input type="checkbox" data-act="toggleroles" ${roles?'checked':''}> <span>Roles on (impostors, meetings &amp; voting)</span></label>
+      ${roles ? `<div class="row"><span class="grow">Impostors</span><button class="btn ghost sm inline" data-act="imp" data-v="-1">−</button><b style="min-width:24px;text-align:center">${m.impostors ?? 2}</b><button class="btn ghost sm inline" data-act="imp" data-v="1">+</button></div>
+      <label class="chk"><input type="checkbox" data-act="toggleconfirm" ${m.confirmEject?'checked':''}> <span>Reveal the role of an ejected player</span></label><p class="small muted">Special roles (at most one of each per round)</p><label class="chk"><input type="checkbox" data-act="role-sheriff" data-v="1" ${m.roleSheriff!==false?'checked':''}> <span>Enable Sheriff</span></label><label class="chk"><input type="checkbox" data-act="role-medic" data-v="1" ${m.roleMedic!==false?'checked':''}> <span>Enable Medic</span></label><label class="chk"><input type="checkbox" data-act="role-mayor" data-v="1" ${m.roleMayor!==false?'checked':''}> <span>Enable Mayor</span></label>` : `<p class="small muted">Everyone is crew; no meetings or voting.</p>`}
+      <div class="row" style="margin-top:6px"><span class="grow">Time limit</span><button class="btn ghost sm inline" data-act="limit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${lim?lim+' min':'Off'}</b><button class="btn ghost sm inline" data-act="limit" data-v="1">+</button></div>
+      ${roles ? `<div class="row" style="margin-top:10px"><span class="grow">Meeting timer</span><button class="btn ghost sm inline" data-act="meetinglimit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.meetingLimit||60}s</b><button class="btn ghost sm inline" data-act="meetinglimit" data-v="1">+</button></div><div class="row" style="margin-top:10px"><span class="grow">Impostor kill cooldown</span><button class="btn ghost sm inline" data-act="killcooldown" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.killCooldown||30}s</b><button class="btn ghost sm inline" data-act="killcooldown" data-v="1">+</button></div><label class="chk"><input type="checkbox" data-act="toggleanonymous" ${m.anonymousVotes?'checked':''}> <span>Anonymous voting</span></label><p class="small muted">Sheriff, Medic and Mayor are randomly assigned to up to three crewmates.</p>`:''}
+      <p class="small muted">${PER} tasks per player, assigned at random (tasks can be shared, combinations differ).${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
+      <details><summary>Task names &amp; locations (optional)</summary>
+      <p class="small muted">Untick tasks you won't use. Rename them and add a location hint so players know where to look.</p>
+      ${TASKS.map(t=>`<div class="trow"><div class="l1"><input type="checkbox" data-act="toggletask" data-v="${t.id}" ${m.off&&m.off[t.id]?'':'checked'}><span>${t.icon}</span><input type="text" data-name="${t.id}" value="${esc(tname(m,t.id))}" maxlength="28"></div>
+        <div class="l2"><input type="text" data-loc="${t.id}" value="${esc((m.locs&&m.locs[t.id])||'')}" placeholder="Where is it?" maxlength="40"></div></div>`).join('')}</details>
+      <p class="small" style="margin-top:8px"><a href="?print=1&room=${esc(s.room)}" target="_blank">🖨 Open printable task QR sheet</a> <span class="muted">(print once, reuse for every game)</span></p>
+      <button class="btn ok" style="margin-top:8px" data-act="start" ${d.players.length<2?'disabled':''}>▶ Start game</button></div>`;
+  } else if(m.status==='playing'){
+    html += `<div class="card"><h2>Game controls</h2>
+      ${roles ? `<div class="row" style="margin-bottom:8px"><span class="grow">Meeting timer</span><button class="btn ghost sm inline" data-act="meetinglimit" data-v="-1">−</button><b>${m.meetingLimit||60}s</b><button class="btn ghost sm inline" data-act="meetinglimit" data-v="1">+</button></div><div class="row" style="margin-bottom:8px"><span class="grow">Kill cooldown</span><button class="btn ghost sm inline" data-act="killcooldown" data-v="-1">−</button><b>${m.killCooldown||30}s</b><button class="btn ghost sm inline" data-act="killcooldown" data-v="1">+</button></div><label class="chk"><input type="checkbox" data-act="toggleanonymous" ${m.anonymousVotes?'checked':''}> <span>Anonymous voting</span></label><button class="btn warn" data-act="meeting" data-kind="meeting" data-host="1">🚨 Call emergency meeting</button>
+      <div class="row" style="margin-top:8px"><button class="btn ghost sm grow" data-act="end" data-v="crew">Crew wins</button><button class="btn ghost sm grow" data-act="end" data-v="impostor">Impostors win</button></div>`
+      : `<button class="btn ghost" data-act="end" data-v="none">End game</button>`}</div>`;
+  } else {
+    html += `<div class="card"><h2>Round finished</h2>${rosterView(g,d,me,true).replace(/^<div class="card">/,'<div>')}
+      <button class="btn" data-act="newround" style="margin-top:8px">↻ New round (same players)</button></div>`;
+  }
+  html += `<div class="card"><button class="btn ghost sm" data-act="deletegame">Delete game &amp; close</button></div>`;
+  return html;
+}
+
+async function drawJoinQR(room){
+  try{
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js');
+    const el = $('#joinqr'); if(!el || el.dataset.done===room) return;
+    el.innerHTML=''; new QRCode(el,{text:`${BASE}?room=${room}`,width:176,height:176,correctLevel:QRCode.CorrectLevel.M}); el.dataset.done=room;
+  }catch(e){}
+}
+
+async function renderPrint(names, fetched){
+  document.body.classList.add('print');
+  names = names || {};
+  const nm = id => names[id] || BYID[id].name;
+  $('#app').innerHTML = `<div class="no-print row wrap" style="margin-bottom:10px"><div class="grow"><b>Task QR sheet</b><div class="small">QR codes point to: <code>${esc(BASE)}</code><br>Print from your <b>live website</b>, not from a local file. Cut out and stick up the ones you'll use (${PER}+ needed, 8–16 is ideal).</div></div>
+    <button class="btn inline" onclick="window.print()">🖨 Print</button></div>
+    <div class="sheetgrid">${TASKS.map(t=>`<div class="pcard"><div class="qrc" id="qr-${t.id}"></div><div class="pname">${t.icon} ${esc(nm(t.id))}</div><div class="pcode">${TOKENS[t.id]}</div><div class="psm">Scan with your phone camera or in the app</div></div>`).join('')}</div>`;
+  try{
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js');
+    TASKS.forEach(t=> new QRCode(document.getElementById('qr-'+t.id),{text:`${BASE}?t=${TOKENS[t.id]}`,width:150,height:150,correctLevel:QRCode.CorrectLevel.M}));
+  }catch(e){ toast('Could not load the QR library (needs internet)'); }
+  const room = (qs.get('room')||'').toUpperCase();
+  if(!fetched && room && DB){          // use the host's custom task names for this room
+    try{ const n = await DB.get('games/'+room+'/meta/names'); if(n){ renderPrint(n, true); return; } }catch(e){}
+  }
+}
+
+/* ---------------------------- events ------------------------------- */
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const act = el.dataset.act, v = el.dataset.v, s = S.session, g = S.g;
+  const hostActions = new Set(['meetinglimit','killcooldown','imp','limit','start','end','newround','kick','revive','closemeet','deletegame','toggleroles','toggleconfirm','toggleanonymous','toggletask','role-sheriff','role-medic','role-mayor']);
+  if(hostActions.has(act) && !s?.host){ toast('Only the host can do that'); return; }
+  if(!g && !['create','leave','tab'].includes(act)) return;
+  switch(act){
+    case 'create': await createGame().catch(()=>toast('Could not create game – check Firebase setup')); break;
+    case 'leave': if(s && s.host){ break; } S.session=null; saveSession(); subscribe(); break;
+    case 'tab': S.tab=v; render(); break;
+    case 'reveal': S.reveal=!S.reveal; render(); break;
+    case 'impscreen': S.impScreen=!S.impScreen; render(); break;
+    case 'sheriffscreen': S.sheriffScreen=!S.sheriffScreen; render(); break;
+    case 'meetinglimit': { const a=MEETING_LIMITS; let i=a.indexOf(Number(g.meta.meetingLimit)||60); if(i<0)i=1; i=Math.max(0,Math.min(a.length-1,i+Number(v))); await DB.set(path('meta','meetingLimit'),a[i]); break; }
+    case 'killcooldown': { const a=KILL_LIMITS; let i=a.indexOf(Number(g.meta.killCooldown)||30); if(i<0)i=3; i=Math.max(0,Math.min(a.length-1,i+Number(v))); await DB.set(path('meta','killCooldown'),a[i]); break; }
+    case 'impostor-kill': { const me=g.players[s.me], target=g.players[v]; if(g.meta.status!=='playing'||(g.meeting&&g.meeting.status==='open')){toast('Kills are disabled during meetings or after the round ends');break;} if(!me||me.dead||me.role!=='impostor'||!target||target.dead||target.role==='impostor') break; const cooldownStart=Number(me.killCooldownStartedAt||g.meta.startedAt||Date.now()); const left=cooldownStart+(Number(g.meta.killCooldown)||30)*1000-Date.now(); if(left>0){toast('Kill cooldown: '+Math.ceil(left/1000)+'s');break;} if(!confirm('Confirm kill on '+target.name+'?')) break; await DB.update(path(), {[`players/${v}/dead`]:true,[`players/${s.me}/killCooldownStartedAt`]:Date.now(),[`players/${s.me}/killUsed`]:true}); S.impScreen=true; break; }
+    case 'sheriff-kill': { const me=g.players[s.me], target=g.players[v]; if(g.meta.status!=='playing'||(g.meeting&&g.meeting.status==='open')){toast('Sheriff shots are disabled during meetings or after the round ends');break;} if(!me||me.dead||me.role!=='sheriff'||me.sheriffUsed||!target||target.dead||v===s.me) break; if(!confirm('Sheriff: attempt to shoot '+target.name+'? If they are crew, you will die.')) break; const up={[`players/${s.me}/sheriffUsed`]:true}; if(target.role==='impostor') up[`players/${v}/dead`]=true; else up[`players/${s.me}/dead`]=true; await DB.update(path(),up); toast(target.role==='impostor'?'Impostor eliminated!':'Wrong target — the Sheriff dies.'); break; }
+    case 'medic-revive': { const me=g.players[s.me], target=g.players[v]; if(g.meta.status!=='playing'||(g.meeting&&g.meeting.status==='open')){toast('Medic ability is disabled during meetings or after the round ends');break;} if(!me||me.dead||me.role!=='medic'||me.medicUsed||!target||!target.dead||target.role==='impostor') break; if(!confirm('Revive '+target.name+'? You will sacrifice yourself.')) break; await DB.update(path(), {[`players/${v}/dead`]:null,[`players/${v}/ejected`]:null,[`players/${s.me}/dead`]:true,[`players/${s.me}/medicUsed`]:true}); break; }
+    case 'mayor-eject': { const me=g.players[s.me], target=g.players[v]; if(g.meta.status!=='playing'||!me||me.dead||me.role!=='mayor'||me.mayorUsed||!target||target.dead||!g.meeting||g.meeting.status!=='open') break; if(!confirm('Use your once-per-round Mayor decree to unanimously eject '+target.name+'?')) break; const up={[`players/${v}/dead`]:true,[`players/${v}/ejected`]:true,[`players/${s.me}/mayorUsed`]:true,'meeting/status':'closed','meeting/result':{ejected:v,name:target.name,role:g.meta.confirmEject?(target.role==='impostor'?'impostor':'crew'):null,mayor:true}}; const alive=derive(g).players.filter(p=>!p.dead&&p.k!==v); const imps=alive.filter(p=>p.role==='impostor').length, crew=alive.length-imps; if(imps===0)up['meta/status']='ended',up['meta/winner']='crew'; else if(imps>=crew)up['meta/status']='ended',up['meta/winner']='impostor'; await DB.update(path(),up); break; }
+    case 'scan': openScanner(); break;
+    case 'close-scan': closeScanner(); break;
+    case 'close-result': $('#overlay').innerHTML=''; break;
+    case 'task-done': await finishTask(); break;
+    case 'task-cancel': cancelTask(); break;
+    case 'copy': try{ await navigator.clipboard.writeText(v); toast('Link copied'); }catch(err){ prompt('Copy this link:', v); } break;
+    case 'imp': { if(g.meta.status!=='lobby') break; const n = Math.max(0, Math.min(4, (g.meta.impostors ?? 2) + Number(v))); await DB.set(path('meta','impostors'), n); break; }
+    case 'role-sheriff': case 'role-medic': case 'role-mayor': break;
+    case 'limit': { let i = LIMITS.indexOf(g.meta.limit || 0); if(i<0) i=0; i = Math.max(0, Math.min(LIMITS.length-1, i + Number(v))); await DB.set(path('meta','limit'), LIMITS[i]); break; }
+    case 'start': await startGame().catch(()=>toast('Could not start')); break;
+    case 'end': if(confirm('End the round now?')) await endGame(v); break;
+    case 'newround': await newRound(); break;
+    case 'kick': if(confirm('Remove this player?')) await DB.set(path('players', v), null); break;
+    case 'revive': await DB.update(path(), {[`players/${v}/dead`]:null, [`players/${v}/ejected`]:null}); break;
+    case 'meeting': if(confirm(el.dataset.kind==='body' ? 'Report a body?' : 'Call an emergency meeting?')) await callMeeting(el.dataset.kind, el.dataset.host==='1'); break;
+    case 'vote': await vote(v); break;
+    case 'selfkill': if(confirm('Confirm you were eliminated? This cannot be undone (the host can revive you).')) await selfKill(); break;
+    case 'closemeet': if(s?.host) await closeMeeting(); else toast('Only the host can close the meeting'); break;
+    case 'meet-ok': if(g && g.meeting) S.resultSeen = g.meeting.id; renderMeeting(); break;
+    case 'deletegame':
+      if(confirm('Delete this game for everyone?')){ await DB.set(path(), null); S.session=null; saveSession(); subscribe(); } break;
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target, ds = el.dataset || {};
+  if(!S.session) return;
+  if(ds.loc && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','locs',ds.loc), el.value.trim() || null); }
+  if(ds.name && S.session.host && S.g?.meta?.status==='lobby'){ const val = el.value.trim(); DB.set(path('meta','names',ds.name), val && val !== BYID[ds.name].name ? val : null); }
+  if(ds.act==='toggletask' && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','off',ds.v), el.checked ? null : true); }
+  if(ds.act==='toggleroles' && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','roles'), !!el.checked); }
+  if(ds.act==='toggleconfirm' && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','confirmEject'), !!el.checked); }
+  if(ds.act==='toggleanonymous'){ if(S.session.host && ['lobby','playing'].includes(S.g?.meta?.status)) DB.set(path('meta','anonymousVotes'), !!el.checked); }
+  if(['role-sheriff','role-medic','role-mayor'].includes(ds.act)){ if(S.session.host && S.g?.meta?.status==='lobby'){const key={'role-sheriff':'roleSheriff','role-medic':'roleMedic','role-mayor':'roleMayor'}[ds.act];DB.set(path('meta',key),!!el.checked);} }
+});
+document.addEventListener('submit', async e => {
+  const f = e.target.closest('form[data-form]'); if(!f) return; e.preventDefault();
+  const fd = new FormData(f);
+  if(f.dataset.form==='join') await join(fd.get('room'), fd.get('name'), false);
+  if(f.dataset.form==='hostjoin') await join(S.session.room, fd.get('name'), true);
+  if(f.dataset.form==='resume') await resumeHost(fd.get('room'), fd.get('pin')).catch(()=>toast('Could not resume'));
+  if(f.dataset.form==='code'){ const tok = parseToken(String(fd.get('code')||'')); await closeScanner(); if(tok) handleToken(tok); else toast('That doesn’t look like a task code'); }
+});
+
+/* ------------------------------ boot ------------------------------- */
+(async function boot(){
+  document.body.classList.toggle('print', PRINT);
+  const hasFb = CFG.firebase && CFG.firebase.databaseURL;
+  try { DB = hasFb ? await makeFirebase() : makeDemo(); }
+  catch(e){ $('#app').innerHTML = `<div class="card"><h1>Setup problem</h1><p class="muted">Could not start Firebase. Check config.js and your internet connection.</p></div>`; return; }
+  store = DB.demo ? sessionStorage : localStorage;
+  window.__irl = {S, TASKS, TOKENS, join, createGame, resumeHost, startGame, handleToken, finishTask, derive, DB, newRound, endGame,
+                  callMeeting, vote, selfKill, closeMeeting, tickClock, pickVariant}; // debug / tests
+  if(PRINT){ render(); return; }
+  try { S.session = JSON.parse(store.getItem('irl.session')||'null'); } catch(e){ S.session=null; }
+  const t = qs.get('t'); const tok = t ? parseToken(t) : null;
+  S.pendingTok = tok || sessionStorage.getItem('irl.pending') || null;
+  if(tok) sessionStorage.setItem('irl.pending', tok);
+  if(qs.get('t') || qs.get('room')) history.replaceState(null,'',location.pathname + (qs.get('room') && !S.session ? '?room='+qs.get('room') : ''));
+  subscribe();
+})();
+})();
+</script>
+</body>
+</html>
