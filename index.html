@@ -885,7 +885,7 @@ document.addEventListener('click', async e => {
   if(hostActions.has(act) && !s?.host){ toast('Only the host can do that'); return; }
   if(!g && !['create','leave','tab'].includes(act)) return;
   switch(act){
-    case 'create': await createGame().catch(()=>toast('Could not create game – check Firebase setup')); break;
+    case 'create': await createGame().catch(e => {   console.error('Host new game failed:', e);   toast('Could not create game – check Firebase setup'); }); break;
     case 'leave': if(s && s.host){ break; } S.session=null; saveSession(); subscribe(); break;
     case 'tab': S.tab=v; render(); break;
     case 'reveal': S.reveal=!S.reveal; render(); break;
