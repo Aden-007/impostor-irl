@@ -8,7 +8,7 @@ window.APP_CONFIG = {
   firebase: {
     apiKey: "AIzaSyDd8-MLHJP2ko4RfVKOLZ8j0dMacgVxd1c",
     authDomain: "impostor-irl-campus.firebaseapp.com",
-    databaseURL: "https://impostor-irl-campus-default-rtdb.firebaseio.com/",   // e.g. "https://your-project-default-rtdb.firebaseio.com"
+    databaseURL: "https://impostor-irl-campus-default-rtdb.firebaseio.com",   // e.g. "https://your-project-default-rtdb.firebaseio.com"
     projectId: "impostor-irl-campus",
     appId: "1:576683044663:web:6ee49e1be19b605ba174b2"
   },
