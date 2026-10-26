@@ -96,6 +96,10 @@ body.print #app{max-width:none;padding:10px}
 .pcode{font:700 22px ui-monospace,Menlo,monospace;letter-spacing:4px}
 .psm{font-size:12px;color:#444}
 @media print{.no-print{display:none!important} .pcard{break-inside:avoid}}
+/* Discreet role-screen controls: icon-only, low contrast, accessible label remains for assistive technology. */
+.stealth-toggle{opacity:.16!important;min-width:24px!important;width:24px!important;height:24px!important;padding:0!important;border:0!important;background:transparent!important;color:var(--muted)!important;font-size:16px!important;line-height:1!important;box-shadow:none!important}
+.stealth-toggle:focus-visible{opacity:1!important;outline:2px solid var(--accent)!important}
+.stealth-control-row{display:flex;justify-content:flex-end;min-height:8px;margin:-6px 0 2px}
 </style>
 </head>
 <body>
@@ -759,8 +763,8 @@ function playView(g, d, me){
     html += `<div class="banner">No roles this game – everyone is crew. Finish all the tasks together!</div>`;
   }
   if(me.dead) html += `<div class="banner dead">☠ You're eliminated. You can still finish your tasks, but you can't vote or call meetings.</div>`;
-  if(imp && !me.dead){ html += `<div class="card"><div class="row"><b class="grow">Impostor controls</b><button class="btn ${S.impScreen?'bad':'ghost'} sm inline" data-act="impscreen">${S.impScreen?'Switch to fake tasks':'Switch to impostor screen'}</button></div>${S.impScreen?impostorScreen(g,d,me):'<p class="small muted">Stay on fake tasks to blend in, or switch to the kill screen when ready.</p>'}</div>`; }
-  if(S.reveal && me.role==='sheriff' && !me.dead){ html += `<div class="card"><div class="row"><b class="grow">Sheriff controls</b><button class="btn ${S.sheriffScreen?'bad':'ghost'} sm inline" data-act="sheriffscreen">${S.sheriffScreen?'Switch to tasks':'Switch to sheriff screen'}</button></div>${S.sheriffScreen?sheriffScreen(g,d,me):'<p class="small muted">Switch to the sheriff screen to inspect living players and use your one shot.</p>'}</div>`; }
+  if(imp && !me.dead){ html += `<div class="card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.impScreen?'Return to tasks':'Open alternate screen'}" title="${S.impScreen?'Return to tasks':'Open alternate screen'}" data-act="impscreen">${S.impScreen?'◦':'···'}</button></div>${S.impScreen?impostorScreen(g,d,me):''}</div>`; }
+  if(S.reveal && me.role==='sheriff' && !me.dead){ html += `<div class="card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" title="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" data-act="sheriffscreen">${S.sheriffScreen?'◦':'···'}</button></div>${S.sheriffScreen?sheriffScreen(g,d,me):''}</div>`; }
   if(S.reveal && me.role==='medic' && !me.dead && !me.medicUsed){ const deadCrew=d.players.filter(p=>p.dead&&p.role!=='impostor'); html += `<div class="card"><h2>🩺 Medic ability</h2><p class="small muted">Revive one dead crewmate. You sacrifice yourself.</p>${deadCrew.length?deadCrew.map(p=>`<button class="btn ghost sm" style="margin:4px 0" data-act="medic-revive" data-v="${esc(p.k)}">❤️ Revive ${esc(p.name)} (sacrifice self)</button>`).join(''):'<p class="muted small">No dead crewmates to revive yet.</p>'}</div>`; }
   if(!((imp && S.impScreen) || (me.role==='sheriff' && S.sheriffScreen))){
     html += `<h2>Your tasks (${myTasks.filter(i=>me.done&&me.done[i]).length}/${myTasks.length})</h2>`;
