@@ -117,106 +117,81 @@ const PER = CFG.tasksPerPlayer || 4;
 /*  IDs must stay unique. Names can also be changed by the host in-app. */
 /* ------------------------------------------------------------------ */
 const TASKS = [
-  {id:'wiring', icon:'🔌', name:'Fix Wiring', desc:'Connect matching coloured wires between the panels.', v:[
-    'Connect each coloured wire to the matching colour.',
-    'Match the wire ends by colour to complete the circuit.',
-    'Connect all wire pairs with the same colour.',
-    'Finish the wiring panel by matching every colour.']},
-  {id:'swipe', icon:'💳', name:'Swipe Card', desc:'Swipe the ID card through the reader at the correct speed.', v:[
-    'Swipe the ID card through the reader at the correct speed.',
-    'Use the card reader to accept the ID card.',
-    'Move the ID card across the reader without swiping too quickly.',
-    'Complete the card swipe at the reader.']},
-  {id:'garbage', icon:'🗑️', name:'Empty Garbage', desc:'Pull the lever to release the garbage through the chute.', v:[
-    'Pull and hold the lever until the garbage is ejected.',
-    'Operate the disposal lever to empty the chute.',
-    'Release the garbage by using the chute control.',
-    'Complete the garbage disposal at the chute.']},
-  {id:'fuel', icon:'⛽', name:'Fuel Engines', desc:'Fill the fuel can and transfer fuel to the engine.', v:[
-    'Fill the fuel can, then refuel the engine.',
-    'Collect fuel from Storage and deliver it to the engine.',
-    'Refill the engine using the fuel can.',
-    'Complete the fuel transfer at the engine.']},
-  {id:'download', icon:'⬇️', name:'Download Data', desc:'Download the files at the data terminal.', v:[
-    'Use the terminal to download the data.',
-    'Start the data download and wait for it to finish.',
-    'Collect the data from the designated panel.',
-    'Complete the download at the data terminal.']},
-  {id:'upload', icon:'⬆️', name:'Upload Data', desc:'Upload the downloaded files at the designated terminal.', v:[
-    'Upload the downloaded data at the terminal.',
-    'Send the collected files using the upload panel.',
-    'Complete the data upload at the designated location.',
-    'Transfer the downloaded files to finish the task.']},
-  {id:'o2', icon:'🌬️', name:'Clean O2 Filter', desc:'Remove leaves and debris from the oxygen filter.', v:[
-    'Remove the leaves blocking the O2 filter.',
-    'Clear the debris from the oxygen filter.',
-    'Clean the filter so oxygen can flow through.',
-    'Finish by removing all visible debris from the O2 filter.']},
-  {id:'align', icon:'🎯', name:'Align Engine Output', desc:'Adjust the engine output until the indicator is aligned.', v:[
-    'Adjust the engine output until the indicator lines up.',
-    'Move the control to align the engine output marker.',
-    'Set the engine output indicator to the correct position.',
-    'Complete the engine alignment by matching the indicator.']},
-  {id:'calibrate', icon:'🎛️', name:'Calibrate Distributor', desc:'Stop the rotating indicators when they align with the connections.', v:[
-    'Stop each rotating indicator when it reaches its connection.',
-    'Time the controls so the distributor connections align.',
-    'Match each rotating marker with its connection point.',
-    'Calibrate the distributor by aligning each indicator.']},
-  {id:'course', icon:'🧭', name:'Chart Course', desc:'Move the navigation markers along the route to their targets.', v:[
-    'Guide each navigation marker to its target along the route.',
-    'Plot the course by moving the markers to the destination points.',
-    'Complete the route by connecting the navigation targets.',
-    'Set the course by guiding the markers to their endpoints.']},
-  {id:'shields', icon:'🛡️', name:'Prime Shields', desc:'Activate the shield nodes shown on the panel.', v:[
-    'Activate the shield nodes shown on the panel.',
-    'Select the shield sections that need to be powered.',
-    'Prime the shields by activating the required nodes.',
-    'Complete the shield panel by switching on the indicated nodes.']},
-  {id:'steering', icon:'🕹️', name:'Stabilize Steering', desc:'Adjust the steering controls to the target position.', v:[
-    'Move the steering control to the target position.',
-    'Align the steering marker with the indicated target.',
-    'Adjust the course control until the steering indicator is centred.',
-    'Finish the steering task by matching the target position.']},
-  {id:'asteroids', icon:'☄️', name:'Clear Asteroids', desc:'Use the weapons console to shoot the asteroids.', v:[
-    'Use the weapons console to shoot the asteroids on screen.',
-    'Aim and fire at the asteroids until the task is complete.',
-    'Clear the asteroid field using the ship weapons.',
-    'Destroy the asteroids shown in the weapons panel.']},
-  {id:'reactor', icon:'☢️', name:'Start Reactor', desc:'Repeat the sequence displayed by the reactor system.', v:[
-    'Repeat the displayed sequence in the correct order.',
-    'Memorise and enter the reactor sequence shown on screen.',
-    'Follow the reactor panel sequence without making a mistake.',
-    'Complete the reactor task by reproducing the shown pattern.']},
-  {id:'plants', icon:'🪴', name:'Water Plants', desc:'Collect the watering can and water the plants.', v:[
-    'Collect the watering can and water the plants.',
-    'Use the watering can to complete the plant task.',
-    'Water the plants after retrieving the can.',
-    'Finish the plant task by watering the required plants.']},
-  {id:'power', icon:'⚡', name:'Divert Power', desc:'Move power from the electrical panel to the requested room.', v:[
-    'Divert power at the electrical panel to the indicated room.',
-    'Move the power slider to route energy to the requested location.',
-    'Redirect power using the electrical panel.',
-    'Complete the power diversion to the specified room.']},
-  {id:'sample', icon:'🧪', name:'Inspect Sample', desc:'Start the sample process, then inspect the results after it finishes.', v:[
-    'Start the sample machine and inspect the results when ready.',
-    'Run the sample and check the displayed results after processing.',
-    'Wait for the sample analysis, then inspect the results.',
-    'Complete the sample test by reviewing its results.']},
-  {id:'scan', icon:'🩺', name:'Submit Scan', desc:'Stand on the scanner and let the scan complete.', v:[
-    'Stand on the MedBay scanner until the scan finishes.',
-    'Complete the biometric scan at the scanner.',
-    'Use the MedBay scanner and wait for the result.',
-    'Finish the scan by remaining on the scanner until completion.']},
-  {id:'manifolds', icon:'🔢', name:'Unlock Manifolds', desc:'Select the numbered panels in ascending order.', v:[
-    'Select the numbers in ascending order, starting with the lowest.',
-    'Unlock the manifolds by pressing the numbers from smallest to largest.',
-    'Tap the numbered panels in the correct ascending sequence.',
-    'Complete the manifold panel by selecting each number in order.']},
-  {id:'id-code', icon:'🪪', name:'Enter ID Code', desc:'Enter the identification code displayed on the card.', v:[
-    'Read the code from the ID card and enter it on the keypad.',
-    'Type the displayed identification code into the terminal.',
-    'Enter the card code exactly as shown.',
-    'Complete the ID task by submitting the displayed code.']}
+  {id:'sample', icon:'🧪', name:'Inspect Sample', desc:'Run a sample analysis and inspect the result.', v:[
+    'Open the sample screen and inspect the displayed result.',
+    'Run the sample process, then check the result.',
+    'Wait for the sample analysis and read its result.',
+    'Complete the sample check by reviewing the displayed result.']},
+  {id:'scan', icon:'🩺', name:'Submit Scan', desc:'Complete a scan using your phone camera.', v:[
+    'Open your camera and scan the task QR code again.',
+    'Use the camera app to frame a QR code clearly.',
+    'Open the camera and focus on a nearby object, then return here.',
+    'Complete a camera scan and return to this task.']},
+  {id:'manifolds', icon:'🔢', name:'Unlock Manifolds', desc:'Enter the numbers in ascending order.', v:[
+    'Use your phone keypad to enter 2, 4, 6, 8 in order.',
+    'Open the calculator and enter 3 × 7.',
+    'Type 1, 3, 5, 7 into Notes in ascending order.',
+    'Enter 4, 3, 2, 1 in reverse order using the keypad.']},
+  {id:'id-code', icon:'🪪', name:'Enter ID Code', desc:'Enter the code shown in this task using your phone keypad.', v:[
+    'Enter 4826 into your phone calculator.',
+    'Type CAMPUS-482 into a new Notes entry.',
+    'Enter 7319 in your phone calculator, then clear it.',
+    'Type TASK-204 into Notes, then return to this task.']},
+  {id:'calculator', icon:'🧮', name:'Calculate', desc:'Use your phone calculator to solve the displayed challenge.', v:[
+    'Open Calculator and calculate 37 × 8.',
+    'Calculate 144 ÷ 12 using your phone calculator.',
+    'Calculate 29 + 68 in Calculator.',
+    'Calculate 125 − 47 using Calculator.']},
+  {id:'notes', icon:'📝', name:'Write Notes', desc:'Use your phone Notes app to record a short code.', v:[
+    'Create a note containing the word CREWMATE.',
+    'Write the code IRL-204 in a new note.',
+    'Create a note with three words: RED BLUE GREEN.',
+    'Write the current time in your Notes app, then return here.']},
+  {id:'clock', icon:'⏰', name:'Set Timer', desc:'Use the Clock app timer for a short interval.', v:[
+    'Set a 15-second timer in your Clock app.',
+    'Start a 20-second timer and wait for it to finish.',
+    'Open Clock and set a 10-second timer.',
+    'Start a 5-second timer, then return when it ends.']},
+  {id:'stopwatch', icon:'⏱️', name:'Time Trial', desc:'Use your phone stopwatch to measure a short interval.', v:[
+    'Run the stopwatch for 10 seconds, then stop it.',
+    'Start and stop the stopwatch after 7 seconds.',
+    'Measure 12 seconds using your phone stopwatch.',
+    'Open the stopwatch, start it, then stop after a short interval.']},
+  {id:'camera', icon:'📷', name:'Capture Image', desc:'Use your phone camera to capture a harmless object nearby.', v:[
+    'Take a photo of your own shoe or bag.',
+    'Take a photo of the floor in front of you.',
+    'Capture an image of a nearby non-personal object.',
+    'Take a photo of your hand, then return to the game.']},
+  {id:'compass', icon:'🧭', name:'Check Compass', desc:'Use the compass app or compass feature on your phone.', v:[
+    'Open a compass app and note which direction is north.',
+    'Check the compass and turn until you face east.',
+    'Open the compass and read the current heading.',
+    'Use your compass app to find south, then return here.']},
+  {id:'voice-note', icon:'🎙️', name:'Record Message', desc:'Use your phone voice recorder to make a short recording.', v:[
+    'Record yourself saying “Task complete” for two seconds.',
+    'Make a short voice memo saying “Crewmate ready”.',
+    'Record a brief sound, then stop and discard or save it.',
+    'Open the voice recorder and make a one-second test recording.']},
+  {id:'browser', icon:'🌐', name:'Search the Web', desc:'Use your phone browser to find a simple public fact.', v:[
+    'Search your browser for the number of sides in a hexagon.',
+    'Look up the capital of Japan in your browser.',
+    'Search for how many minutes are in 2 hours.',
+    'Use your browser to find the chemical symbol for oxygen.']},
+  {id:'calendar', icon:'📅', name:'Check Calendar', desc:'Open your phone calendar and inspect today’s date.', v:[
+    'Open Calendar and check today’s date.',
+    'Open your calendar and find the current month.',
+    'Switch to the month view in Calendar, then return here.',
+    'Check the date in your calendar app.']},
+  {id:'photos', icon:'🖼️', name:'Review Photos', desc:'Open your phone photo gallery and find a recent image.', v:[
+    'Open Photos/Gallery and view a recent image.',
+    'Open your gallery and find the most recent screenshot.',
+    'Open Photos/Gallery and return to the newest item.',
+    'Check your gallery, then return to the game.']},
+  {id:'qr-tool', icon:'🔳', name:'QR Scan', desc:'Use your phone camera or QR reader to scan a provided code.', v:[
+    'Open the camera and scan a QR code provided for the game.',
+    'Use your phone QR reader to read the task code.',
+    'Frame the provided QR code until the link appears.',
+    'Scan the supplied task QR code and return to the game.']}
 ];;
 const BYID = Object.fromEntries(TASKS.map(t => [t.id, t]));
 const LIMITS = [0,10,15,20,30,45,60,90,120];   // game time limit options (minutes, 0 = off)
