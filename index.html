@@ -117,87 +117,107 @@ const PER = CFG.tasksPerPlayer || 4;
 /*  IDs must stay unique. Names can also be changed by the host in-app. */
 /* ------------------------------------------------------------------ */
 const TASKS = [
-  {id:'wiring', icon:'🔌', name:'Fix Wiring', desc:'Reconnect the wires.', v:[
-    'Tap your fingers on the wall in a 1-2-3 pattern, {4-8} times.',
-    'Touch your thumb to each fingertip, left then right hand, {3-5} rounds.',
-    'Wiggle all ten fingers like live wires for 10 seconds.|10',
-    'Spell “WIRES” in the air with your elbow.']},
-  {id:'swipe', icon:'💳', name:'Swipe Card', desc:'Swipe at the right speed.', v:[
-    'Mime a card swipe: slow, normal, then too fast – 3 tries.',
-    'Do {3-6} slow-motion card swipes and count them out loud.',
-    'Swipe an imaginary card across your palm {4-7} times without a mistake.',
-    'Swipe, then say “Accepted” in your best robot voice.']},
-  {id:'garbage', icon:'🗑️', name:'Empty Garbage', desc:'Take out the trash.', v:[
-    'Mime lifting a heavy bag and dropping it – {3-5} times.',
-    'Crumple an imaginary paper and shoot it {3-6} times.',
-    'Do {5-8} calf raises while pulling an imaginary lever.',
-    'Squat {4-8} times, then shout “Trash out!”']},
-  {id:'fuel', icon:'⛽', name:'Fuel Engines', desc:'Fill the tanks.', v:[
-    'Do {5-10} slow squats, “carrying” a heavy fuel can.',
-    'Hold a plank for 20 seconds while “fuelling”.|20',
-    'Walk heel-to-toe for {6-10} steps carrying “fuel”.',
-    'Do {8-12} slow arm circles to pump the fuel.']},
-  {id:'download', icon:'⬇️', name:'Download Data', desc:'Wait for the download.', v:[
-    'Stand still and look up for 20 seconds while “downloading”.|20',
-    'Stay perfectly still for 15 seconds. No laughing!|15',
-    'Hum a progress-bar tune for 20 seconds.|20',
-    'Count backwards from {20-30} slowly while “downloading”.']},
-  {id:'upload', icon:'⬆️', name:'Upload Data', desc:'Send the data home.', v:[
-    'Hold both arms up like an antenna for 20 seconds.|20',
-    'Slowly raise your hands over 10 seconds, then say “Uploaded.”|10',
-    'Spin once clockwise and once anticlockwise while “syncing”.',
-    'Stand on one leg for 15 seconds, then switch legs.|15']},
-  {id:'o2', icon:'🌬️', name:'Clean O₂ Filter', desc:'Clear the filter.', v:[
-    'Take {3-5} deep breaths: in for 4, out for 4.',
-    'Blow out an imaginary candle {5-8} times.',
-    'Pick {5-10} imaginary leaves from the air and throw them away.',
-    'Fan yourself with both hands for 10 seconds.|10']},
-  {id:'align', icon:'🎯', name:'Align Engine', desc:'Line it up.', v:[
-    'Stand on one foot with your other foot lined up to your knee for 10 seconds.|10',
-    'Touch your left knee with your right elbow {4-8} times.',
-    'Balance an imaginary spoon on your nose for 10 seconds.|10',
-    'Hold your arms perfectly level for 10 seconds.|10']},
-  {id:'calibrate', icon:'🎛️', name:'Calibrate Distributor', desc:'Tune the dials.', v:[
-    'Press three “buttons” in the air: up, left, right – {2-4} times.',
-    'Turn an imaginary dial right, then left, {3-5} times.',
-    'Clap {2-4} times, snap {2-4} times, stomp {2-4} times.',
-    'Recite three numbers of your choice backwards.']},
-  {id:'course', icon:'🧭', name:'Chart Course', desc:'Plot the route.', v:[
-    'Point north, east, south, west, then face the nearest exit.',
-    'Trace a route in the air from here to the nearest door.',
-    'Walk {8-15} steps in a straight line, turn and walk back.',
-    'Turn slowly in a full circle, pointing at four landmarks.']},
-  {id:'shields', icon:'🛡️', name:'Prime Shields', desc:'Power up the shields.', v:[
-    'Cross your arms over your chest for 10 seconds.|10',
-    'Raise an imaginary shield and block {5-9} attacks.',
-    'Do {4-8} high-knee lifts to prime the shields.',
-    'Hold your palms forward like a force field for 15 seconds.|15']},
-  {id:'steering', icon:'🕹️', name:'Stabilize Steering', desc:'Keep it steady.', v:[
-    'Walk {6-10} steps in a wavy line, steering with both hands.',
-    'Hold an imaginary wheel steady for 15 seconds.|15',
-    'Turn the wheel left {2-4} times and right {2-4} times, calling each turn.',
-    'Balance on tiptoes for 10 seconds without wobbling.|10']},
-  {id:'asteroids', icon:'☄️', name:'Clear Asteroids', desc:'Blast them away.', v:[
-    '“Shoot” {5-10} asteroids by punching the air.',
-    'Dodge left and right {5-8} times.',
-    'Do {4-8} jumping jacks to clear the field.',
-    'Throw {5-8} imaginary rocks away from you.']},
-  {id:'reactor', icon:'☢️', name:'Start Reactor', desc:'Fire up the core.', v:[
-    'Repeat after yourself: clap, clap, stomp – {3-5} times.',
-    'Tap head, shoulders, knees, toes – {2-4} rounds.',
-    'Rub your hands together to “warm up” the reactor for 15 seconds.|15',
-    'Do {5-8} slow-motion jumping jacks.']},
-  {id:'plants', icon:'🪴', name:'Water Plants', desc:'Keep them alive.', v:[
-    'Mime watering a plant and count {5-10} drops out loud.',
-    'Crouch like a seed and slowly “grow” upward over 10 seconds.|10',
-    'Gently “pour” water in a circle {3-5} times.',
-    'Wave your arms like leaves in the wind for 10 seconds.|10']},
-  {id:'power', icon:'⚡', name:'Divert Power', desc:'Reroute the power.', v:[
-    'Flip an imaginary switch {3-6} times, then say “Power diverted.”',
-    'Do {4-8} wall push-ups (hands on a wall, lean in).',
-    'Hold both hands up and “charge up” for 10 seconds.|10',
-    'Stomp {5-9} times like you’re rerouting power.']}
-];
+  {id:'wiring', icon:'🔌', name:'Fix Wiring', desc:'Connect matching coloured wires between the panels.', v:[
+    'Connect each coloured wire to the matching colour.',
+    'Match the wire ends by colour to complete the circuit.',
+    'Connect all wire pairs with the same colour.',
+    'Finish the wiring panel by matching every colour.']},
+  {id:'swipe', icon:'💳', name:'Swipe Card', desc:'Swipe the ID card through the reader at the correct speed.', v:[
+    'Swipe the ID card through the reader at the correct speed.',
+    'Use the card reader to accept the ID card.',
+    'Move the ID card across the reader without swiping too quickly.',
+    'Complete the card swipe at the reader.']},
+  {id:'garbage', icon:'🗑️', name:'Empty Garbage', desc:'Pull the lever to release the garbage through the chute.', v:[
+    'Pull and hold the lever until the garbage is ejected.',
+    'Operate the disposal lever to empty the chute.',
+    'Release the garbage by using the chute control.',
+    'Complete the garbage disposal at the chute.']},
+  {id:'fuel', icon:'⛽', name:'Fuel Engines', desc:'Fill the fuel can and transfer fuel to the engine.', v:[
+    'Fill the fuel can, then refuel the engine.',
+    'Collect fuel from Storage and deliver it to the engine.',
+    'Refill the engine using the fuel can.',
+    'Complete the fuel transfer at the engine.']},
+  {id:'download', icon:'⬇️', name:'Download Data', desc:'Download the files at the data terminal.', v:[
+    'Use the terminal to download the data.',
+    'Start the data download and wait for it to finish.',
+    'Collect the data from the designated panel.',
+    'Complete the download at the data terminal.']},
+  {id:'upload', icon:'⬆️', name:'Upload Data', desc:'Upload the downloaded files at the designated terminal.', v:[
+    'Upload the downloaded data at the terminal.',
+    'Send the collected files using the upload panel.',
+    'Complete the data upload at the designated location.',
+    'Transfer the downloaded files to finish the task.']},
+  {id:'o2', icon:'🌬️', name:'Clean O2 Filter', desc:'Remove leaves and debris from the oxygen filter.', v:[
+    'Remove the leaves blocking the O2 filter.',
+    'Clear the debris from the oxygen filter.',
+    'Clean the filter so oxygen can flow through.',
+    'Finish by removing all visible debris from the O2 filter.']},
+  {id:'align', icon:'🎯', name:'Align Engine Output', desc:'Adjust the engine output until the indicator is aligned.', v:[
+    'Adjust the engine output until the indicator lines up.',
+    'Move the control to align the engine output marker.',
+    'Set the engine output indicator to the correct position.',
+    'Complete the engine alignment by matching the indicator.']},
+  {id:'calibrate', icon:'🎛️', name:'Calibrate Distributor', desc:'Stop the rotating indicators when they align with the connections.', v:[
+    'Stop each rotating indicator when it reaches its connection.',
+    'Time the controls so the distributor connections align.',
+    'Match each rotating marker with its connection point.',
+    'Calibrate the distributor by aligning each indicator.']},
+  {id:'course', icon:'🧭', name:'Chart Course', desc:'Move the navigation markers along the route to their targets.', v:[
+    'Guide each navigation marker to its target along the route.',
+    'Plot the course by moving the markers to the destination points.',
+    'Complete the route by connecting the navigation targets.',
+    'Set the course by guiding the markers to their endpoints.']},
+  {id:'shields', icon:'🛡️', name:'Prime Shields', desc:'Activate the shield nodes shown on the panel.', v:[
+    'Activate the shield nodes shown on the panel.',
+    'Select the shield sections that need to be powered.',
+    'Prime the shields by activating the required nodes.',
+    'Complete the shield panel by switching on the indicated nodes.']},
+  {id:'steering', icon:'🕹️', name:'Stabilize Steering', desc:'Adjust the steering controls to the target position.', v:[
+    'Move the steering control to the target position.',
+    'Align the steering marker with the indicated target.',
+    'Adjust the course control until the steering indicator is centred.',
+    'Finish the steering task by matching the target position.']},
+  {id:'asteroids', icon:'☄️', name:'Clear Asteroids', desc:'Use the weapons console to shoot the asteroids.', v:[
+    'Use the weapons console to shoot the asteroids on screen.',
+    'Aim and fire at the asteroids until the task is complete.',
+    'Clear the asteroid field using the ship weapons.',
+    'Destroy the asteroids shown in the weapons panel.']},
+  {id:'reactor', icon:'☢️', name:'Start Reactor', desc:'Repeat the sequence displayed by the reactor system.', v:[
+    'Repeat the displayed sequence in the correct order.',
+    'Memorise and enter the reactor sequence shown on screen.',
+    'Follow the reactor panel sequence without making a mistake.',
+    'Complete the reactor task by reproducing the shown pattern.']},
+  {id:'plants', icon:'🪴', name:'Water Plants', desc:'Collect the watering can and water the plants.', v:[
+    'Collect the watering can and water the plants.',
+    'Use the watering can to complete the plant task.',
+    'Water the plants after retrieving the can.',
+    'Finish the plant task by watering the required plants.']},
+  {id:'power', icon:'⚡', name:'Divert Power', desc:'Move power from the electrical panel to the requested room.', v:[
+    'Divert power at the electrical panel to the indicated room.',
+    'Move the power slider to route energy to the requested location.',
+    'Redirect power using the electrical panel.',
+    'Complete the power diversion to the specified room.']},
+  {id:'sample', icon:'🧪', name:'Inspect Sample', desc:'Start the sample process, then inspect the results after it finishes.', v:[
+    'Start the sample machine and inspect the results when ready.',
+    'Run the sample and check the displayed results after processing.',
+    'Wait for the sample analysis, then inspect the results.',
+    'Complete the sample test by reviewing its results.']},
+  {id:'scan', icon:'🩺', name:'Submit Scan', desc:'Stand on the scanner and let the scan complete.', v:[
+    'Stand on the MedBay scanner until the scan finishes.',
+    'Complete the biometric scan at the scanner.',
+    'Use the MedBay scanner and wait for the result.',
+    'Finish the scan by remaining on the scanner until completion.']},
+  {id:'manifolds', icon:'🔢', name:'Unlock Manifolds', desc:'Select the numbered panels in ascending order.', v:[
+    'Select the numbers in ascending order, starting with the lowest.',
+    'Unlock the manifolds by pressing the numbers from smallest to largest.',
+    'Tap the numbered panels in the correct ascending sequence.',
+    'Complete the manifold panel by selecting each number in order.']},
+  {id:'id-code', icon:'🪪', name:'Enter ID Code', desc:'Enter the identification code displayed on the card.', v:[
+    'Read the code from the ID card and enter it on the keypad.',
+    'Type the displayed identification code into the terminal.',
+    'Enter the card code exactly as shown.',
+    'Complete the ID task by submitting the displayed code.']}
+];;
 const BYID = Object.fromEntries(TASKS.map(t => [t.id, t]));
 const LIMITS = [0,10,15,20,30,45,60,90,120];   // game time limit options (minutes, 0 = off)
 const MEETING_LIMITS = [30,60,90,120,180,300]; // seconds
