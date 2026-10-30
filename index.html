@@ -563,8 +563,7 @@ function makeMiniGame(id){
   };
   const c = configs[id] || configs.sample;
   const game = {...c,step:0,cleared:[],solved:false,value:0,entry:''};
-  if(c.type==='sequence' && id==='manifolds') game.items=shuffled(c.items);
-  if(c.type==='sequence' && id==='decontaminate') game.items=shuffled(c.items);
+  if(c.type==='sequence'){game.order=c.items.slice();if(id==='manifolds'||id==='decontaminate')game.items=shuffled(c.items);}
   return game;
 }
 function miniGameHtml(g){
@@ -598,7 +597,7 @@ function miniAction(el){
     const i=Number(el.dataset.mini);
     if(g.type==='count'){if(!g.cleared.includes(i))g.cleared.push(i);if(g.cleared.length===g.items.length)g.solved=true;}
     if(g.type==='sequence'){
-      const expected=g.items[g.step];
+      const expected=g.order[g.step];
       const actual=g.items[i];
       if(actual===expected){g.cleared.push(i);g.step++;if(g.step===g.items.length)g.solved=true;}
       else {g.step=0;g.cleared=[];toast('Wrong order — sequence reset.');}
@@ -938,7 +937,8 @@ async function renderPrint(names, fetched){
 
 /* ---------------------------- events ------------------------------- */
 document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit]'); if(mini){e.preventDefault();miniAction(mini);} });
-document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance)g.solved=true;renderTaskOverlay();} if(e.target.matches('[data-mini-entry') && S.task?.game)S.task.game.entry=e.target.value; });
+document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;const b=$('#taskdone');if(b)b.disabled=false;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
+document.addEventListener('change', e => { if(e.target.matches('[data-mini-range]') && S.task?.game)renderTaskOverlay(); });
 document.addEventListener('click', async e => {
   const el = e.target.closest('[data-act]'); if(!el) return;
   const act = el.dataset.act, v = el.dataset.v, s = S.session, g = S.g;
