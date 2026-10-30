@@ -899,7 +899,7 @@ function playView(g, d, me){
   }
   if(me.dead) html += `<div class="banner dead">☠ You're eliminated. You can still finish your tasks, but you can't vote or call meetings.</div>`;
   if(imp && !me.dead){ html += `<div class="card role-screen-card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.impScreen?'Return to tasks':'Open alternate screen'}" title="${S.impScreen?'Return to tasks':'Open alternate screen'}" data-act="impscreen">${S.impScreen?'↩':'⋯'}</button></div>${S.impScreen?impostorScreen(g,d,me):''}</div>`; }
-  if(S.reveal && me.role==='sheriff' && !me.dead){ html += `<div class="card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" title="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" data-act="sheriffscreen">${S.sheriffScreen?'↩':'⋯'}</button></div>${S.sheriffScreen?sheriffScreen(g,d,me):''}</div>`; }
+  if(S.reveal && me.role==='sheriff' && !me.dead){ html += `<div class="card role-screen-card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" title="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" data-act="sheriffscreen">${S.sheriffScreen?'↩':'⋯'}</button></div>${S.sheriffScreen?sheriffScreen(g,d,me):''}</div>`; }
   if(S.reveal && me.role==='medic' && !me.dead && !me.medicUsed){ const deadCrew=d.players.filter(p=>p.dead&&p.role!=='impostor'); html += `<div class="card"><h2>🩺 Medic ability</h2><p class="small muted">Revive one dead crewmate. You sacrifice yourself.</p>${deadCrew.length?deadCrew.map(p=>`<button class="btn ghost sm" style="margin:4px 0" data-act="medic-revive" data-v="${esc(p.k)}">❤️ Revive ${esc(p.name)} (sacrifice self)</button>`).join(''):'<p class="muted small">No dead crewmates to revive yet.</p>'}</div>`; }
   if(!((imp && S.impScreen) || (me.role==='sheriff' && S.sheriffScreen))){
     html += `<h2>Your tasks (${myTasks.filter(i=>me.done&&me.done[i]).length}/${myTasks.length})</h2>`;
@@ -960,7 +960,7 @@ function hostView(g, d, me){
   }
   if(m.status==='lobby'){
     const lim = m.limit || 0;
-    const taskCount = Number(m.tasksPerPlayer)||PER;
+    const taskCount = Math.max(1,Math.min(enabledIds(m).length,Number(m.tasksPerPlayer)||PER));
     html += `<div class="card"><h2>Game setup</h2>
       <label class="chk"><input type="checkbox" data-act="toggleroles" ${roles?'checked':''}> <span>Roles on (impostors, meetings &amp; voting)</span></label>
       ${roles ? `<div class="row"><span class="grow">Impostors</span><button class="btn ghost sm inline" data-act="imp" data-v="-1">−</button><b style="min-width:24px;text-align:center">${m.impostors ?? 2}</b><button class="btn ghost sm inline" data-act="imp" data-v="1">+</button></div>
@@ -1045,7 +1045,7 @@ document.addEventListener('click', async e => {
     case 'imp': { if(g.meta.status!=='lobby') break; const n = Math.max(0, Math.min(4, (g.meta.impostors ?? 2) + Number(v))); await DB.set(path('meta','impostors'), n); break; }
     case 'role-sheriff': case 'role-medic': case 'role-mayor': break;
     case 'limit': { let i = LIMITS.indexOf(g.meta.limit || 0); if(i<0) i=0; i = Math.max(0, Math.min(LIMITS.length-1, i + Number(v))); await DB.set(path('meta','limit'), LIMITS[i]); break; }
-    case 'taskcount': { if(g.meta.status!=='lobby') break; const max=enabledIds(g.meta).length; const n=Math.max(1,Math.min(max,(Number(g.meta.tasksPerPlayer)||PER)+Number(v))); await DB.set(path('meta','tasksPerPlayer'),n); break; }
+    case 'taskcount': { if(g.meta.status!=='lobby') break; const max=enabledIds(g.meta).length; const current=Math.max(1,Math.min(max,Number(g.meta.tasksPerPlayer)||PER)); const n=Math.max(1,Math.min(max,current+Number(v))); await DB.set(path('meta','tasksPerPlayer'),n); break; }
     case 'start': await startGame().catch(()=>toast('Could not start')); break;
     case 'end': if(confirm('End the round now?')) await endGame(v); break;
     case 'newround': await newRound(); break;
