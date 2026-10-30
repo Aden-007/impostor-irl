@@ -540,30 +540,88 @@ async function handleToken(tok){
   if(p) return showResult(p.ok, p.icon, p.title, p.msg);
   openTask(id);
 }
-function openTask(id){
-  const m = S.g.meta, t = BYID[id], v = pickVariant(t, S.session?.me);
-  clearInterval(S.taskTimer);
-  S.task = {id, text:v.text, secs:v.secs};
-  $('#overlay').innerHTML = `<div class="ov"><div class="sheet"><div class="big">${t.icon}</div><h1>${esc(tname(m,id))}</h1>
-    <p style="font-size:18px;margin:10px 0">${esc(v.text)}</p>
-    <button class="btn ok" id="taskdone" data-act="task-done" style="margin-top:12px" ${v.secs?'disabled':''}>${v.secs?`Wait ${v.secs}s…`:'✔ I did it'}</button>
-    <button class="btn ghost" data-act="task-cancel" style="margin-top:8px">Cancel</button></div></div>`;
-  if(v.secs){
-    const end = Date.now() + v.secs*1000;
-    S.taskTimer = setInterval(() => {
-      const b = $('#taskdone'); if(!b){ clearInterval(S.taskTimer); return; }
-      const left = Math.ceil((end - Date.now())/1000);
-      if(left <= 0){ clearInterval(S.taskTimer); b.disabled = false; b.textContent = '✔ I did it'; }
-      else b.textContent = `Wait ${left}s…`;
-    }, 250);
+
+function makeMiniGame(id){
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+  const shuffled = a => a.slice().sort(()=>Math.random()-.5);
+  const configs = {
+    sample:{type:'choice',title:'Sample analysis',prompt:'The analyser indicator reads NORMAL. Select that result.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL'},
+    scan:{type:'range',title:'Biometric scanner',prompt:'Move the scanner until the signal is centred.',target:50,tolerance:4},
+    manifolds:{type:'sequence',title:'Manifold sequence',prompt:'Tap the panels in ascending order.',items:[1,2,3,4]},
+    'id-code':{type:'code',title:'Identity keypad',prompt:'Enter the access code shown on the ID card.',code:String(1000+Math.floor(Math.random()*9000))},
+    telescope:{type:'range',title:'Telescope alignment',prompt:'Slide until the target is centred in the crosshair.',target:Math.floor(25+Math.random()*51),tolerance:3},
+    artifact:{type:'sequence',title:'Artifact assembly',prompt:'Fit the fragments in the correct order: top, right, bottom, left.',items:['TOP','RIGHT','BOTTOM','LEFT']},
+    beverage:{type:'choice',title:'Vending machine',prompt:'Order ticket: BLUE SODA. Select the matching drink.',options:['ORANGE JUICE','BLUE SODA','WATER','APPLE DRINK'],answer:'BLUE SODA'},
+    'clean-vent':{type:'count',title:'Vent cleaning',prompt:'Tap every piece of debris to clear the vent.',items:['🪨','🍂','🧻','🔩','🪵','🕸️']},
+    decontaminate:{type:'sequence',title:'Decontamination panel',prompt:'Repeat this sequence: 🔴 → 🟢 → 🔵 → 🟡.',items:['🔴','🟢','🔵','🟡']},
+    photos:{type:'sequence',title:'Photo developing',prompt:'Sort the photos from oldest to newest: 1, 2, 3.',items:['PHOTO 1','PHOTO 2','PHOTO 3']},
+    mannequin:{type:'choice',title:'Mannequin fitting',prompt:'Dress code: SPACE SUIT. Choose the matching outfit.',options:['CASUAL','SPACE SUIT','FORMAL','SPORTSWEAR'],answer:'SPACE SUIT'},
+    shower:{type:'sequence',title:'Shower repair',prompt:'Turn the valves in this order to restore water flow.',items:['LEFT','CENTRE','RIGHT']},
+    burger:{type:'sequence',title:'Burger assembly',prompt:'Stack the ingredients in order: bun, patty, cheese, lettuce.',items:['BUN','PATTY','CHEESE','LETTUCE']},
+    towels:{type:'count',title:'Towel collection',prompt:'Tap each towel to put it in the laundry basket.',items:['🧻','🧻','🧻','🧻','🧻']},
+    ruby:{type:'count',title:'Ruby polishing',prompt:'Tap the polishing pad repeatedly until the ruby shines.',items:['✨','✨','✨','✨','✨','✨','✨','✨']}
+  };
+  const c = configs[id] || configs.sample;
+  const game = {...c,step:0,cleared:[],solved:false,value:0,entry:''};
+  if(c.type==='sequence'){game.order=c.items.slice();if(id==='manifolds'||id==='decontaminate')game.items=shuffled(c.items);}
+  return game;
+}
+function miniGameHtml(g){
+  const progress = g.type==='count' ? g.cleared.length+'/'+g.items.length :
+    g.type==='sequence' ? g.step+'/'+g.items.length : g.type==='range' ? Math.round(g.value)+'%' :
+    g.type==='code' ? g.entry.length+'/4' : (g.solved?'Complete':'');
+  let body='';
+  if(g.type==='range'){
+    body='<div style="font-size:42px;margin:14px">🎯</div><input data-mini-range type="range" min="0" max="100" value="'+g.value+'" style="width:100%;accent-color:var(--accent)"><p class="small muted">Signal position: <b id="mini-value">'+Math.round(g.value)+'%</b></p>';
+  } else if(g.type==='sequence'){
+    body='<div class="row wrap" style="justify-content:center;margin:16px 0">'+g.items.map((x,i)=>'<button class="btn ghost sm" data-mini="'+i+'" '+(g.cleared.includes(i)?'disabled':'')+'>'+esc(String(x))+'</button>').join('')+'</div><p class="small muted">Tap the next correct item. Incorrect taps reset the sequence.</p>';
+  } else if(g.type==='choice'){
+    body='<div class="col" style="display:grid;gap:8px;margin:16px 0">'+g.options.map(x=>'<button class="btn ghost" data-mini-choice="'+esc(x)+'">'+esc(x)+'</button>').join('')+'</div>';
+  } else if(g.type==='count'){
+    body='<div class="row wrap" style="justify-content:center;margin:16px 0">'+g.items.map((x,i)=>'<button class="btn ghost sm" style="font-size:24px;min-width:54px" data-mini="'+i+'" '+(g.cleared.includes(i)?'disabled':'')+'>'+x+'</button>').join('')+'</div><p class="small muted">Tap each item once.</p>';
+  } else if(g.type==='code'){
+    body='<div class="code" style="font-size:34px;letter-spacing:5px">'+g.code+'</div><input type="text" data-mini-entry maxlength="4" inputmode="numeric" placeholder="4-digit code" value="'+esc(g.entry)+'"><button class="btn ghost" style="margin-top:8px" data-mini-submit>Verify code</button>';
   }
+  return '<div class="card" style="text-align:left;margin:12px 0"><div class="row"><b class="grow">'+esc(g.title)+'</b><span class="tag">'+esc(progress)+'</span></div><p class="small muted">'+esc(g.prompt)+'</p>'+body+(g.solved?'<p class="banner win">✔ Challenge completed!</p>':'')+'</div>';
+}
+function renderTaskOverlay(){
+  const tk=S.task, g=S.g, t=tk&&BYID[tk.id]; if(!tk||!t||!g||!g.meta)return;
+  const game=tk.game;
+  $('#overlay').innerHTML='<div class="ov"><div class="sheet"><div class="big">'+t.icon+'</div><h1>'+esc(tname(g.meta,tk.id))+'</h1><p class="small muted">Complete the phone challenge to verify this task.</p>'+miniGameHtml(game)+'<button class="btn ok" id="taskdone" data-act="task-done" style="margin-top:12px" '+(!game.solved?'disabled':'')+'>✔ Complete task</button><button class="btn ghost" data-act="task-cancel" style="margin-top:8px">Cancel</button></div></div>';
+}
+function miniAction(el){
+  const g=S.task&&S.task.game; if(!g||g.solved)return;
+  if(el.hasAttribute('data-mini-choice')){
+    if(el.dataset.miniChoice===g.answer)g.solved=true;else toast('Not quite — try another option.');
+  }else if(el.hasAttribute('data-mini')){
+    const i=Number(el.dataset.mini);
+    if(g.type==='count'){if(!g.cleared.includes(i))g.cleared.push(i);if(g.cleared.length===g.items.length)g.solved=true;}
+    if(g.type==='sequence'){
+      const expected=g.order[g.step];
+      const actual=g.items[i];
+      if(actual===expected){g.cleared.push(i);g.step++;if(g.step===g.items.length)g.solved=true;}
+      else {g.step=0;g.cleared=[];toast('Wrong order — sequence reset.');}
+    }
+  }else if(el.hasAttribute('data-mini-submit')){
+    const input=$('[data-mini-entry]');
+    if(input&&input.value===g.code){g.solved=true;g.entry=input.value;}else toast('Incorrect code. Try again.');
+  }
+  renderTaskOverlay();
+}
+
+function openTask(id){
+  clearInterval(S.taskTimer);
+  S.task = {id, game:makeMiniGame(id)};
+  renderTaskOverlay();
 }
 function cancelTask(){ clearInterval(S.taskTimer); S.task = null; $('#overlay').innerHTML = ''; }
 async function finishTask(){
   const tk = S.task, s = S.session; if(!tk || !s || !s.me) return;
-  clearInterval(S.taskTimer); S.task = null; $('#overlay').innerHTML = '';
+  if(!tk.game?.solved){toast('Complete the mini-game first.');return;}
+  clearInterval(S.taskTimer);
   const p = scanProblem(tk.id);
-  if(p) return showResult(p.ok, p.icon, p.title, p.msg);
+  if(p){S.task=null;$('#overlay').innerHTML='';return showResult(p.ok,p.icon,p.title,p.msg);}
+  S.task = null; $('#overlay').innerHTML = '';
   await DB.set(path('players', s.me, 'done', tk.id), Date.now());
   showResult(true, BYID[tk.id].icon, 'Task complete!', tname(S.g.meta, tk.id));
 }
@@ -878,6 +936,9 @@ async function renderPrint(names, fetched){
 }
 
 /* ---------------------------- events ------------------------------- */
+document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit]'); if(mini){e.preventDefault();miniAction(mini);} });
+document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;const b=$('#taskdone');if(b)b.disabled=false;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
+document.addEventListener('change', e => { if(e.target.matches('[data-mini-range]') && S.task?.game)renderTaskOverlay(); });
 document.addEventListener('click', async e => {
   const el = e.target.closest('[data-act]'); if(!el) return;
   const act = el.dataset.act, v = el.dataset.v, s = S.session, g = S.g;
