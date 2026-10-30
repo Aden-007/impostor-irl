@@ -96,11 +96,13 @@ body.print #app{max-width:none;padding:10px}
 .pcode{font:700 22px ui-monospace,Menlo,monospace;letter-spacing:4px}
 .psm{font-size:12px;color:#444}
 @media print{.no-print{display:none!important} .pcard{break-inside:avoid}}
-/* Discreet role-screen controls: visible icon-only buttons with accessible labels. */
-.stealth-toggle{opacity:.55!important;min-width:28px!important;width:28px!important;height:28px!important;padding:0!important;border:1px solid var(--line)!important;border-radius:9px!important;background:rgba(14,20,48,.65)!important;color:var(--text)!important;font-size:19px!important;line-height:1!important;box-shadow:none!important;transition:opacity .15s ease,background .15s ease!important}
-.stealth-toggle:hover{opacity:.95!important;background:#20294b!important}
+/* Low-profile role-screen toggles: tucked into the card corner for both roles. */
+.role-screen-card{position:relative;padding-top:8px!important}
+.stealth-control-row{position:absolute;top:5px;right:7px;z-index:3;display:flex;justify-content:flex-end;min-height:0;margin:0;pointer-events:none}
+.stealth-toggle{pointer-events:auto;opacity:.38!important;min-width:25px!important;width:25px!important;height:25px!important;padding:0!important;border:1px solid transparent!important;border-radius:50%!important;background:transparent!important;color:var(--muted)!important;font-size:18px!important;line-height:1!important;box-shadow:none!important;transition:opacity .15s ease,background .15s ease,border-color .15s ease!important}
+.stealth-toggle:hover{opacity:.82!important;background:rgba(124,92,255,.12)!important;border-color:rgba(147,160,207,.18)!important}
 .stealth-toggle:focus-visible{opacity:1!important;outline:2px solid var(--accent)!important}
-.stealth-control-row{display:flex;justify-content:flex-end;min-height:28px;margin:-4px 0 2px}
+
 
 /* Among Us-inspired task terminal and interactive mini-game visuals */
 .task-ov{background:radial-gradient(ellipse at 50% 10%,rgba(35,66,111,.35),rgba(3,7,18,.94) 65%);backdrop-filter:blur(7px);padding:12px}
@@ -376,12 +378,12 @@ const saveSession = () => S.session ? store.setItem('irl.session', JSON.stringif
 const path = (...p) => 'games/' + S.session.room + (p.length ? '/' + p.join('/') : '');
 
 /* --------------------------- game logic ---------------------------- */
-function pickTasks(ids, usage, combos){
+function pickTasks(ids, usage, combos, count){
   let first = null;
   for(let a=0;a<80;a++){
     const jit = a < 40 ? 0.99 : 1.99;   // <1 = strictly balanced, >1 = looser
     const pick = ids.map(id => ({id, s:(usage[id]||0)+Math.random()*jit}))
-      .sort((x,y)=>x.s-y.s).slice(0,PER).map(x=>x.id).sort();
+      .sort((x,y)=>x.s-y.s).slice(0,count).map(x=>x.id).sort();
     first = first || pick;
     if(!combos.has(pick.join(','))) return pick;
   }
@@ -405,7 +407,7 @@ function derive(g){
 async function createGame(){
   let room;
   for(let i=0;i<20;i++){ room=randRoom(); if(!(await DB.get('games/'+room+'/meta'))) break; }
-  await DB.set('games/'+room+'/meta', {created:Date.now(), status:'lobby', roles:true, impostors:CFG.defaultImpostors ?? 2,
+  await DB.set('games/'+room+'/meta', {created:Date.now(), status:'lobby', roles:true, tasksPerPlayer:PER, impostors:CFG.defaultImpostors ?? 2,
                                       limit:0, confirmEject:false, anonymousVotes:false, meetingLimit:60, killCooldown:30, roleSheriff:true, roleMedic:true, roleMayor:true, hostPin:randPin(), round:1});
   S.session = {room, host:true, me:null, name:null}; S.tab='host';
   saveSession(); subscribe();
@@ -453,7 +455,8 @@ async function startGame(){
   const players = Object.keys(g.players||{});
   const ids = enabledIds(m);
   if(players.length < 2) return toast('Need at least 2 players');
-  if(ids.length < PER) return toast(`Enable at least ${PER} tasks`);
+  const taskCount = Math.max(1, Math.min(ids.length, Number(m.tasksPerPlayer)||PER));
+  if(ids.length < taskCount) return toast(`Enable at least ${taskCount} tasks`);
   const imp = rolesOn(m) ? Math.max(0, Math.min(m.impostors ?? 2, Math.floor((players.length-1)/2))) : 0;
   const impSet = new Set(shuffle(players).slice(0, imp));
   const usage = {}, combos = new Set(), up = {};
@@ -465,7 +468,7 @@ async function startGame(){
   const enabledRoles = rolesOn(m) ? shuffle([['sheriff',m.roleSheriff!==false],['medic',m.roleMedic!==false],['mayor',m.roleMayor!==false]].filter(x=>x[1]).map(x=>x[0])) : [];
   shuffle(crewKeys).slice(0, enabledRoles.length).forEach((k,i) => { special[k] = enabledRoles[i]; });
   shuffle(players).forEach(k => {
-    const pick = pickTasks(ids, usage, combos);
+    const pick = pickTasks(ids, usage, combos, taskCount);
     pick.forEach(i => usage[i]=(usage[i]||0)+1);
     combos.add(pick.join(','));
     up[`players/${k}/role`] = impSet.has(k) ? 'impostor' : (special[k] || 'crew');
@@ -895,7 +898,7 @@ function playView(g, d, me){
     html += `<div class="banner">No roles this game – everyone is crew. Finish all the tasks together!</div>`;
   }
   if(me.dead) html += `<div class="banner dead">☠ You're eliminated. You can still finish your tasks, but you can't vote or call meetings.</div>`;
-  if(imp && !me.dead){ html += `<div class="card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.impScreen?'Return to tasks':'Open alternate screen'}" title="${S.impScreen?'Return to tasks':'Open alternate screen'}" data-act="impscreen">${S.impScreen?'↩':'⋯'}</button></div>${S.impScreen?impostorScreen(g,d,me):''}</div>`; }
+  if(imp && !me.dead){ html += `<div class="card role-screen-card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.impScreen?'Return to tasks':'Open alternate screen'}" title="${S.impScreen?'Return to tasks':'Open alternate screen'}" data-act="impscreen">${S.impScreen?'↩':'⋯'}</button></div>${S.impScreen?impostorScreen(g,d,me):''}</div>`; }
   if(S.reveal && me.role==='sheriff' && !me.dead){ html += `<div class="card"><div class="stealth-control-row"><button class="btn stealth-toggle" aria-label="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" title="${S.sheriffScreen?'Return to tasks':'Open alternate screen'}" data-act="sheriffscreen">${S.sheriffScreen?'↩':'⋯'}</button></div>${S.sheriffScreen?sheriffScreen(g,d,me):''}</div>`; }
   if(S.reveal && me.role==='medic' && !me.dead && !me.medicUsed){ const deadCrew=d.players.filter(p=>p.dead&&p.role!=='impostor'); html += `<div class="card"><h2>🩺 Medic ability</h2><p class="small muted">Revive one dead crewmate. You sacrifice yourself.</p>${deadCrew.length?deadCrew.map(p=>`<button class="btn ghost sm" style="margin:4px 0" data-act="medic-revive" data-v="${esc(p.k)}">❤️ Revive ${esc(p.name)} (sacrifice self)</button>`).join(''):'<p class="muted small">No dead crewmates to revive yet.</p>'}</div>`; }
   if(!((imp && S.impScreen) || (me.role==='sheriff' && S.sheriffScreen))){
@@ -957,13 +960,15 @@ function hostView(g, d, me){
   }
   if(m.status==='lobby'){
     const lim = m.limit || 0;
+    const taskCount = Number(m.tasksPerPlayer)||PER;
     html += `<div class="card"><h2>Game setup</h2>
       <label class="chk"><input type="checkbox" data-act="toggleroles" ${roles?'checked':''}> <span>Roles on (impostors, meetings &amp; voting)</span></label>
       ${roles ? `<div class="row"><span class="grow">Impostors</span><button class="btn ghost sm inline" data-act="imp" data-v="-1">−</button><b style="min-width:24px;text-align:center">${m.impostors ?? 2}</b><button class="btn ghost sm inline" data-act="imp" data-v="1">+</button></div>
       <label class="chk"><input type="checkbox" data-act="toggleconfirm" ${m.confirmEject?'checked':''}> <span>Reveal the role of an ejected player</span></label><p class="small muted">Special roles (at most one of each per round)</p><label class="chk"><input type="checkbox" data-act="role-sheriff" data-v="1" ${m.roleSheriff!==false?'checked':''}> <span>Enable Sheriff</span></label><label class="chk"><input type="checkbox" data-act="role-medic" data-v="1" ${m.roleMedic!==false?'checked':''}> <span>Enable Medic</span></label><label class="chk"><input type="checkbox" data-act="role-mayor" data-v="1" ${m.roleMayor!==false?'checked':''}> <span>Enable Mayor</span></label>` : `<p class="small muted">Everyone is crew; no meetings or voting.</p>`}
+      <div class="row" style="margin-top:10px"><span class="grow">Tasks per player</span><button class="btn ghost sm inline" data-act="taskcount" data-v="-1" ${taskCount<=1?'disabled':''}>−</button><b style="min-width:36px;text-align:center">${taskCount}</b><button class="btn ghost sm inline" data-act="taskcount" data-v="1" ${taskCount>=enabledIds(m).length?'disabled':''}>+</button></div>
       <div class="row" style="margin-top:6px"><span class="grow">Time limit</span><button class="btn ghost sm inline" data-act="limit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${lim?lim+' min':'Off'}</b><button class="btn ghost sm inline" data-act="limit" data-v="1">+</button></div>
       ${roles ? `<div class="row" style="margin-top:10px"><span class="grow">Meeting timer</span><button class="btn ghost sm inline" data-act="meetinglimit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.meetingLimit||60}s</b><button class="btn ghost sm inline" data-act="meetinglimit" data-v="1">+</button></div><div class="row" style="margin-top:10px"><span class="grow">Impostor kill cooldown</span><button class="btn ghost sm inline" data-act="killcooldown" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.killCooldown||30}s</b><button class="btn ghost sm inline" data-act="killcooldown" data-v="1">+</button></div><label class="chk"><input type="checkbox" data-act="toggleanonymous" ${m.anonymousVotes?'checked':''}> <span>Anonymous voting</span></label><p class="small muted">Sheriff, Medic and Mayor are randomly assigned to up to three crewmates.</p>`:''}
-      <p class="small muted">${PER} tasks per player, assigned at random (tasks can be shared, combinations differ).${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
+      <p class="small muted">${taskCount} tasks per player, assigned at random (tasks can be shared, combinations differ).${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
       <details><summary>Task names &amp; locations (optional)</summary>
       <p class="small muted">Untick tasks you won't use. Rename them and add a location hint so players know where to look.</p>
       ${TASKS.map(t=>`<div class="trow"><div class="l1"><input type="checkbox" data-act="toggletask" data-v="${t.id}" ${m.off&&m.off[t.id]?'':'checked'}><span>${t.icon}</span><input type="text" data-name="${t.id}" value="${esc(tname(m,t.id))}" maxlength="28"></div>
@@ -1015,7 +1020,7 @@ document.addEventListener('change', e => { if(e.target.matches('[data-mini-range
 document.addEventListener('click', async e => {
   const el = e.target.closest('[data-act]'); if(!el) return;
   const act = el.dataset.act, v = el.dataset.v, s = S.session, g = S.g;
-  const hostActions = new Set(['meetinglimit','killcooldown','imp','limit','start','end','newround','kick','revive','closemeet','deletegame','toggleroles','toggleconfirm','toggleanonymous','toggletask','role-sheriff','role-medic','role-mayor']);
+  const hostActions = new Set(['meetinglimit','killcooldown','imp','limit','taskcount','start','end','newround','kick','revive','closemeet','deletegame','toggleroles','toggleconfirm','toggleanonymous','toggletask','role-sheriff','role-medic','role-mayor']);
   if(hostActions.has(act) && !s?.host){ toast('Only the host can do that'); return; }
   if(!g && !['create','leave','tab'].includes(act)) return;
   switch(act){
@@ -1040,6 +1045,7 @@ document.addEventListener('click', async e => {
     case 'imp': { if(g.meta.status!=='lobby') break; const n = Math.max(0, Math.min(4, (g.meta.impostors ?? 2) + Number(v))); await DB.set(path('meta','impostors'), n); break; }
     case 'role-sheriff': case 'role-medic': case 'role-mayor': break;
     case 'limit': { let i = LIMITS.indexOf(g.meta.limit || 0); if(i<0) i=0; i = Math.max(0, Math.min(LIMITS.length-1, i + Number(v))); await DB.set(path('meta','limit'), LIMITS[i]); break; }
+    case 'taskcount': { if(g.meta.status!=='lobby') break; const max=enabledIds(g.meta).length; const n=Math.max(1,Math.min(max,(Number(g.meta.tasksPerPlayer)||PER)+Number(v))); await DB.set(path('meta','tasksPerPlayer'),n); break; }
     case 'start': await startGame().catch(()=>toast('Could not start')); break;
     case 'end': if(confirm('End the round now?')) await endGame(v); break;
     case 'newround': await newRound(); break;
