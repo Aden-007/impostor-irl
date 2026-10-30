@@ -2418,7 +2418,8 @@ function hostView(g, d, me){
   }
   if(m.status==='lobby'){
     const lim = m.limit || 0;
-    const maxPuzzleCount=Math.max(1,Math.floor(enabledIds(m).length/Math.max(1,d.players.length)));\n    const taskCount = Math.max(1,Math.min(maxPuzzleCount,Number(m.tasksPerPlayer)||PER));
+    const maxPuzzleCount=Math.max(1,Math.floor(enabledIds(m).length/Math.max(1,d.players.length)));
+    const taskCount = Math.max(1,Math.min(maxPuzzleCount,Number(m.tasksPerPlayer)||PER));
     html += `<div class="card"><h2>Game setup</h2>
       <label class="chk"><input type="checkbox" data-act="toggleroles" ${roles?'checked':''}> <span>Roles on (impostors, meetings &amp; voting)</span></label>
       ${roles ? `<div class="row"><span class="grow">Impostors</span><button class="btn ghost sm inline" data-act="imp" data-v="-1">−</button><b style="min-width:24px;text-align:center">${m.impostors ?? 2}</b><button class="btn ghost sm inline" data-act="imp" data-v="1">+</button></div>
