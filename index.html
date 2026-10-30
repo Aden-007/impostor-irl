@@ -545,7 +545,7 @@ function makeMiniGame(id){
   const pick = a => a[Math.floor(Math.random()*a.length)];
   const shuffled = a => a.slice().sort(()=>Math.random()-.5);
   const configs = {
-    sample:{type:'choice',title:'Sample analysis',prompt:'The analyser has finished. Select the result shown by the indicator.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL'},
+    sample:{type:'choice',title:'Sample analysis',prompt:'The analyser indicator reads NORMAL. Select that result.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL'},
     scan:{type:'range',title:'Biometric scanner',prompt:'Move the scanner until the signal is centred.',target:50,tolerance:4},
     manifolds:{type:'sequence',title:'Manifold sequence',prompt:'Tap the panels in ascending order.',items:[1,2,3,4]},
     'id-code':{type:'code',title:'Identity keypad',prompt:'Enter the access code shown on the ID card.',code:String(1000+Math.floor(Math.random()*9000))},
@@ -553,7 +553,7 @@ function makeMiniGame(id){
     artifact:{type:'sequence',title:'Artifact assembly',prompt:'Fit the fragments in the correct order: top, right, bottom, left.',items:['TOP','RIGHT','BOTTOM','LEFT']},
     beverage:{type:'choice',title:'Vending machine',prompt:'Order ticket: BLUE SODA. Select the matching drink.',options:['ORANGE JUICE','BLUE SODA','WATER','APPLE DRINK'],answer:'BLUE SODA'},
     'clean-vent':{type:'count',title:'Vent cleaning',prompt:'Tap every piece of debris to clear the vent.',items:['🪨','🍂','🧻','🔩','🪵','🕸️']},
-    decontaminate:{type:'sequence',title:'Decontamination panel',prompt:'Repeat the four-colour safety sequence.',items:['🔴','🟢','🔵','🟡']},
+    decontaminate:{type:'sequence',title:'Decontamination panel',prompt:'Repeat this sequence: 🔴 → 🟢 → 🔵 → 🟡.',items:['🔴','🟢','🔵','🟡']},
     photos:{type:'sequence',title:'Photo developing',prompt:'Sort the photos from oldest to newest: 1, 2, 3.',items:['PHOTO 1','PHOTO 2','PHOTO 3']},
     mannequin:{type:'choice',title:'Mannequin fitting',prompt:'Dress code: SPACE SUIT. Choose the matching outfit.',options:['CASUAL','SPACE SUIT','FORMAL','SPORTSWEAR'],answer:'SPACE SUIT'},
     shower:{type:'sequence',title:'Shower repair',prompt:'Turn the valves in this order to restore water flow.',items:['LEFT','CENTRE','RIGHT']},
