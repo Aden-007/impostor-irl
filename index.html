@@ -2139,6 +2139,9 @@ function miniAction(el){
       g.timeLimit=base;g.deadlineAt=Date.now()+base*1000;g.wrongCount=0;g.timedOut=false;
       startPuzzleTimer();renderTaskOverlay();return;
     }
+    if(Date.now()>=g.deadlineAt){
+      g.timedOut=true;clearInterval(S.taskTimer);renderTaskOverlay();return;
+    }
     const norm=v=>String(v??'').trim().toUpperCase().replace(/\s+/g,' ');
     if(norm(el.dataset.puzzleChoice)===norm(g.answer))g.solved=true;
     else{
