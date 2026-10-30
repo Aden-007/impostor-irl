@@ -1905,7 +1905,7 @@ async function startGame(){
   const players = Object.keys(g.players||{});
   const ids = enabledIds(m);
   if(players.length < 2) return toast('Need at least 2 players');
-  const taskCount = Math.max(1, Math.min(ids.length, Number(m.tasksPerPlayer)||PER));
+  const taskCount = Math.max(1, Math.min(Math.floor(ids.length/Math.max(1,players.length)), Number(m.tasksPerPlayer)||PER));
   if(ids.length < players.length*taskCount) return toast(`You need ${players.length*taskCount} unique puzzles for ${players.length} players. Enable more puzzles or reduce puzzles per player.`);
   const imp = rolesOn(m) ? Math.max(0, Math.min(m.impostors ?? 2, Math.floor((players.length-1)/2))) : 0;
   const impSet = new Set(shuffle(players).slice(0, imp));
@@ -2121,7 +2121,7 @@ function renderTaskOverlay(){
 function miniAction(el){
   const g=S.task&&S.task.game;if(!g||g.solved)return;
   if(g.type==='puzzle'){
-    const norm=v=>String(v??'').trim().toUpperCase().replace(/\\s+/g,' ');
+    const norm=v=>String(v??'').trim().toUpperCase().replace(/\s+/g,' ');
     if(norm(el.dataset.puzzleChoice)===norm(g.answer))g.solved=true;else toast('Incorrect solution. Try again.');
   }else if(el.hasAttribute('data-mini-choice')){
     if(el.dataset.miniChoice===g.answer)g.solved=true;else toast('Incorrect selection — check the task order.');
@@ -2418,12 +2418,12 @@ function hostView(g, d, me){
   }
   if(m.status==='lobby'){
     const lim = m.limit || 0;
-    const taskCount = Math.max(1,Math.min(enabledIds(m).length,Number(m.tasksPerPlayer)||PER));
+    const maxPuzzleCount=Math.max(1,Math.floor(enabledIds(m).length/Math.max(1,d.players.length)));\n    const taskCount = Math.max(1,Math.min(maxPuzzleCount,Number(m.tasksPerPlayer)||PER));
     html += `<div class="card"><h2>Game setup</h2>
       <label class="chk"><input type="checkbox" data-act="toggleroles" ${roles?'checked':''}> <span>Roles on (impostors, meetings &amp; voting)</span></label>
       ${roles ? `<div class="row"><span class="grow">Impostors</span><button class="btn ghost sm inline" data-act="imp" data-v="-1">−</button><b style="min-width:24px;text-align:center">${m.impostors ?? 2}</b><button class="btn ghost sm inline" data-act="imp" data-v="1">+</button></div>
       <label class="chk"><input type="checkbox" data-act="toggleconfirm" ${m.confirmEject?'checked':''}> <span>Reveal the role of an ejected player</span></label><p class="small muted">Special roles (at most one of each per round)</p><label class="chk"><input type="checkbox" data-act="role-sheriff" data-v="1" ${m.roleSheriff!==false?'checked':''}> <span>Enable Sheriff</span></label><label class="chk"><input type="checkbox" data-act="role-medic" data-v="1" ${m.roleMedic!==false?'checked':''}> <span>Enable Medic</span></label><label class="chk"><input type="checkbox" data-act="role-mayor" data-v="1" ${m.roleMayor!==false?'checked':''}> <span>Enable Mayor</span></label>` : `<p class="small muted">Everyone is crew; no meetings or voting.</p>`}
-      <div class="row" style="margin-top:10px"><span class="grow">Puzzles per player</span><button class="btn ghost sm inline" data-act="taskcount" data-v="-1" ${taskCount<=1?'disabled':''}>−</button><b style="min-width:36px;text-align:center">${taskCount}</b><button class="btn ghost sm inline" data-act="taskcount" data-v="1" ${taskCount>=enabledIds(m).length?'disabled':''}>+</button></div>
+      <div class="row" style="margin-top:10px"><span class="grow">Puzzles per player</span><button class="btn ghost sm inline" data-act="taskcount" data-v="-1" ${taskCount<=1?'disabled':''}>−</button><b style="min-width:36px;text-align:center">${taskCount}</b><button class="btn ghost sm inline" data-act="taskcount" data-v="1" ${taskCount>=maxPuzzleCount?'disabled':''}>+</button></div>
       <div class="row" style="margin-top:6px"><span class="grow">Time limit</span><button class="btn ghost sm inline" data-act="limit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${lim?lim+' min':'Off'}</b><button class="btn ghost sm inline" data-act="limit" data-v="1">+</button></div>
       ${roles ? `<div class="row" style="margin-top:10px"><span class="grow">Meeting timer</span><button class="btn ghost sm inline" data-act="meetinglimit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.meetingLimit||60}s</b><button class="btn ghost sm inline" data-act="meetinglimit" data-v="1">+</button></div><div class="row" style="margin-top:10px"><span class="grow">Impostor kill cooldown</span><button class="btn ghost sm inline" data-act="killcooldown" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.killCooldown||30}s</b><button class="btn ghost sm inline" data-act="killcooldown" data-v="1">+</button></div><label class="chk"><input type="checkbox" data-act="toggleanonymous" ${m.anonymousVotes?'checked':''}> <span>Anonymous voting</span></label><p class="small muted">Sheriff, Medic and Mayor are randomly assigned to up to three crewmates.</p>`:''}
       <p class="small muted">${taskCount} puzzles per player, selected randomly. Every puzzle is unique within the round.${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
@@ -2503,7 +2503,7 @@ document.addEventListener('click', async e => {
     case 'imp': { if(g.meta.status!=='lobby') break; const n = Math.max(0, Math.min(4, (g.meta.impostors ?? 2) + Number(v))); await DB.set(path('meta','impostors'), n); break; }
     case 'role-sheriff': case 'role-medic': case 'role-mayor': break;
     case 'limit': { let i = LIMITS.indexOf(g.meta.limit || 0); if(i<0) i=0; i = Math.max(0, Math.min(LIMITS.length-1, i + Number(v))); await DB.set(path('meta','limit'), LIMITS[i]); break; }
-    case 'taskcount': { if(g.meta.status!=='lobby') break; const max=enabledIds(g.meta).length; const current=Math.max(1,Math.min(max,Number(g.meta.tasksPerPlayer)||PER)); const n=Math.max(1,Math.min(max,current+Number(v))); await DB.set(path('meta','tasksPerPlayer'),n); break; }
+    case 'taskcount': { if(g.meta.status!=='lobby') break; const max=Math.max(1,Math.floor(enabledIds(g.meta).length/Math.max(1,Object.keys(g.players||{}).length))); const current=Math.max(1,Math.min(max,Number(g.meta.tasksPerPlayer)||PER)); const n=Math.max(1,Math.min(max,current+Number(v))); await DB.set(path('meta','tasksPerPlayer'),n); break; }
     case 'start': await startGame().catch(()=>toast('Could not start')); break;
     case 'end': if(confirm('End the round now?')) await endGame(v); break;
     case 'newround': await newRound(); break;
