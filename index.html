@@ -191,81 +191,1536 @@ const PER = CFG.tasksPerPlayer || 4;
 /*  IDs must stay unique. Names can also be changed by the host in-app. */
 /* ------------------------------------------------------------------ */
 const TASKS = [
-  {id:'sample', icon:'🧪', name:'Inspect Sample', desc:'Run the sample analysis and inspect the result.', v:[
-    'Start the sample process, then inspect its result.',
-    'Wait for the sample analysis and read the result.',
-    'Run the sample check and review the displayed outcome.',
-    'Complete the sample task by checking its result.']},
-  {id:'scan', icon:'🩺', name:'Submit Scan', desc:'Complete the biometric scan at the scanner.', v:[
-    'Stand on the scanner until the scan finishes.',
-    'Complete the biometric scan and wait for confirmation.',
-    'Use the scanner and let the scan complete.',
-    'Finish the scan by remaining in place until it ends.']},
-  {id:'manifolds', icon:'🔢', name:'Unlock Manifolds', desc:'Select the numbered panels in ascending order.', v:[
-    'Select the numbers from lowest to highest.',
-    'Enter the numbered sequence in ascending order.',
-    'Unlock the panel by choosing each number in order.',
-    'Complete the manifold sequence without skipping a number.']},
-  {id:'id-code', icon:'🪪', name:'Enter ID Code', desc:'Enter the identification code shown on the card.', v:[
-    'Read the ID card and enter its code.',
-    'Type the displayed identification code into the keypad.',
-    'Enter the code exactly as it appears on the card.',
-    'Submit the ID code shown on the card.']},
-  {id:'telescope', icon:'🔭', name:'Align Telescope', desc:'Align the telescope with the target shown in the viewfinder.', v:[
-    'Adjust the telescope until the target is centred.',
-    'Move the telescope view to line up with the target.',
-    'Align the viewfinder with the object shown.',
-    'Finish by centring the target in the telescope.']},
-  {id:'artifact', icon:'🪬', name:'Assemble Artifact', desc:'Reassemble the artifact by fitting its pieces together.', v:[
-    'Arrange the artifact pieces to form the complete shape.',
-    'Fit the fragments together to rebuild the artifact.',
-    'Place each piece in the matching position.',
-    'Complete the artifact by assembling all its parts.']},
-  {id:'beverage', icon:'🥤', name:'Buy Beverage', desc:'Select the requested drink from the vending machine.', v:[
-    'Choose the requested beverage from the machine.',
-    'Select the correct drink using its code.',
-    'Find and choose the beverage shown in the prompt.',
-    'Complete the drink selection at the vending machine.']},
-  {id:'clean-vent', icon:'🌀', name:'Clean Vent', desc:'Remove debris from the vent.', v:[
-    'Clear the debris from the vent opening.',
-    'Remove the objects blocking the vent.',
-    'Clean the vent until it is clear.',
-    'Finish by clearing the vent of debris.']},
-  {id:'decontaminate', icon:'☣️', name:'Decontaminate', desc:'Complete the decontamination cycle.', v:[
-    'Enter the decontamination chamber and wait for the cycle.',
-    'Start the decontamination process and let it finish.',
-    'Complete the chamber cycle before leaving.',
-    'Wait until the decontamination cycle is complete.']},
-  {id:'photos', icon:'🖼️', name:'Develop Photos', desc:'Develop the photographs and place them in the correct order.', v:[
-    'Develop the photos and arrange them in the requested order.',
-    'Process the photographs, then sort them correctly.',
-    'Complete the photo development sequence.',
-    'Develop the pictures and place them in their correct positions.']},
-  {id:'mannequin', icon:'🧍', name:'Dress Mannequin', desc:'Dress the mannequin to match the displayed outfit.', v:[
-    'Choose the clothing items that match the example.',
-    'Dress the mannequin using the requested outfit.',
-    'Select the correct garments for the mannequin.',
-    'Finish by matching the mannequin to the outfit shown.']},
-  {id:'shower', icon:'🚿', name:'Fix Shower', desc:'Repair the shower so it works correctly.', v:[
-    'Adjust the shower controls until it works properly.',
-    'Repair the shower using the available controls.',
-    'Fix the shower and complete the repair.',
-    'Finish the shower repair by correcting the controls.']},
-  {id:'burger', icon:'🍔', name:'Make Burger', desc:'Prepare a burger using the ingredients in the requested order.', v:[
-    'Assemble the burger in the order shown.',
-    'Add the ingredients to match the displayed recipe.',
-    'Build the requested burger using the correct layers.',
-    'Complete the burger by stacking the ingredients correctly.']},
-  {id:'towels', icon:'🧺', name:'Pick Up Towels', desc:'Collect the towels and place them in the designated spot.', v:[
-    'Collect the towels and bring them to the marked location.',
-    'Pick up the towels and deliver them to the collection point.',
-    'Gather the towels and place them where indicated.',
-    'Finish by collecting all required towels.']},
-  {id:'ruby', icon:'💎', name:'Polish Ruby', desc:'Polish the ruby until it is clean and shiny.', v:[
-    'Polish the ruby until its surface shines.',
-    'Clean and polish the gemstone.',
-    'Remove marks from the ruby by polishing it.',
-    'Finish polishing when the ruby looks clear and bright.']}
+  {
+    "id": "q-01",
+    "icon": "⚡",
+    "name": "Signal Check 01",
+    "desc": "Signal sequence: 8, 10, 12, ? Find the next number.",
+    "category": "Quick",
+    "answer": "14",
+    "options": [
+      "14",
+      "16",
+      "12",
+      "18"
+    ],
+    "v": [
+      "Signal sequence: 8, 10, 12, ? Find the next number."
+    ]
+  },
+  {
+    "id": "q-02",
+    "icon": "⚡",
+    "name": "Power Sequence 02",
+    "desc": "Power sequence: 5, 8, 11, 14, ?",
+    "category": "Quick",
+    "answer": "24",
+    "options": [
+      "24",
+      "27",
+      "21",
+      "30"
+    ],
+    "v": [
+      "Power sequence: 5, 8, 11, 14, ?"
+    ]
+  },
+  {
+    "id": "q-03",
+    "icon": "⚡",
+    "name": "Access Alphabet 03",
+    "desc": "Access alphabet: if A=1, B=2 and so on, what number represents G?",
+    "category": "Quick",
+    "answer": "11",
+    "options": [
+      "11",
+      "12",
+      "10",
+      "13"
+    ],
+    "v": [
+      "Access alphabet: if A=1, B=2 and so on, what number represents G?"
+    ]
+  },
+  {
+    "id": "q-04",
+    "icon": "⚡",
+    "name": "Odd Circuit 04",
+    "desc": "Fuel sum: a reserve has 21 units and receives 28 more. What is the total?",
+    "category": "Quick",
+    "answer": "49",
+    "options": [
+      "49",
+      "53",
+      "45",
+      "57"
+    ],
+    "v": [
+      "Fuel sum: a reserve has 21 units and receives 28 more. What is the total?"
+    ]
+  },
+  {
+    "id": "q-05",
+    "icon": "⚡",
+    "name": "Binary Ping 05",
+    "desc": "Shape scan: how many sides does a polygon with 6 sides have?",
+    "category": "Quick",
+    "answer": "6",
+    "options": [
+      "6",
+      "7",
+      "5",
+      "8"
+    ],
+    "v": [
+      "Shape scan: how many sides does a polygon with 6 sides have?"
+    ]
+  },
+  {
+    "id": "q-06",
+    "icon": "⚡",
+    "name": "Fuel Sum 06",
+    "desc": "Square signal: what is 9 multiplied by itself?",
+    "category": "Quick",
+    "answer": "81",
+    "options": [
+      "81",
+      "82",
+      "80",
+      "83"
+    ],
+    "v": [
+      "Square signal: what is 9 multiplied by itself?"
+    ]
+  },
+  {
+    "id": "q-07",
+    "icon": "⚡",
+    "name": "Letter Shift 07",
+    "desc": "Final digit: what is the last digit of 10 × 4?",
+    "category": "Quick",
+    "answer": "0",
+    "options": [
+      "0",
+      "1",
+      "-1",
+      "2"
+    ],
+    "v": [
+      "Final digit: what is the last digit of 10 × 4?"
+    ]
+  },
+  {
+    "id": "q-08",
+    "icon": "⚡",
+    "name": "Shape Scan 08",
+    "desc": "Beacon rhythm: 11, 22, 33, 44, ?",
+    "category": "Quick",
+    "answer": "55",
+    "options": [
+      "55",
+      "60",
+      "50",
+      "65"
+    ],
+    "v": [
+      "Beacon rhythm: 11, 22, 33, 44, ?"
+    ]
+  },
+  {
+    "id": "q-09",
+    "icon": "⚡",
+    "name": "Quick Count 09",
+    "desc": "Parity check: is 132 even or odd?",
+    "category": "Quick",
+    "answer": "EVEN",
+    "options": [
+      "EVEN",
+      "ODD",
+      "NEITHER",
+      "BOTH"
+    ],
+    "v": [
+      "Parity check: is 132 even or odd?"
+    ]
+  },
+  {
+    "id": "q-10",
+    "icon": "⚡",
+    "name": "Prime Alert 10",
+    "desc": "Letter shift: move N forward by 2 places. Which letter do you get?",
+    "category": "Quick",
+    "answer": "P",
+    "options": [
+      "P",
+      "Q",
+      "O",
+      "R"
+    ],
+    "v": [
+      "Letter shift: move N forward by 2 places. Which letter do you get?"
+    ]
+  },
+  {
+    "id": "q-11",
+    "icon": "⚡",
+    "name": "Signal Check 11",
+    "desc": "Signal sequence: 28, 30, 32, ? Find the next number.",
+    "category": "Quick",
+    "answer": "34",
+    "options": [
+      "34",
+      "36",
+      "32",
+      "38"
+    ],
+    "v": [
+      "Signal sequence: 28, 30, 32, ? Find the next number."
+    ]
+  },
+  {
+    "id": "q-12",
+    "icon": "⚡",
+    "name": "Power Sequence 12",
+    "desc": "Power sequence: 15, 18, 21, 24, ?",
+    "category": "Quick",
+    "answer": "54",
+    "options": [
+      "54",
+      "57",
+      "51",
+      "60"
+    ],
+    "v": [
+      "Power sequence: 15, 18, 21, 24, ?"
+    ]
+  },
+  {
+    "id": "q-13",
+    "icon": "⚡",
+    "name": "Access Alphabet 13",
+    "desc": "Access alphabet: if A=1, B=2 and so on, what number represents Q?",
+    "category": "Quick",
+    "answer": "21",
+    "options": [
+      "21",
+      "22",
+      "20",
+      "23"
+    ],
+    "v": [
+      "Access alphabet: if A=1, B=2 and so on, what number represents Q?"
+    ]
+  },
+  {
+    "id": "q-14",
+    "icon": "⚡",
+    "name": "Odd Circuit 14",
+    "desc": "Fuel sum: a reserve has 51 units and receives 68 more. What is the total?",
+    "category": "Quick",
+    "answer": "119",
+    "options": [
+      "119",
+      "123",
+      "115",
+      "127"
+    ],
+    "v": [
+      "Fuel sum: a reserve has 51 units and receives 68 more. What is the total?"
+    ]
+  },
+  {
+    "id": "q-15",
+    "icon": "⚡",
+    "name": "Binary Ping 15",
+    "desc": "Shape scan: how many sides does a polygon with 6 sides have?",
+    "category": "Quick",
+    "answer": "6",
+    "options": [
+      "6",
+      "7",
+      "5",
+      "8"
+    ],
+    "v": [
+      "Shape scan: how many sides does a polygon with 6 sides have?"
+    ]
+  },
+  {
+    "id": "q-16",
+    "icon": "⚡",
+    "name": "Fuel Sum 16",
+    "desc": "Square signal: what is 19 multiplied by itself?",
+    "category": "Quick",
+    "answer": "361",
+    "options": [
+      "361",
+      "362",
+      "360",
+      "363"
+    ],
+    "v": [
+      "Square signal: what is 19 multiplied by itself?"
+    ]
+  },
+  {
+    "id": "q-17",
+    "icon": "⚡",
+    "name": "Letter Shift 17",
+    "desc": "Final digit: what is the last digit of 20 × 4?",
+    "category": "Quick",
+    "answer": "0",
+    "options": [
+      "0",
+      "1",
+      "-1",
+      "2"
+    ],
+    "v": [
+      "Final digit: what is the last digit of 20 × 4?"
+    ]
+  },
+  {
+    "id": "q-18",
+    "icon": "⚡",
+    "name": "Shape Scan 18",
+    "desc": "Beacon rhythm: 21, 42, 63, 84, ?",
+    "category": "Quick",
+    "answer": "105",
+    "options": [
+      "105",
+      "110",
+      "100",
+      "115"
+    ],
+    "v": [
+      "Beacon rhythm: 21, 42, 63, 84, ?"
+    ]
+  },
+  {
+    "id": "q-19",
+    "icon": "⚡",
+    "name": "Quick Count 19",
+    "desc": "Parity check: is 242 even or odd?",
+    "category": "Quick",
+    "answer": "EVEN",
+    "options": [
+      "EVEN",
+      "ODD",
+      "NEITHER",
+      "BOTH"
+    ],
+    "v": [
+      "Parity check: is 242 even or odd?"
+    ]
+  },
+  {
+    "id": "q-20",
+    "icon": "⚡",
+    "name": "Prime Alert 20",
+    "desc": "Letter shift: move X forward by 2 places. Which letter do you get?",
+    "category": "Quick",
+    "answer": "Z",
+    "options": [
+      "Z",
+      "[",
+      "Y",
+      "\\"
+    ],
+    "v": [
+      "Letter shift: move X forward by 2 places. Which letter do you get?"
+    ]
+  },
+  {
+    "id": "m-01",
+    "icon": "🧩",
+    "name": "Cargo Equation 01",
+    "desc": "Sequence lock: 25, 36, 49, ? Find the next square.",
+    "category": "Medium",
+    "answer": "64",
+    "options": [
+      "64",
+      "68",
+      "60",
+      "72"
+    ],
+    "v": [
+      "Sequence lock: 25, 36, 49, ? Find the next square."
+    ]
+  },
+  {
+    "id": "m-02",
+    "icon": "🧩",
+    "name": "Sequence Engine 02",
+    "desc": "Cargo equation: three identical crates and a 6 kg tool weigh 33 kg. What is one crate's weight?",
+    "category": "Medium",
+    "answer": "9",
+    "options": [
+      "9",
+      "10",
+      "8",
+      "11"
+    ],
+    "v": [
+      "Cargo equation: three identical crates and a 6 kg tool weigh 33 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "m-03",
+    "icon": "🧩",
+    "name": "Route Decoder 03",
+    "desc": "Deck route: a rover moves 7 m north, 7 m south, then 14 m east. How far is it from its start?",
+    "category": "Medium",
+    "answer": "14",
+    "options": [
+      "14",
+      "16",
+      "12",
+      "18"
+    ],
+    "v": [
+      "Deck route: a rover moves 7 m north, 7 m south, then 14 m east. How far is it from its start?"
+    ]
+  },
+  {
+    "id": "m-04",
+    "icon": "🧩",
+    "name": "Battery Balance 04",
+    "desc": "Battery balance: 56 credits buy seven identical batteries. What does one battery cost?",
+    "category": "Medium",
+    "answer": "8",
+    "options": [
+      "8",
+      "9",
+      "7",
+      "10"
+    ],
+    "v": [
+      "Battery balance: 56 credits buy seven identical batteries. What does one battery cost?"
+    ]
+  },
+  {
+    "id": "m-05",
+    "icon": "🧩",
+    "name": "Crew Logic 05",
+    "desc": "Crew ages: one crew member is twice another's age. Together they are 27 years old. How old is the younger member?",
+    "category": "Medium",
+    "answer": "9",
+    "options": [
+      "9",
+      "10",
+      "8",
+      "11"
+    ],
+    "v": [
+      "Crew ages: one crew member is twice another's age. Together they are 27 years old. How old is the younger member?"
+    ]
+  },
+  {
+    "id": "m-06",
+    "icon": "🧩",
+    "name": "Code Breaker 06",
+    "desc": "Code breaker: multiply 10 by 3. What is the result?",
+    "category": "Medium",
+    "answer": "30",
+    "options": [
+      "30",
+      "33",
+      "27",
+      "36"
+    ],
+    "v": [
+      "Code breaker: multiply 10 by 3. What is the result?"
+    ]
+  },
+  {
+    "id": "m-07",
+    "icon": "🧩",
+    "name": "Clock Pulse 07",
+    "desc": "Clock pulse: how many seconds are there in 11 minutes?",
+    "category": "Medium",
+    "answer": "660",
+    "options": [
+      "660",
+      "720",
+      "600",
+      "780"
+    ],
+    "v": [
+      "Clock pulse: how many seconds are there in 11 minutes?"
+    ]
+  },
+  {
+    "id": "m-08",
+    "icon": "🧩",
+    "name": "Pattern Matrix 08",
+    "desc": "Pattern matrix: 2 maps to 8, 3 maps to 12, 5 maps to 20. What does 12 map to?",
+    "category": "Medium",
+    "answer": "48",
+    "options": [
+      "48",
+      "52",
+      "44",
+      "56"
+    ],
+    "v": [
+      "Pattern matrix: 2 maps to 8, 3 maps to 12, 5 maps to 20. What does 12 map to?"
+    ]
+  },
+  {
+    "id": "m-09",
+    "icon": "🧩",
+    "name": "Supply Split 09",
+    "desc": "Supply split: 78 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?",
+    "category": "Medium",
+    "answer": "11",
+    "options": [
+      "11",
+      "12",
+      "10",
+      "13"
+    ],
+    "v": [
+      "Supply split: 78 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?"
+    ]
+  },
+  {
+    "id": "m-10",
+    "icon": "🧩",
+    "name": "Sensor Average 10",
+    "desc": "Sensor average: readings 14 and 18 are taken for equal time. What is their average?",
+    "category": "Medium",
+    "answer": "16",
+    "options": [
+      "16",
+      "17",
+      "15",
+      "18"
+    ],
+    "v": [
+      "Sensor average: readings 14 and 18 are taken for equal time. What is their average?"
+    ]
+  },
+  {
+    "id": "m-11",
+    "icon": "🧩",
+    "name": "Cargo Equation 11",
+    "desc": "Sequence lock: 225, 256, 289, ? Find the next square.",
+    "category": "Medium",
+    "answer": "324",
+    "options": [
+      "324",
+      "328",
+      "320",
+      "332"
+    ],
+    "v": [
+      "Sequence lock: 225, 256, 289, ? Find the next square."
+    ]
+  },
+  {
+    "id": "m-12",
+    "icon": "🧩",
+    "name": "Sequence Engine 12",
+    "desc": "Cargo equation: three identical crates and a 16 kg tool weigh 73 kg. What is one crate's weight?",
+    "category": "Medium",
+    "answer": "19",
+    "options": [
+      "19",
+      "20",
+      "18",
+      "21"
+    ],
+    "v": [
+      "Cargo equation: three identical crates and a 16 kg tool weigh 73 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "m-13",
+    "icon": "🧩",
+    "name": "Route Decoder 13",
+    "desc": "Deck route: a rover moves 17 m north, 17 m south, then 34 m east. How far is it from its start?",
+    "category": "Medium",
+    "answer": "34",
+    "options": [
+      "34",
+      "36",
+      "32",
+      "38"
+    ],
+    "v": [
+      "Deck route: a rover moves 17 m north, 17 m south, then 34 m east. How far is it from its start?"
+    ]
+  },
+  {
+    "id": "m-14",
+    "icon": "🧩",
+    "name": "Battery Balance 14",
+    "desc": "Battery balance: 126 credits buy seven identical batteries. What does one battery cost?",
+    "category": "Medium",
+    "answer": "18",
+    "options": [
+      "18",
+      "19",
+      "17",
+      "20"
+    ],
+    "v": [
+      "Battery balance: 126 credits buy seven identical batteries. What does one battery cost?"
+    ]
+  },
+  {
+    "id": "m-15",
+    "icon": "🧩",
+    "name": "Crew Logic 15",
+    "desc": "Crew ages: one crew member is twice another's age. Together they are 57 years old. How old is the younger member?",
+    "category": "Medium",
+    "answer": "19",
+    "options": [
+      "19",
+      "20",
+      "18",
+      "21"
+    ],
+    "v": [
+      "Crew ages: one crew member is twice another's age. Together they are 57 years old. How old is the younger member?"
+    ]
+  },
+  {
+    "id": "m-16",
+    "icon": "🧩",
+    "name": "Code Breaker 16",
+    "desc": "Code breaker: multiply 20 by 3. What is the result?",
+    "category": "Medium",
+    "answer": "60",
+    "options": [
+      "60",
+      "63",
+      "57",
+      "66"
+    ],
+    "v": [
+      "Code breaker: multiply 20 by 3. What is the result?"
+    ]
+  },
+  {
+    "id": "m-17",
+    "icon": "🧩",
+    "name": "Clock Pulse 17",
+    "desc": "Clock pulse: how many seconds are there in 21 minutes?",
+    "category": "Medium",
+    "answer": "1260",
+    "options": [
+      "1260",
+      "1320",
+      "1200",
+      "1380"
+    ],
+    "v": [
+      "Clock pulse: how many seconds are there in 21 minutes?"
+    ]
+  },
+  {
+    "id": "m-18",
+    "icon": "🧩",
+    "name": "Pattern Matrix 18",
+    "desc": "Pattern matrix: 2 maps to 8, 3 maps to 12, 5 maps to 20. What does 22 map to?",
+    "category": "Medium",
+    "answer": "88",
+    "options": [
+      "88",
+      "92",
+      "84",
+      "96"
+    ],
+    "v": [
+      "Pattern matrix: 2 maps to 8, 3 maps to 12, 5 maps to 20. What does 22 map to?"
+    ]
+  },
+  {
+    "id": "m-19",
+    "icon": "🧩",
+    "name": "Supply Split 19",
+    "desc": "Supply split: 138 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?",
+    "category": "Medium",
+    "answer": "21",
+    "options": [
+      "21",
+      "22",
+      "20",
+      "23"
+    ],
+    "v": [
+      "Supply split: 138 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?"
+    ]
+  },
+  {
+    "id": "m-20",
+    "icon": "🧩",
+    "name": "Sensor Average 20",
+    "desc": "Sensor average: readings 24 and 28 are taken for equal time. What is their average?",
+    "category": "Medium",
+    "answer": "26",
+    "options": [
+      "26",
+      "27",
+      "25",
+      "28"
+    ],
+    "v": [
+      "Sensor average: readings 24 and 28 are taken for equal time. What is their average?"
+    ]
+  },
+  {
+    "id": "m-21",
+    "icon": "🧩",
+    "name": "Cargo Equation 21",
+    "desc": "Sequence lock: 625, 676, 729, ? Find the next square.",
+    "category": "Medium",
+    "answer": "784",
+    "options": [
+      "784",
+      "788",
+      "780",
+      "792"
+    ],
+    "v": [
+      "Sequence lock: 625, 676, 729, ? Find the next square."
+    ]
+  },
+  {
+    "id": "m-22",
+    "icon": "🧩",
+    "name": "Sequence Engine 22",
+    "desc": "Cargo equation: three identical crates and a 26 kg tool weigh 113 kg. What is one crate's weight?",
+    "category": "Medium",
+    "answer": "29",
+    "options": [
+      "29",
+      "30",
+      "28",
+      "31"
+    ],
+    "v": [
+      "Cargo equation: three identical crates and a 26 kg tool weigh 113 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "m-23",
+    "icon": "🧩",
+    "name": "Route Decoder 23",
+    "desc": "Deck route: a rover moves 27 m north, 27 m south, then 54 m east. How far is it from its start?",
+    "category": "Medium",
+    "answer": "54",
+    "options": [
+      "54",
+      "56",
+      "52",
+      "58"
+    ],
+    "v": [
+      "Deck route: a rover moves 27 m north, 27 m south, then 54 m east. How far is it from its start?"
+    ]
+  },
+  {
+    "id": "m-24",
+    "icon": "🧩",
+    "name": "Battery Balance 24",
+    "desc": "Battery balance: 196 credits buy seven identical batteries. What does one battery cost?",
+    "category": "Medium",
+    "answer": "28",
+    "options": [
+      "28",
+      "29",
+      "27",
+      "30"
+    ],
+    "v": [
+      "Battery balance: 196 credits buy seven identical batteries. What does one battery cost?"
+    ]
+  },
+  {
+    "id": "m-25",
+    "icon": "🧩",
+    "name": "Crew Logic 25",
+    "desc": "Crew ages: one crew member is twice another's age. Together they are 87 years old. How old is the younger member?",
+    "category": "Medium",
+    "answer": "29",
+    "options": [
+      "29",
+      "30",
+      "28",
+      "31"
+    ],
+    "v": [
+      "Crew ages: one crew member is twice another's age. Together they are 87 years old. How old is the younger member?"
+    ]
+  },
+  {
+    "id": "h-01",
+    "icon": "🧠",
+    "name": "Reactor Sequence 01",
+    "desc": "Reactor sequence: 6, 13, 25, 49. What is the next term?",
+    "category": "Challenging",
+    "answer": "97",
+    "options": [
+      "97",
+      "105",
+      "89",
+      "113"
+    ],
+    "v": [
+      "Reactor sequence: 6, 13, 25, 49. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-02",
+    "icon": "🧠",
+    "name": "Vault Deduction 02",
+    "desc": "Vault deduction: two positive numbers add to 18. One number is 7. What is the other?",
+    "category": "Challenging",
+    "answer": "11",
+    "options": [
+      "11",
+      "12",
+      "10",
+      "13"
+    ],
+    "v": [
+      "Vault deduction: two positive numbers add to 18. One number is 7. What is the other?"
+    ]
+  },
+  {
+    "id": "h-03",
+    "icon": "🧠",
+    "name": "Multi-stage Cipher 03",
+    "desc": "Multi-stage cipher: multiply 8 by 4, subtract 8, then subtract 3. What remains?",
+    "category": "Challenging",
+    "answer": "21",
+    "options": [
+      "21",
+      "24",
+      "18",
+      "27"
+    ],
+    "v": [
+      "Multi-stage cipher: multiply 8 by 4, subtract 8, then subtract 3. What remains?"
+    ]
+  },
+  {
+    "id": "h-04",
+    "icon": "🧠",
+    "name": "Generator Logic 04",
+    "desc": "Generator logic: 9 generators produce 18 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "category": "Challenging",
+    "answer": "45",
+    "options": [
+      "45",
+      "50",
+      "40",
+      "55"
+    ],
+    "v": [
+      "Generator logic: 9 generators produce 18 units in 2 minutes. How many units do they produce in 5 minutes?"
+    ]
+  },
+  {
+    "id": "h-05",
+    "icon": "🧠",
+    "name": "Crew Scheduling 05",
+    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "category": "Challenging",
+    "answer": "YES",
+    "options": [
+      "YES",
+      "NO",
+      "UNKNOWN",
+      "ONLY SOMETIMES"
+    ],
+    "v": [
+      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
+    ]
+  },
+  {
+    "id": "h-06",
+    "icon": "🧠",
+    "name": "Prime Network 06",
+    "desc": "Prime network: what number is one more than twice 11?",
+    "category": "Challenging",
+    "answer": "23",
+    "options": [
+      "23",
+      "25",
+      "21",
+      "27"
+    ],
+    "v": [
+      "Prime network: what number is one more than twice 11?"
+    ]
+  },
+  {
+    "id": "h-07",
+    "icon": "🧠",
+    "name": "Cargo Conundrum 07",
+    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 43 kg. What is one crate's weight?",
+    "category": "Challenging",
+    "answer": "12",
+    "options": [
+      "12",
+      "13",
+      "11",
+      "14"
+    ],
+    "v": [
+      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 43 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "h-08",
+    "icon": "🧠",
+    "name": "Power Grid 08",
+    "desc": "Power grid: 13 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "category": "Challenging",
+    "answer": "88",
+    "options": [
+      "88",
+      "96",
+      "80",
+      "104"
+    ],
+    "v": [
+      "Power grid: 13 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
+    ]
+  },
+  {
+    "id": "h-09",
+    "icon": "🧠",
+    "name": "Navigation Riddle 09",
+    "desc": "Navigation riddle: a shuttle travels 14 km, then twice that distance, then 14 km again. What is the total distance?",
+    "category": "Challenging",
+    "answer": "56",
+    "options": [
+      "56",
+      "60",
+      "52",
+      "64"
+    ],
+    "v": [
+      "Navigation riddle: a shuttle travels 14 km, then twice that distance, then 14 km again. What is the total distance?"
+    ]
+  },
+  {
+    "id": "h-10",
+    "icon": "🧠",
+    "name": "Advanced Sequence 10",
+    "desc": "Advanced sequence: 240, 272, 306. What is the next term?",
+    "category": "Challenging",
+    "answer": "342",
+    "options": [
+      "342",
+      "348",
+      "336",
+      "354"
+    ],
+    "v": [
+      "Advanced sequence: 240, 272, 306. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-11",
+    "icon": "🧠",
+    "name": "Reactor Sequence 11",
+    "desc": "Reactor sequence: 16, 33, 65, 129. What is the next term?",
+    "category": "Challenging",
+    "answer": "257",
+    "options": [
+      "257",
+      "265",
+      "249",
+      "273"
+    ],
+    "v": [
+      "Reactor sequence: 16, 33, 65, 129. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-12",
+    "icon": "🧠",
+    "name": "Vault Deduction 12",
+    "desc": "Vault deduction: two positive numbers add to 38. One number is 17. What is the other?",
+    "category": "Challenging",
+    "answer": "21",
+    "options": [
+      "21",
+      "22",
+      "20",
+      "23"
+    ],
+    "v": [
+      "Vault deduction: two positive numbers add to 38. One number is 17. What is the other?"
+    ]
+  },
+  {
+    "id": "h-13",
+    "icon": "🧠",
+    "name": "Multi-stage Cipher 13",
+    "desc": "Multi-stage cipher: multiply 18 by 4, subtract 18, then subtract 3. What remains?",
+    "category": "Challenging",
+    "answer": "51",
+    "options": [
+      "51",
+      "54",
+      "48",
+      "57"
+    ],
+    "v": [
+      "Multi-stage cipher: multiply 18 by 4, subtract 18, then subtract 3. What remains?"
+    ]
+  },
+  {
+    "id": "h-14",
+    "icon": "🧠",
+    "name": "Generator Logic 14",
+    "desc": "Generator logic: 19 generators produce 38 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "category": "Challenging",
+    "answer": "95",
+    "options": [
+      "95",
+      "100",
+      "90",
+      "105"
+    ],
+    "v": [
+      "Generator logic: 19 generators produce 38 units in 2 minutes. How many units do they produce in 5 minutes?"
+    ]
+  },
+  {
+    "id": "h-15",
+    "icon": "🧠",
+    "name": "Crew Scheduling 15",
+    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "category": "Challenging",
+    "answer": "YES",
+    "options": [
+      "YES",
+      "NO",
+      "UNKNOWN",
+      "ONLY SOMETIMES"
+    ],
+    "v": [
+      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
+    ]
+  },
+  {
+    "id": "h-16",
+    "icon": "🧠",
+    "name": "Prime Network 16",
+    "desc": "Prime network: what number is one more than twice 21?",
+    "category": "Challenging",
+    "answer": "43",
+    "options": [
+      "43",
+      "45",
+      "41",
+      "47"
+    ],
+    "v": [
+      "Prime network: what number is one more than twice 21?"
+    ]
+  },
+  {
+    "id": "h-17",
+    "icon": "🧠",
+    "name": "Cargo Conundrum 17",
+    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 73 kg. What is one crate's weight?",
+    "category": "Challenging",
+    "answer": "22",
+    "options": [
+      "22",
+      "23",
+      "21",
+      "24"
+    ],
+    "v": [
+      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 73 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "h-18",
+    "icon": "🧠",
+    "name": "Power Grid 18",
+    "desc": "Power grid: 23 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "category": "Challenging",
+    "answer": "168",
+    "options": [
+      "168",
+      "176",
+      "160",
+      "184"
+    ],
+    "v": [
+      "Power grid: 23 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
+    ]
+  },
+  {
+    "id": "h-19",
+    "icon": "🧠",
+    "name": "Navigation Riddle 19",
+    "desc": "Navigation riddle: a shuttle travels 24 km, then twice that distance, then 24 km again. What is the total distance?",
+    "category": "Challenging",
+    "answer": "96",
+    "options": [
+      "96",
+      "100",
+      "92",
+      "104"
+    ],
+    "v": [
+      "Navigation riddle: a shuttle travels 24 km, then twice that distance, then 24 km again. What is the total distance?"
+    ]
+  },
+  {
+    "id": "h-20",
+    "icon": "🧠",
+    "name": "Advanced Sequence 20",
+    "desc": "Advanced sequence: 650, 702, 756. What is the next term?",
+    "category": "Challenging",
+    "answer": "812",
+    "options": [
+      "812",
+      "818",
+      "806",
+      "824"
+    ],
+    "v": [
+      "Advanced sequence: 650, 702, 756. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-21",
+    "icon": "🧠",
+    "name": "Reactor Sequence 21",
+    "desc": "Reactor sequence: 26, 53, 105, 209. What is the next term?",
+    "category": "Challenging",
+    "answer": "417",
+    "options": [
+      "417",
+      "425",
+      "409",
+      "433"
+    ],
+    "v": [
+      "Reactor sequence: 26, 53, 105, 209. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-22",
+    "icon": "🧠",
+    "name": "Vault Deduction 22",
+    "desc": "Vault deduction: two positive numbers add to 58. One number is 27. What is the other?",
+    "category": "Challenging",
+    "answer": "31",
+    "options": [
+      "31",
+      "32",
+      "30",
+      "33"
+    ],
+    "v": [
+      "Vault deduction: two positive numbers add to 58. One number is 27. What is the other?"
+    ]
+  },
+  {
+    "id": "h-23",
+    "icon": "🧠",
+    "name": "Multi-stage Cipher 23",
+    "desc": "Multi-stage cipher: multiply 28 by 4, subtract 28, then subtract 3. What remains?",
+    "category": "Challenging",
+    "answer": "81",
+    "options": [
+      "81",
+      "84",
+      "78",
+      "87"
+    ],
+    "v": [
+      "Multi-stage cipher: multiply 28 by 4, subtract 28, then subtract 3. What remains?"
+    ]
+  },
+  {
+    "id": "h-24",
+    "icon": "🧠",
+    "name": "Generator Logic 24",
+    "desc": "Generator logic: 29 generators produce 58 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "category": "Challenging",
+    "answer": "145",
+    "options": [
+      "145",
+      "150",
+      "140",
+      "155"
+    ],
+    "v": [
+      "Generator logic: 29 generators produce 58 units in 2 minutes. How many units do they produce in 5 minutes?"
+    ]
+  },
+  {
+    "id": "h-25",
+    "icon": "🧠",
+    "name": "Crew Scheduling 25",
+    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "category": "Challenging",
+    "answer": "YES",
+    "options": [
+      "YES",
+      "NO",
+      "UNKNOWN",
+      "ONLY SOMETIMES"
+    ],
+    "v": [
+      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
+    ]
+  },
+  {
+    "id": "h-26",
+    "icon": "🧠",
+    "name": "Prime Network 26",
+    "desc": "Prime network: what number is one more than twice 31?",
+    "category": "Challenging",
+    "answer": "63",
+    "options": [
+      "63",
+      "65",
+      "61",
+      "67"
+    ],
+    "v": [
+      "Prime network: what number is one more than twice 31?"
+    ]
+  },
+  {
+    "id": "h-27",
+    "icon": "🧠",
+    "name": "Cargo Conundrum 27",
+    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 103 kg. What is one crate's weight?",
+    "category": "Challenging",
+    "answer": "32",
+    "options": [
+      "32",
+      "33",
+      "31",
+      "34"
+    ],
+    "v": [
+      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 103 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "h-28",
+    "icon": "🧠",
+    "name": "Power Grid 28",
+    "desc": "Power grid: 33 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "category": "Challenging",
+    "answer": "248",
+    "options": [
+      "248",
+      "256",
+      "240",
+      "264"
+    ],
+    "v": [
+      "Power grid: 33 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
+    ]
+  },
+  {
+    "id": "h-29",
+    "icon": "🧠",
+    "name": "Navigation Riddle 29",
+    "desc": "Navigation riddle: a shuttle travels 34 km, then twice that distance, then 34 km again. What is the total distance?",
+    "category": "Challenging",
+    "answer": "136",
+    "options": [
+      "136",
+      "140",
+      "132",
+      "144"
+    ],
+    "v": [
+      "Navigation riddle: a shuttle travels 34 km, then twice that distance, then 34 km again. What is the total distance?"
+    ]
+  },
+  {
+    "id": "h-30",
+    "icon": "🧠",
+    "name": "Advanced Sequence 30",
+    "desc": "Advanced sequence: 1260, 1332, 1406. What is the next term?",
+    "category": "Challenging",
+    "answer": "1482",
+    "options": [
+      "1482",
+      "1488",
+      "1476",
+      "1494"
+    ],
+    "v": [
+      "Advanced sequence: 1260, 1332, 1406. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-31",
+    "icon": "🧠",
+    "name": "Reactor Sequence 31",
+    "desc": "Reactor sequence: 36, 73, 145, 289. What is the next term?",
+    "category": "Challenging",
+    "answer": "577",
+    "options": [
+      "577",
+      "585",
+      "569",
+      "593"
+    ],
+    "v": [
+      "Reactor sequence: 36, 73, 145, 289. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-32",
+    "icon": "🧠",
+    "name": "Vault Deduction 32",
+    "desc": "Vault deduction: two positive numbers add to 78. One number is 37. What is the other?",
+    "category": "Challenging",
+    "answer": "41",
+    "options": [
+      "41",
+      "42",
+      "40",
+      "43"
+    ],
+    "v": [
+      "Vault deduction: two positive numbers add to 78. One number is 37. What is the other?"
+    ]
+  },
+  {
+    "id": "h-33",
+    "icon": "🧠",
+    "name": "Multi-stage Cipher 33",
+    "desc": "Multi-stage cipher: multiply 38 by 4, subtract 38, then subtract 3. What remains?",
+    "category": "Challenging",
+    "answer": "111",
+    "options": [
+      "111",
+      "114",
+      "108",
+      "117"
+    ],
+    "v": [
+      "Multi-stage cipher: multiply 38 by 4, subtract 38, then subtract 3. What remains?"
+    ]
+  },
+  {
+    "id": "h-34",
+    "icon": "🧠",
+    "name": "Generator Logic 34",
+    "desc": "Generator logic: 39 generators produce 78 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "category": "Challenging",
+    "answer": "195",
+    "options": [
+      "195",
+      "200",
+      "190",
+      "205"
+    ],
+    "v": [
+      "Generator logic: 39 generators produce 78 units in 2 minutes. How many units do they produce in 5 minutes?"
+    ]
+  },
+  {
+    "id": "h-35",
+    "icon": "🧠",
+    "name": "Crew Scheduling 35",
+    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "category": "Challenging",
+    "answer": "YES",
+    "options": [
+      "YES",
+      "NO",
+      "UNKNOWN",
+      "ONLY SOMETIMES"
+    ],
+    "v": [
+      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
+    ]
+  },
+  {
+    "id": "h-36",
+    "icon": "🧠",
+    "name": "Prime Network 36",
+    "desc": "Prime network: what number is one more than twice 41?",
+    "category": "Challenging",
+    "answer": "83",
+    "options": [
+      "83",
+      "85",
+      "81",
+      "87"
+    ],
+    "v": [
+      "Prime network: what number is one more than twice 41?"
+    ]
+  },
+  {
+    "id": "h-37",
+    "icon": "🧠",
+    "name": "Cargo Conundrum 37",
+    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 133 kg. What is one crate's weight?",
+    "category": "Challenging",
+    "answer": "42",
+    "options": [
+      "42",
+      "43",
+      "41",
+      "44"
+    ],
+    "v": [
+      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 133 kg. What is one crate's weight?"
+    ]
+  },
+  {
+    "id": "h-38",
+    "icon": "🧠",
+    "name": "Power Grid 38",
+    "desc": "Power grid: 43 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "category": "Challenging",
+    "answer": "328",
+    "options": [
+      "328",
+      "336",
+      "320",
+      "344"
+    ],
+    "v": [
+      "Power grid: 43 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
+    ]
+  },
+  {
+    "id": "h-39",
+    "icon": "🧠",
+    "name": "Navigation Riddle 39",
+    "desc": "Navigation riddle: a shuttle travels 44 km, then twice that distance, then 44 km again. What is the total distance?",
+    "category": "Challenging",
+    "answer": "176",
+    "options": [
+      "176",
+      "180",
+      "172",
+      "184"
+    ],
+    "v": [
+      "Navigation riddle: a shuttle travels 44 km, then twice that distance, then 44 km again. What is the total distance?"
+    ]
+  },
+  {
+    "id": "h-40",
+    "icon": "🧠",
+    "name": "Advanced Sequence 40",
+    "desc": "Advanced sequence: 2070, 2162, 2256. What is the next term?",
+    "category": "Challenging",
+    "answer": "2352",
+    "options": [
+      "2352",
+      "2358",
+      "2346",
+      "2364"
+    ],
+    "v": [
+      "Advanced sequence: 2070, 2162, 2256. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-41",
+    "icon": "🧠",
+    "name": "Reactor Sequence 41",
+    "desc": "Reactor sequence: 46, 93, 185, 369. What is the next term?",
+    "category": "Challenging",
+    "answer": "737",
+    "options": [
+      "737",
+      "745",
+      "729",
+      "753"
+    ],
+    "v": [
+      "Reactor sequence: 46, 93, 185, 369. What is the next term?"
+    ]
+  },
+  {
+    "id": "h-42",
+    "icon": "🧠",
+    "name": "Vault Deduction 42",
+    "desc": "Vault deduction: two positive numbers add to 98. One number is 47. What is the other?",
+    "category": "Challenging",
+    "answer": "51",
+    "options": [
+      "51",
+      "52",
+      "50",
+      "53"
+    ],
+    "v": [
+      "Vault deduction: two positive numbers add to 98. One number is 47. What is the other?"
+    ]
+  },
+  {
+    "id": "h-43",
+    "icon": "🧠",
+    "name": "Multi-stage Cipher 43",
+    "desc": "Multi-stage cipher: multiply 48 by 4, subtract 48, then subtract 3. What remains?",
+    "category": "Challenging",
+    "answer": "141",
+    "options": [
+      "141",
+      "144",
+      "138",
+      "147"
+    ],
+    "v": [
+      "Multi-stage cipher: multiply 48 by 4, subtract 48, then subtract 3. What remains?"
+    ]
+  },
+  {
+    "id": "h-44",
+    "icon": "🧠",
+    "name": "Generator Logic 44",
+    "desc": "Generator logic: 49 generators produce 98 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "category": "Challenging",
+    "answer": "245",
+    "options": [
+      "245",
+      "250",
+      "240",
+      "255"
+    ],
+    "v": [
+      "Generator logic: 49 generators produce 98 units in 2 minutes. How many units do they produce in 5 minutes?"
+    ]
+  },
+  {
+    "id": "h-45",
+    "icon": "🧠",
+    "name": "Crew Scheduling 45",
+    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "category": "Challenging",
+    "answer": "YES",
+    "options": [
+      "YES",
+      "NO",
+      "UNKNOWN",
+      "ONLY SOMETIMES"
+    ],
+    "v": [
+      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
+    ]
+  }
 ];
 const BYID = Object.fromEntries(TASKS.map(t => [t.id, t]));
 const LIMITS = [0,10,15,20,30,45,60,90,120];   // game time limit options (minutes, 0 = off)
@@ -379,15 +1834,8 @@ const path = (...p) => 'games/' + S.session.room + (p.length ? '/' + p.join('/')
 
 /* --------------------------- game logic ---------------------------- */
 function pickTasks(ids, usage, combos, count){
-  let first = null;
-  for(let a=0;a<80;a++){
-    const jit = a < 40 ? 0.99 : 1.99;   // <1 = strictly balanced, >1 = looser
-    const pick = ids.map(id => ({id, s:(usage[id]||0)+Math.random()*jit}))
-      .sort((x,y)=>x.s-y.s).slice(0,count).map(x=>x.id).sort();
-    first = first || pick;
-    if(!combos.has(pick.join(','))) return pick;
-  }
-  return first;
+  const unused=shuffle(ids.filter(id=>!(usage[id]||0)));
+  return unused.length<count?[]:unused.slice(0,count).sort();
 }
 function usageOf(players){
   const usage={}, combos=new Set();
@@ -439,7 +1887,9 @@ async function join(room, name, asHost){
     const p = {name, joined:Date.now()};
     if(g.meta.status === 'playing'){            // late joiner: assign immediately
       const {usage, combos} = usageOf(g.players);
-      const pick = pickTasks(enabledIds(g.meta), usage, combos);
+      const count=Math.max(1,Math.min(enabledIds(g.meta).length,Number(g.meta.tasksPerPlayer)||PER));
+      const pick = pickTasks(enabledIds(g.meta), usage, combos, count);
+      if(!pick.length) return toast('No unused puzzles remain for a late joiner');
       p.role = 'crew'; p.tasks = Object.fromEntries(pick.map(i=>[i,true]));
     }
     await DB.set(`games/${room}/players/${key}`, p);
@@ -456,7 +1906,7 @@ async function startGame(){
   const ids = enabledIds(m);
   if(players.length < 2) return toast('Need at least 2 players');
   const taskCount = Math.max(1, Math.min(ids.length, Number(m.tasksPerPlayer)||PER));
-  if(ids.length < taskCount) return toast(`Enable at least ${taskCount} tasks`);
+  if(ids.length < players.length*taskCount) return toast(`You need ${players.length*taskCount} unique puzzles for ${players.length} players. Enable more puzzles or reduce puzzles per player.`);
   const imp = rolesOn(m) ? Math.max(0, Math.min(m.impostors ?? 2, Math.floor((players.length-1)/2))) : 0;
   const impSet = new Set(shuffle(players).slice(0, imp));
   const usage = {}, combos = new Set(), up = {};
@@ -469,6 +1919,7 @@ async function startGame(){
   shuffle(crewKeys).slice(0, enabledRoles.length).forEach((k,i) => { special[k] = enabledRoles[i]; });
   shuffle(players).forEach(k => {
     const pick = pickTasks(ids, usage, combos, taskCount);
+    if(pick.length!==taskCount) return toast('Not enough unused puzzles for every player. Reduce puzzles per player.');
     pick.forEach(i => usage[i]=(usage[i]||0)+1);
     combos.add(pick.join(','));
     up[`players/${k}/role`] = impSet.has(k) ? 'impostor' : (special[k] || 'crew');
@@ -612,6 +2063,8 @@ async function handleToken(tok){
 }
 
 function makeMiniGame(id){
+  const puzzle=BYID[id];
+  if(puzzle) return {type:'puzzle',title:puzzle.name,station:puzzle.category.toUpperCase()+' PUZZLE BANK',prompt:puzzle.desc,answer:puzzle.answer,options:shuffle(puzzle.options),entry:'',solved:false,step:0,cleared:[]};
   const shuffled = a => {const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
   const configs = {
     sample:{type:'choice',title:'Specimen analyser',station:'LAB / ANALYSIS',prompt:'The analyser has finished. The result indicator is NORMAL. Select the matching result.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL',visual:'sample'},
@@ -642,7 +2095,9 @@ function miniGameHtml(g){
   const pct=Math.round(done/total*100);
   const meter='<div class="task-progress"><div class="task-progress-fill" style="width:'+pct+'%"></div></div>';
   let body='';
-  if(g.type==='range'){
+  if(g.type==='puzzle'){
+    body='<div class="choice-grid">'+g.options.map(x=>'<button class="task-choice" data-puzzle-choice="'+esc(x)+'"><span class="choice-icon">◈</span><b>'+esc(x)+'</b><span class="choice-arrow">›</span></button>').join('')+'</div>';
+  }else if(g.type==='range'){
     const left=Math.max(0,g.target-g.tolerance),right=Math.min(100,g.target+g.tolerance);
     body='<div class="calibration"><div class="calibration-screen"><div class="calibration-cross">＋</div><div class="calibration-target" style="left:'+left+'%;width:'+(right-left)+'%"></div><div class="calibration-beam" style="left:'+g.value+'%"></div><span class="calibration-readout">'+Math.round(g.value)+'%</span></div><input class="task-range" data-mini-range type="range" min="0" max="100" value="'+g.value+'"><div class="range-ends"><span>LOW</span><span>CALIBRATE</span><span>HIGH</span></div></div>';
   }else if(g.type==='sequence'){
@@ -657,15 +2112,18 @@ function miniGameHtml(g){
     body='<div class="wire-board"><div class="wire-column"><small>POWER INPUT</small>'+g.pairs.map((p,i)=>'<button class="wire-port '+(g.selectedSource===i?'wire-selected':'')+' '+(g.connected.includes(i)?'wire-complete':'')+'" style="--wire:'+p[1]+'" data-wire="s:'+i+'" '+(g.connected.includes(i)?'disabled':'')+'><i></i><b>'+p[0]+'</b></button>').join('')+'</div><div class="wire-column"><small>OUTPUT SOCKETS</small>'+g.targets.map(i=>'<button class="wire-port '+(g.connected.includes(i)?'wire-complete':'')+'" style="--wire:'+g.pairs[i][1]+'" data-wire="t:'+i+'" '+(g.connected.includes(i)?'disabled':'')+'><i></i><b>SOCKET '+(g.targets.indexOf(i)+1)+'</b></button>').join('')+'</div></div><p class="task-hint">Tap a coloured input, then its matching output socket.</p>';
   }
   const title='<div class="task-station"><span class="station-light"></span><span>'+esc(g.station||'SHIP SYSTEMS')+'</span><span class="station-status">'+(g.solved?'ONLINE':'ACTIVE')+'</span></div>';
-  return '<div class="mini-terminal"><div class="terminal-top"><span class="terminal-dots">● ● ●</span><span>SHIP SYSTEMS // TASK CONSOLE</span><span>◈</span></div>'+title+'<div class="terminal-body"><div class="terminal-heading"><div><small>MAINTENANCE PROTOCOL</small><h2>'+esc(g.title)+'</h2></div><span class="terminal-icon">'+({sample:'🧪',scan:'◉',manifolds:'▦',id:'▣',telescope:'◎',wires:'⌁',vending:'▤',vent:'✣',decon:'☣',photos:'▧',uniform:'♙',shower:'≋',burger:'▤',towels:'▥',ruby:'✧'}[g.visual]||'◈')+'</span></div><p class="task-instruction">'+esc(g.prompt)+'</p><div class="task-meter-label"><span>PROGRESS</span><b>'+done+' / '+total+'</b></div>'+meter+body+(g.solved?'<div class="task-success"><span>✓</span><div><b>Task verified</b><small>System restored successfully</small></div></div>':'')+'</div></div>';
+  return '<div class="mini-terminal"><div class="terminal-top"><span class="terminal-dots">● ● ●</span><span>SHIP SYSTEMS // TASK CONSOLE</span><span>◈</span></div>'+title+'<div class="terminal-body"><div class="terminal-heading"><div><small>PUZZLE INTERFACE</small><h2>'+esc(g.title)+'</h2></div><span class="terminal-icon">'+({sample:'🧪',scan:'◉',manifolds:'▦',id:'▣',telescope:'◎',wires:'⌁',vending:'▤',vent:'✣',decon:'☣',photos:'▧',uniform:'♙',shower:'≋',burger:'▤',towels:'▥',ruby:'✧'}[g.visual]||'◈')+'</span></div><p class="task-instruction">'+esc(g.prompt)+'</p><div class="task-meter-label"><span>PROGRESS</span><b>'+done+' / '+total+'</b></div>'+meter+body+(g.solved?'<div class="task-success"><span>✓</span><div><b>Task verified</b><small>System restored successfully</small></div></div>':'')+'</div></div>';
 }
 function renderTaskOverlay(){
   const tk=S.task,g=S.g,t=tk&&BYID[tk.id];if(!tk||!t||!g||!g.meta)return;
-  $('#overlay').innerHTML='<div class="ov task-ov"><div class="sheet task-sheet"><div class="task-sheet-head"><span class="task-badge">'+t.icon+'</span><div><small>CREWMATE DUTIES</small><h1>'+esc(tname(g.meta,tk.id))+'</h1></div><button class="task-close" data-act="task-cancel" aria-label="Close">×</button></div>'+miniGameHtml(tk.game)+'<button class="btn ok task-finish" id="taskdone" data-act="task-done" '+(!tk.game.solved?'disabled':'')+'>VERIFY & COMPLETE TASK <span>→</span></button><button class="task-cancel-link" data-act="task-cancel">Cancel task</button></div></div>';
+  $('#overlay').innerHTML='<div class="ov task-ov"><div class="sheet task-sheet"><div class="task-sheet-head"><span class="task-badge">'+t.icon+'</span><div><small>CREW PUZZLE MISSION</small><h1>'+esc(tname(g.meta,tk.id))+'</h1></div><button class="task-close" data-act="task-cancel" aria-label="Close">×</button></div>'+miniGameHtml(tk.game)+'<button class="btn ok task-finish" id="taskdone" data-act="task-done" '+(!tk.game.solved?'disabled':'')+'>SUBMIT & COMPLETE PUZZLE <span>→</span></button><button class="task-cancel-link" data-act="task-cancel">Cancel task</button></div></div>';
 }
 function miniAction(el){
   const g=S.task&&S.task.game;if(!g||g.solved)return;
-  if(el.hasAttribute('data-mini-choice')){
+  if(g.type==='puzzle'){
+    const norm=v=>String(v??'').trim().toUpperCase().replace(/\\s+/g,' ');
+    if(norm(el.dataset.puzzleChoice)===norm(g.answer))g.solved=true;else toast('Incorrect solution. Try again.');
+  }else if(el.hasAttribute('data-mini-choice')){
     if(el.dataset.miniChoice===g.answer)g.solved=true;else toast('Incorrect selection — check the task order.');
   }else if(el.hasAttribute('data-mini')){
     const i=Number(el.dataset.mini);
@@ -965,13 +2423,13 @@ function hostView(g, d, me){
       <label class="chk"><input type="checkbox" data-act="toggleroles" ${roles?'checked':''}> <span>Roles on (impostors, meetings &amp; voting)</span></label>
       ${roles ? `<div class="row"><span class="grow">Impostors</span><button class="btn ghost sm inline" data-act="imp" data-v="-1">−</button><b style="min-width:24px;text-align:center">${m.impostors ?? 2}</b><button class="btn ghost sm inline" data-act="imp" data-v="1">+</button></div>
       <label class="chk"><input type="checkbox" data-act="toggleconfirm" ${m.confirmEject?'checked':''}> <span>Reveal the role of an ejected player</span></label><p class="small muted">Special roles (at most one of each per round)</p><label class="chk"><input type="checkbox" data-act="role-sheriff" data-v="1" ${m.roleSheriff!==false?'checked':''}> <span>Enable Sheriff</span></label><label class="chk"><input type="checkbox" data-act="role-medic" data-v="1" ${m.roleMedic!==false?'checked':''}> <span>Enable Medic</span></label><label class="chk"><input type="checkbox" data-act="role-mayor" data-v="1" ${m.roleMayor!==false?'checked':''}> <span>Enable Mayor</span></label>` : `<p class="small muted">Everyone is crew; no meetings or voting.</p>`}
-      <div class="row" style="margin-top:10px"><span class="grow">Tasks per player</span><button class="btn ghost sm inline" data-act="taskcount" data-v="-1" ${taskCount<=1?'disabled':''}>−</button><b style="min-width:36px;text-align:center">${taskCount}</b><button class="btn ghost sm inline" data-act="taskcount" data-v="1" ${taskCount>=enabledIds(m).length?'disabled':''}>+</button></div>
+      <div class="row" style="margin-top:10px"><span class="grow">Puzzles per player</span><button class="btn ghost sm inline" data-act="taskcount" data-v="-1" ${taskCount<=1?'disabled':''}>−</button><b style="min-width:36px;text-align:center">${taskCount}</b><button class="btn ghost sm inline" data-act="taskcount" data-v="1" ${taskCount>=enabledIds(m).length?'disabled':''}>+</button></div>
       <div class="row" style="margin-top:6px"><span class="grow">Time limit</span><button class="btn ghost sm inline" data-act="limit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${lim?lim+' min':'Off'}</b><button class="btn ghost sm inline" data-act="limit" data-v="1">+</button></div>
       ${roles ? `<div class="row" style="margin-top:10px"><span class="grow">Meeting timer</span><button class="btn ghost sm inline" data-act="meetinglimit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.meetingLimit||60}s</b><button class="btn ghost sm inline" data-act="meetinglimit" data-v="1">+</button></div><div class="row" style="margin-top:10px"><span class="grow">Impostor kill cooldown</span><button class="btn ghost sm inline" data-act="killcooldown" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.killCooldown||30}s</b><button class="btn ghost sm inline" data-act="killcooldown" data-v="1">+</button></div><label class="chk"><input type="checkbox" data-act="toggleanonymous" ${m.anonymousVotes?'checked':''}> <span>Anonymous voting</span></label><p class="small muted">Sheriff, Medic and Mayor are randomly assigned to up to three crewmates.</p>`:''}
-      <p class="small muted">${taskCount} tasks per player, assigned at random (tasks can be shared, combinations differ).${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
-      <details><summary>Task names &amp; locations (optional)</summary>
-      <p class="small muted">Untick tasks you won't use. Rename them and add a location hint so players know where to look.</p>
-      ${TASKS.map(t=>`<div class="trow"><div class="l1"><input type="checkbox" data-act="toggletask" data-v="${t.id}" ${m.off&&m.off[t.id]?'':'checked'}><span>${t.icon}</span><input type="text" data-name="${t.id}" value="${esc(tname(m,t.id))}" maxlength="28"></div>
+      <p class="small muted">${taskCount} puzzles per player, selected randomly. Every puzzle is unique within the round.${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
+      <details><summary>Puzzle bank &amp; names (optional)</summary>
+      <p class="small muted">Disable puzzles you don't want in this round, or rename them.</p>
+      ${TASKS.map(t=>`<div class="trow"><div class="l1"><input type="checkbox" data-act="toggletask" data-v="${t.id}" ${m.off&&m.off[t.id]?'':'checked'}><span>${t.icon}</span><span class="tag">${t.category}</span><input type="text" data-name="${t.id}" value="${esc(tname(m,t.id))}" maxlength="28"></div>
         <div class="l2"><input type="text" data-loc="${t.id}" value="${esc((m.locs&&m.locs[t.id])||'')}" placeholder="Where is it?" maxlength="40"></div></div>`).join('')}</details>
       <p class="small" style="margin-top:8px"><a href="?print=1&room=${esc(s.room)}" target="_blank">🖨 Open printable task QR sheet</a> <span class="muted">(print once, reuse for every game)</span></p>
       <button class="btn ok" style="margin-top:8px" data-act="start" ${d.players.length<2?'disabled':''}>▶ Start game</button></div>`;
@@ -1014,7 +2472,7 @@ async function renderPrint(names, fetched){
 }
 
 /* ---------------------------- events ------------------------------- */
-document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit],[data-mini-key],[data-wire]'); if(mini){e.preventDefault();miniAction(mini);} });
+document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit],[data-mini-key],[data-wire],[data-puzzle-choice]'); if(mini){e.preventDefault();miniAction(mini);} });
 document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
 document.addEventListener('change', e => { if(e.target.matches('[data-mini-range]') && S.task?.game)renderTaskOverlay(); });
 document.addEventListener('click', async e => {
