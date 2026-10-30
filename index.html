@@ -101,6 +101,73 @@ body.print #app{max-width:none;padding:10px}
 .stealth-toggle:hover{opacity:.95!important;background:#20294b!important}
 .stealth-toggle:focus-visible{opacity:1!important;outline:2px solid var(--accent)!important}
 .stealth-control-row{display:flex;justify-content:flex-end;min-height:28px;margin:-4px 0 2px}
+
+/* Among Us-inspired task terminal and interactive mini-game visuals */
+.task-ov{background:radial-gradient(ellipse at 50% 10%,rgba(35,66,111,.35),rgba(3,7,18,.94) 65%);backdrop-filter:blur(7px);padding:12px}
+.task-sheet{max-width:460px;text-align:left;padding:0;overflow:auto;background:#0c1425;border:1px solid #334865;box-shadow:0 24px 80px #000b;max-height:96vh}
+.task-sheet-head{display:flex;align-items:center;gap:12px;padding:15px 17px;border-bottom:1px solid #293a53;background:linear-gradient(110deg,#182b42,#101a2c)}
+.task-sheet-head>div{flex:1;min-width:0}
+.task-sheet-head small,.terminal-heading small{font-size:9px;letter-spacing:1.8px;color:#83a5c6;font-weight:800}
+.task-sheet-head h1{font-size:19px;margin:2px 0 0;letter-spacing:.2px}
+.task-badge{width:42px;height:42px;display:grid;place-items:center;font-size:25px;border-radius:12px;background:#263c55;border:1px solid #46617d}
+.task-close{border:1px solid #43556e;background:#17253a;color:#c6d7e8;border-radius:10px;width:36px;height:36px;font-size:24px}
+.mini-terminal{margin:13px;border:1px solid #354b66;border-radius:13px;overflow:hidden;background:#101e30;box-shadow:inset 0 0 25px #0005}
+.terminal-top{height:28px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;background:#1c3048;color:#7e9bb8;font:700 9px ui-monospace,monospace;letter-spacing:1px}
+.terminal-dots{color:#7ad6a2;letter-spacing:2px}
+.task-station{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#13243a;border-bottom:1px solid #2b4058;color:#9ab4cc;font:800 9px ui-monospace,monospace;letter-spacing:1px}
+.station-light{width:7px;height:7px;border-radius:50%;background:#5ce0a1;box-shadow:0 0 9px #5ce0a1}
+.station-status{margin-left:auto;color:#65e2a5}
+.terminal-body{padding:14px}
+.terminal-heading{display:flex;justify-content:space-between;align-items:center}
+.terminal-heading h2{color:#f0f5ff;text-transform:none;letter-spacing:0;font-size:20px;margin:3px 0 0}
+.terminal-icon{font-size:28px;color:#8fc7ef;background:#203851;border:1px solid #3c5a78;border-radius:10px;width:45px;height:45px;display:grid;place-items:center}
+.task-instruction{font-size:13px;color:#b8c9dc;line-height:1.5;margin:12px 0}
+.task-meter-label{display:flex;justify-content:space-between;color:#829bb5;font:800 9px ui-monospace,monospace;letter-spacing:1px;margin:14px 0 6px}
+.task-meter-label b{color:#d8e9f8}
+.task-progress{height:7px;background:#091321;border:1px solid #31445a;border-radius:99px;overflow:hidden}
+.task-progress-fill{height:100%;background:linear-gradient(90deg,#22b879,#91f2bd);box-shadow:0 0 10px #42d995;transition:width .2s}
+.task-hint{text-align:center;color:#819ab4;font-size:11px;margin:12px 0 2px}
+.task-success{display:flex;align-items:center;gap:10px;padding:11px;margin-top:14px;border-radius:10px;background:#103a30;border:1px solid #287a61;color:#a9f4d5}
+.task-success>span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#1c7658;color:white;font-size:19px}
+.task-success b,.task-success small{display:block}.task-success small{font-size:11px;color:#80cbb0}
+.task-sheet .task-finish{margin:0 13px 4px;width:calc(100% - 26px);background:linear-gradient(100deg,#16895c,#25b77a);letter-spacing:.5px;font-size:13px}
+.task-finish span{float:right;font-size:18px}
+.task-cancel-link{display:block;margin:4px auto 12px;border:0;background:none;color:#8197b1;font-size:12px;padding:7px 14px}
+.sequence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}
+.task-tile{min-height:66px;position:relative;border:1px solid #45617d;border-radius:10px;background:linear-gradient(145deg,#243d57,#15283e);color:#e4f1ff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
+.task-tile:active,.task-choice:active,.debris-item:active{transform:scale(.97)}
+.tile-index{position:absolute;top:5px;left:8px;color:#83a7c8;font:700 9px ui-monospace,monospace}
+.task-tile.tile-done{background:#104b3b;border-color:#38b987;color:#a6f3d0;opacity:.8}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}
+.task-choice{min-height:86px;border:1px solid #405c78;border-radius:11px;background:linear-gradient(145deg,#263f5a,#172a40);color:#e6f2ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative}
+.task-choice b{font-size:11px;letter-spacing:.7px}.choice-icon{font-size:26px}.choice-arrow{position:absolute;right:8px;top:7px;color:#80a7c7}
+.debris-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.debris-item{min-height:78px;border:1px solid #52657b;border-radius:10px;background:linear-gradient(145deg,#293e52,#172a3e);color:#e8f3ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;touch-action:manipulation}
+.debris-item span{font-size:25px}.debris-item small{font:700 8px ui-monospace,monospace;color:#92abc3}
+.debris-item.debris-cleared{background:#123a34;border-color:#2b9a75;opacity:.72}.debris-cleared span{filter:grayscale(1)}
+.calibration-screen{height:155px;position:relative;overflow:hidden;border:1px solid #39536d;border-radius:10px;background:repeating-linear-gradient(0deg,transparent 0 24px,#29405a 25px),repeating-linear-gradient(90deg,transparent 0 24px,#29405a 25px),#0b1929;margin:14px 0 12px}
+.calibration-cross{position:absolute;inset:0;display:grid;place-items:center;color:#a9c6df;font-size:38px;opacity:.65}
+.calibration-target{position:absolute;top:0;bottom:0;background:#36d99425;border-left:2px solid #43e3a1;border-right:2px solid #43e3a1}
+.calibration-beam{position:absolute;top:0;bottom:0;width:3px;background:#ffdf76;box-shadow:0 0 13px #ffdf76;transition:left .08s}
+.calibration-readout{position:absolute;right:8px;top:8px;color:#e7f6ff;font:800 12px ui-monospace,monospace}
+.task-range{width:100%;accent-color:#43d99a;touch-action:pan-y}
+.range-ends{display:flex;justify-content:space-between;color:#829bb5;font:700 8px ui-monospace,monospace}
+.id-card{padding:12px;border:1px solid #6a8198;border-radius:8px;background:linear-gradient(120deg,#d8e5ec,#aebfca);color:#1a3042;margin:12px auto 10px;max-width:250px;text-align:center;box-shadow:0 4px 0 #60788a}
+.id-card span,.id-card small{display:block;font:800 8px ui-monospace,monospace;letter-spacing:1.5px}
+.id-card b{display:block;font-size:10px;margin-top:10px}.id-card strong{display:block;font:900 28px ui-monospace,monospace;letter-spacing:5px;margin:4px}.id-card small{font-size:7px}
+.key-display{text-align:center;color:#8df0bf;font:900 25px ui-monospace,monospace;letter-spacing:8px;padding:10px;background:#07121e;border:1px solid #35516a;border-radius:8px;margin:10px 0}
+.keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.keypad-key{height:48px;border:1px solid #45617b;border-radius:8px;background:linear-gradient(#29435c,#192d43);color:#edf6ff;font:800 17px ui-monospace,monospace;touch-action:manipulation}
+.keypad-key.key-enter{background:#126a4d;border-color:#2eb985;font-size:11px}
+.wire-board{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 8px}
+.wire-column{display:flex;flex-direction:column;gap:9px}.wire-column>small{text-align:center;color:#8ea8c0;font:800 8px ui-monospace,monospace;letter-spacing:1px;margin-bottom:2px}
+.wire-port{height:43px;border:1px solid #405a73;border-radius:8px;background:#1a2d42;color:#e7f2fc;display:flex;align-items:center;gap:8px;padding:0 8px;font-size:10px}
+.wire-port i{width:14px;height:14px;border-radius:50%;background:var(--wire);box-shadow:0 0 9px var(--wire);flex:none}
+.wire-port b{font:800 9px ui-monospace,monospace}
+.wire-port.wire-selected{outline:2px solid #f5f9ff;background:#314d69}
+.wire-port.wire-complete{border-color:#3dbb88;background:#104233;opacity:.75}
+@media(max-width:360px){.terminal-body{padding:11px}.wire-board{gap:7px}.wire-port{padding:0 5px;font-size:9px}.debris-grid{gap:5px}.debris-item{min-height:68px}}
+
 </style>
 </head>
 <body>
@@ -542,73 +609,79 @@ async function handleToken(tok){
 }
 
 function makeMiniGame(id){
-  const pick = a => a[Math.floor(Math.random()*a.length)];
-  const shuffled = a => a.slice().sort(()=>Math.random()-.5);
+  const shuffled = a => {const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
   const configs = {
-    sample:{type:'choice',title:'Sample analysis',prompt:'The analyser indicator reads NORMAL. Select that result.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL'},
-    scan:{type:'range',title:'Biometric scanner',prompt:'Move the scanner until the signal is centred.',target:50,tolerance:4},
-    manifolds:{type:'sequence',title:'Manifold sequence',prompt:'Tap the panels in ascending order.',items:[1,2,3,4]},
-    'id-code':{type:'code',title:'Identity keypad',prompt:'Enter the access code shown on the ID card.',code:String(1000+Math.floor(Math.random()*9000))},
-    telescope:{type:'range',title:'Telescope alignment',prompt:'Slide until the target is centred in the crosshair.',target:Math.floor(25+Math.random()*51),tolerance:3},
-    artifact:{type:'sequence',title:'Artifact assembly',prompt:'Fit the fragments in the correct order: top, right, bottom, left.',items:['TOP','RIGHT','BOTTOM','LEFT']},
-    beverage:{type:'choice',title:'Vending machine',prompt:'Order ticket: BLUE SODA. Select the matching drink.',options:['ORANGE JUICE','BLUE SODA','WATER','APPLE DRINK'],answer:'BLUE SODA'},
-    'clean-vent':{type:'count',title:'Vent cleaning',prompt:'Tap every piece of debris to clear the vent.',items:['🪨','🍂','🧻','🔩','🪵','🕸️']},
-    decontaminate:{type:'sequence',title:'Decontamination panel',prompt:'Repeat this sequence: 🔴 → 🟢 → 🔵 → 🟡.',items:['🔴','🟢','🔵','🟡']},
-    photos:{type:'sequence',title:'Photo developing',prompt:'Sort the photos from oldest to newest: 1, 2, 3.',items:['PHOTO 1','PHOTO 2','PHOTO 3']},
-    mannequin:{type:'choice',title:'Mannequin fitting',prompt:'Dress code: SPACE SUIT. Choose the matching outfit.',options:['CASUAL','SPACE SUIT','FORMAL','SPORTSWEAR'],answer:'SPACE SUIT'},
-    shower:{type:'sequence',title:'Shower repair',prompt:'Turn the valves in this order to restore water flow.',items:['LEFT','CENTRE','RIGHT']},
-    burger:{type:'sequence',title:'Burger assembly',prompt:'Stack the ingredients in order: bun, patty, cheese, lettuce.',items:['BUN','PATTY','CHEESE','LETTUCE']},
-    towels:{type:'count',title:'Towel collection',prompt:'Tap each towel to put it in the laundry basket.',items:['🧻','🧻','🧻','🧻','🧻']},
-    ruby:{type:'count',title:'Ruby polishing',prompt:'Tap the polishing pad repeatedly until the ruby shines.',items:['✨','✨','✨','✨','✨','✨','✨','✨']}
+    sample:{type:'choice',title:'Specimen analyser',station:'LAB / ANALYSIS',prompt:'The analyser has finished. The result indicator is NORMAL. Select the matching result.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL',visual:'sample'},
+    scan:{type:'range',title:'Biometric scanner',station:'MEDBAY / SCAN',prompt:'Move the scanner beam into the green calibration zone and hold it there.',target:50,tolerance:5,visual:'scan'},
+    manifolds:{type:'sequence',title:'Unlock manifolds',station:'ADMIN / MANIFOLDS',prompt:'Enter the numbered panels in ascending order: 1 → 2 → 3 → 4.',items:[1,2,3,4],visual:'manifolds'},
+    'id-code':{type:'keypad',title:'Enter ID code',station:'ADMIN / ID CARD',prompt:'Read the access code on the ID card, then enter it on the keypad.',code:String(1000+Math.floor(Math.random()*9000)),visual:'id'},
+    telescope:{type:'range',title:'Align telescope',station:'NAVIGATION / VIEWFINDER',prompt:'Move the telescope until the signal locks inside the green target zone.',target:Math.floor(25+Math.random()*51),tolerance:4,visual:'telescope'},
+    artifact:{type:'wires',title:'Assemble artifact',station:'STORAGE / POWER ROUTING',prompt:'Restore the four circuits. Connect each coloured plug to the socket with the same colour.',pairs:[['RED','#ff5b68'],['BLUE','#59a8ff'],['YELLOW','#ffd45c'],['GREEN','#55db9a']],visual:'wires'},
+    beverage:{type:'choice',title:'Buy beverage',station:'CAFETERIA / VENDING',prompt:'Order ticket: BLUE SODA. Select the exact drink from the vending machine.',options:['ORANGE JUICE','BLUE SODA','WATER','APPLE DRINK'],answer:'BLUE SODA',visual:'vending'},
+    'clean-vent':{type:'count',title:'Clean vent',station:'VENTILATION / FILTER',prompt:'Tap every piece of debris to clear the air intake. Leave no blockage behind.',items:['🪨','🍂','🧻','🔩','🪵','🕸️'],visual:'vent'},
+    decontaminate:{type:'sequence',title:'Decontamination',station:'LAB / AIRLOCK',prompt:'Enter the purge sequence shown on the monitor: RED → GREEN → BLUE → YELLOW.',items:['🔴','🟢','🔵','🟡'],visual:'decon'},
+    photos:{type:'sequence',title:'Develop photos',station:'SECURITY / DARKROOM',prompt:'Sort the photo trays from oldest to newest: 1 → 2 → 3.',items:['PHOTO 1','PHOTO 2','PHOTO 3'],visual:'photos'},
+    mannequin:{type:'choice',title:'Dress mannequin',station:'LOCKER ROOM / UNIFORM',prompt:'Required uniform: SPACE SUIT. Select the correct outfit.',options:['CASUAL','SPACE SUIT','FORMAL','SPORTSWEAR'],answer:'SPACE SUIT',visual:'uniform'},
+    shower:{type:'sequence',title:'Fix shower',station:'SHOWERS / PIPE CONTROL',prompt:'Open the valves in the correct order to restore water flow: LEFT → CENTRE → RIGHT.',items:['LEFT','CENTRE','RIGHT'],visual:'shower'},
+    burger:{type:'sequence',title:'Make burger',station:'CAFETERIA / FOOD PREP',prompt:'Build the order from the bottom up: BUN → PATTY → CHEESE → LETTUCE.',items:['BUN','PATTY','CHEESE','LETTUCE'],visual:'burger'},
+    towels:{type:'count',title:'Pick up towels',station:'SHOWERS / LAUNDRY',prompt:'Collect every towel and send it to the laundry chute.',items:['▤','▤','▤','▤','▤'],visual:'towels'},
+    ruby:{type:'count',title:'Polish ruby',station:'SPECIMEN ROOM / GEM CARE',prompt:'Tap each dull facet to polish the ruby until every facet shines.',items:['✦','✦','✦','✦','✦','✦','✦','✦'],visual:'ruby'}
   };
-  const c = configs[id] || configs.sample;
-  const game = {...c,step:0,cleared:[],solved:false,value:0,entry:''};
-  if(c.type==='sequence'){game.order=c.items.slice();if(id==='manifolds'||id==='decontaminate')game.items=shuffled(c.items);}
+  const c=configs[id]||configs.sample;
+  const game={...c,step:0,cleared:[],solved:false,value:0,entry:'',selectedSource:null};
+  if(c.type==='sequence'){game.order=c.items.slice();game.items=c.items.slice();}
+  if(c.type==='wires'){game.targets=shuffled(c.pairs.map((p,i)=>i));game.connected=[];}
   return game;
 }
 function miniGameHtml(g){
-  const progress = g.type==='count' ? g.cleared.length+'/'+g.items.length :
-    g.type==='sequence' ? g.step+'/'+g.items.length : g.type==='range' ? Math.round(g.value)+'%' :
-    g.type==='code' ? g.entry.length+'/4' : (g.solved?'Complete':'');
+  const done=g.type==='count'?g.cleared.length:g.type==='sequence'?g.step:g.type==='wires'?g.connected.length:g.solved?1:0;
+  const total=g.type==='count'?g.items.length:g.type==='sequence'?g.items.length:g.type==='wires'?g.pairs.length:1;
+  const pct=Math.round(done/total*100);
+  const meter='<div class="task-progress"><div class="task-progress-fill" style="width:'+pct+'%"></div></div>';
   let body='';
   if(g.type==='range'){
-    body='<div style="font-size:42px;margin:14px">🎯</div><input data-mini-range type="range" min="0" max="100" value="'+g.value+'" style="width:100%;accent-color:var(--accent)"><p class="small muted">Signal position: <b id="mini-value">'+Math.round(g.value)+'%</b></p>';
-  } else if(g.type==='sequence'){
-    body='<div class="row wrap" style="justify-content:center;margin:16px 0">'+g.items.map((x,i)=>'<button class="btn ghost sm" data-mini="'+i+'" '+(g.cleared.includes(i)?'disabled':'')+'>'+esc(String(x))+'</button>').join('')+'</div><p class="small muted">Tap the next correct item. Incorrect taps reset the sequence.</p>';
-  } else if(g.type==='choice'){
-    body='<div class="col" style="display:grid;gap:8px;margin:16px 0">'+g.options.map(x=>'<button class="btn ghost" data-mini-choice="'+esc(x)+'">'+esc(x)+'</button>').join('')+'</div>';
-  } else if(g.type==='count'){
-    body='<div class="row wrap" style="justify-content:center;margin:16px 0">'+g.items.map((x,i)=>'<button class="btn ghost sm" style="font-size:24px;min-width:54px" data-mini="'+i+'" '+(g.cleared.includes(i)?'disabled':'')+'>'+x+'</button>').join('')+'</div><p class="small muted">Tap each item once.</p>';
-  } else if(g.type==='code'){
-    body='<div class="code" style="font-size:34px;letter-spacing:5px">'+g.code+'</div><input type="text" data-mini-entry maxlength="4" inputmode="numeric" placeholder="4-digit code" value="'+esc(g.entry)+'"><button class="btn ghost" style="margin-top:8px" data-mini-submit>Verify code</button>';
+    const left=Math.max(0,g.target-g.tolerance),right=Math.min(100,g.target+g.tolerance);
+    body='<div class="calibration"><div class="calibration-screen"><div class="calibration-cross">＋</div><div class="calibration-target" style="left:'+left+'%;width:'+(right-left)+'%"></div><div class="calibration-beam" style="left:'+g.value+'%"></div><span class="calibration-readout">'+Math.round(g.value)+'%</span></div><input class="task-range" data-mini-range type="range" min="0" max="100" value="'+g.value+'"><div class="range-ends"><span>LOW</span><span>CALIBRATE</span><span>HIGH</span></div></div>';
+  }else if(g.type==='sequence'){
+    body='<div class="sequence-grid">'+g.items.map((x,i)=>'<button class="task-tile '+(g.cleared.includes(i)?'tile-done':'')+'" data-mini="'+i+'" '+(g.cleared.includes(i)?'disabled':'')+'><span class="tile-index">'+(i+1)+'</span><b>'+esc(String(x))+'</b></button>').join('')+'</div><p class="task-hint">Select the next correct panel. A wrong selection resets the sequence.</p>';
+  }else if(g.type==='choice'){
+    body='<div class="choice-grid">'+g.options.map((x,i)=>'<button class="task-choice" data-mini-choice="'+esc(x)+'"><span class="choice-icon">'+(g.visual==='vending'?['🧃','🥤','💧','🍎'][i]:g.visual==='uniform'?['👕','🚀','🤵','🏃'][i]:['◉','◌'][i%2])+'</span><b>'+esc(x)+'</b><span class="choice-arrow">›</span></button>').join('')+'</div>';
+  }else if(g.type==='count'){
+    body='<div class="debris-grid">'+g.items.map((x,i)=>'<button class="debris-item '+(g.cleared.includes(i)?'debris-cleared':'')+'" data-mini="'+i+'" '+(g.cleared.includes(i)?'disabled':'')+'><span>'+x+'</span>'+(g.cleared.includes(i)?'<small>REMOVED</small>':'<small>TAP TO CLEAR</small>')+'</button>').join('')+'</div><p class="task-hint">Tap each highlighted object once.</p>';
+  }else if(g.type==='keypad'){
+    body='<div class="id-card"><span>CREWMATE ACCESS CARD</span><b>ACCESS CODE</b><strong>'+g.code+'</strong><small>AUTHORISED PERSONNEL ONLY</small></div><div class="key-display">'+(g.entry||'— — — —')+'</div><div class="keypad-grid">'+['1','2','3','4','5','6','7','8','9','⌫','0','ENTER'].map(k=>'<button class="keypad-key '+(k==='ENTER'?'key-enter':'')+'" data-mini-key="'+k+'">'+k+'</button>').join('')+'</div>';
+  }else if(g.type==='wires'){
+    body='<div class="wire-board"><div class="wire-column"><small>POWER INPUT</small>'+g.pairs.map((p,i)=>'<button class="wire-port '+(g.selectedSource===i?'wire-selected':'')+' '+(g.connected.includes(i)?'wire-complete':'')+'" style="--wire:'+p[1]+'" data-wire="s:'+i+'" '+(g.connected.includes(i)?'disabled':'')+'><i></i><b>'+p[0]+'</b></button>').join('')+'</div><div class="wire-column"><small>OUTPUT SOCKETS</small>'+g.targets.map(i=>'<button class="wire-port '+(g.connected.includes(i)?'wire-complete':'')+'" style="--wire:'+g.pairs[i][1]+'" data-wire="t:'+i+'" '+(g.connected.includes(i)?'disabled':'')+'><i></i><b>SOCKET '+(g.targets.indexOf(i)+1)+'</b></button>').join('')+'</div></div><p class="task-hint">Tap a coloured input, then its matching output socket.</p>';
   }
-  return '<div class="card" style="text-align:left;margin:12px 0"><div class="row"><b class="grow">'+esc(g.title)+'</b><span class="tag">'+esc(progress)+'</span></div><p class="small muted">'+esc(g.prompt)+'</p>'+body+(g.solved?'<p class="banner win">✔ Challenge completed!</p>':'')+'</div>';
+  const title='<div class="task-station"><span class="station-light"></span><span>'+esc(g.station||'SHIP SYSTEMS')+'</span><span class="station-status">'+(g.solved?'ONLINE':'ACTIVE')+'</span></div>';
+  return '<div class="mini-terminal"><div class="terminal-top"><span class="terminal-dots">● ● ●</span><span>SHIP SYSTEMS // TASK CONSOLE</span><span>◈</span></div>'+title+'<div class="terminal-body"><div class="terminal-heading"><div><small>MAINTENANCE PROTOCOL</small><h2>'+esc(g.title)+'</h2></div><span class="terminal-icon">'+({sample:'🧪',scan:'◉',manifolds:'▦',id:'▣',telescope:'◎',wires:'⌁',vending:'▤',vent:'✣',decon:'☣',photos:'▧',uniform:'♙',shower:'≋',burger:'▤',towels:'▥',ruby:'✧'}[g.visual]||'◈')+'</span></div><p class="task-instruction">'+esc(g.prompt)+'</p><div class="task-meter-label"><span>PROGRESS</span><b>'+done+' / '+total+'</b></div>'+meter+body+(g.solved?'<div class="task-success"><span>✓</span><div><b>Task verified</b><small>System restored successfully</small></div></div>':'')+'</div></div>';
 }
 function renderTaskOverlay(){
-  const tk=S.task, g=S.g, t=tk&&BYID[tk.id]; if(!tk||!t||!g||!g.meta)return;
-  const game=tk.game;
-  $('#overlay').innerHTML='<div class="ov"><div class="sheet"><div class="big">'+t.icon+'</div><h1>'+esc(tname(g.meta,tk.id))+'</h1><p class="small muted">Complete the phone challenge to verify this task.</p>'+miniGameHtml(game)+'<button class="btn ok" id="taskdone" data-act="task-done" style="margin-top:12px" '+(!game.solved?'disabled':'')+'>✔ Complete task</button><button class="btn ghost" data-act="task-cancel" style="margin-top:8px">Cancel</button></div></div>';
+  const tk=S.task,g=S.g,t=tk&&BYID[tk.id];if(!tk||!t||!g||!g.meta)return;
+  $('#overlay').innerHTML='<div class="ov task-ov"><div class="sheet task-sheet"><div class="task-sheet-head"><span class="task-badge">'+t.icon+'</span><div><small>CREWMATE DUTIES</small><h1>'+esc(tname(g.meta,tk.id))+'</h1></div><button class="task-close" data-act="task-cancel" aria-label="Close">×</button></div>'+miniGameHtml(tk.game)+'<button class="btn ok task-finish" id="taskdone" data-act="task-done" '+(!tk.game.solved?'disabled':'')+'>VERIFY & COMPLETE TASK <span>→</span></button><button class="task-cancel-link" data-act="task-cancel">Cancel task</button></div></div>';
 }
 function miniAction(el){
-  const g=S.task&&S.task.game; if(!g||g.solved)return;
+  const g=S.task&&S.task.game;if(!g||g.solved)return;
   if(el.hasAttribute('data-mini-choice')){
-    if(el.dataset.miniChoice===g.answer)g.solved=true;else toast('Not quite — try another option.');
+    if(el.dataset.miniChoice===g.answer)g.solved=true;else toast('Incorrect selection — check the task order.');
   }else if(el.hasAttribute('data-mini')){
     const i=Number(el.dataset.mini);
     if(g.type==='count'){if(!g.cleared.includes(i))g.cleared.push(i);if(g.cleared.length===g.items.length)g.solved=true;}
-    if(g.type==='sequence'){
-      const expected=g.order[g.step];
-      const actual=g.items[i];
-      if(actual===expected){g.cleared.push(i);g.step++;if(g.step===g.items.length)g.solved=true;}
-      else {g.step=0;g.cleared=[];toast('Wrong order — sequence reset.');}
-    }
-  }else if(el.hasAttribute('data-mini-submit')){
-    const input=$('[data-mini-entry]');
-    if(input&&input.value===g.code){g.solved=true;g.entry=input.value;}else toast('Incorrect code. Try again.');
+    if(g.type==='sequence'){if(g.items[i]===g.order[g.step]){g.cleared.push(i);g.step++;if(g.step===g.items.length)g.solved=true;}else{g.step=0;g.cleared=[];toast('Incorrect sequence — start again.');}}
+  }else if(el.hasAttribute('data-mini-key')){
+    const k=el.dataset.miniKey;
+    if(k==='⌫')g.entry=g.entry.slice(0,-1);
+    else if(k==='ENTER'){if(g.entry===g.code)g.solved=true;else toast('Access denied — incorrect code.');}
+    else if(g.entry.length<4)g.entry+=k;
+  }else if(el.hasAttribute('data-wire')){
+    const [side,n]=el.dataset.wire.split(':'),i=Number(n);
+    if(side==='s'){g.selectedSource=i;}
+    else if(g.selectedSource===null){toast('Select a power input first.');}
+    else if(g.selectedSource===i){g.connected.push(i);g.selectedSource=null;if(g.connected.length===g.pairs.length)g.solved=true;}
+    else{g.selectedSource=null;toast('Circuit mismatch — try another socket.');}
   }
   renderTaskOverlay();
 }
-
 function openTask(id){
   clearInterval(S.taskTimer);
   S.task = {id, game:makeMiniGame(id)};
@@ -936,8 +1009,8 @@ async function renderPrint(names, fetched){
 }
 
 /* ---------------------------- events ------------------------------- */
-document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit]'); if(mini){e.preventDefault();miniAction(mini);} });
-document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;const b=$('#taskdone');if(b)b.disabled=false;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
+document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit],[data-mini-key],[data-wire]'); if(mini){e.preventDefault();miniAction(mini);} });
+document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
 document.addEventListener('change', e => { if(e.target.matches('[data-mini-range]') && S.task?.game)renderTaskOverlay(); });
 document.addEventListener('click', async e => {
   const el = e.target.closest('[data-act]'); if(!el) return;
