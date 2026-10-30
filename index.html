@@ -186,8 +186,8 @@ const CFG = window.APP_CONFIG || {};
 const PER = CFG.tasksPerPlayer || 4;
 
 /* ------------------------------------------------------------------ */
-/*  Tasks. `v` = challenge variants; one is picked at random each time  */
-/*  a player does the task. {3-6} = random number, |20 = wait 20 secs.  */
+/*  Puzzle missions are grouped by difficulty and each ID is unique.       */
+/*  Puzzle answers and choices are checked by the task terminal.            */
 /*  IDs must stay unique. Names can also be changed by the host in-app. */
 /* ------------------------------------------------------------------ */
 const TASKS = [
@@ -231,12 +231,12 @@ const TASKS = [
     "name": "Access Alphabet 03",
     "desc": "Access alphabet: if A=1, B=2 and so on, what number represents G?",
     "category": "Quick",
-    "answer": "11",
+    "answer": "7",
     "options": [
-      "11",
-      "12",
-      "10",
-      "13"
+      "7",
+      "8",
+      "6",
+      "9"
     ],
     "v": [
       "Access alphabet: if A=1, B=2 and so on, what number represents G?"
@@ -401,12 +401,12 @@ const TASKS = [
     "name": "Access Alphabet 13",
     "desc": "Access alphabet: if A=1, B=2 and so on, what number represents Q?",
     "category": "Quick",
-    "answer": "21",
+    "answer": "17",
     "options": [
-      "21",
-      "22",
-      "20",
-      "23"
+      "17",
+      "18",
+      "16",
+      "19"
     ],
     "v": [
       "Access alphabet: if A=1, B=2 and so on, what number represents Q?"
@@ -1044,7 +1044,7 @@ const TASKS = [
   {
     "id": "h-06",
     "icon": "🧠",
-    "name": "Prime Network 06",
+    "name": "Double Signal 06",
     "desc": "Prime network: what number is one more than twice 11?",
     "category": "Challenging",
     "answer": "23",
@@ -1214,7 +1214,7 @@ const TASKS = [
   {
     "id": "h-16",
     "icon": "🧠",
-    "name": "Prime Network 16",
+    "name": "Double Signal 16",
     "desc": "Prime network: what number is one more than twice 21?",
     "category": "Challenging",
     "answer": "43",
@@ -1384,7 +1384,7 @@ const TASKS = [
   {
     "id": "h-26",
     "icon": "🧠",
-    "name": "Prime Network 26",
+    "name": "Double Signal 26",
     "desc": "Prime network: what number is one more than twice 31?",
     "category": "Challenging",
     "answer": "63",
@@ -1554,7 +1554,7 @@ const TASKS = [
   {
     "id": "h-36",
     "icon": "🧠",
-    "name": "Prime Network 36",
+    "name": "Double Signal 36",
     "desc": "Prime network: what number is one more than twice 41?",
     "category": "Challenging",
     "answer": "83",
