@@ -1761,7 +1761,19 @@ const randPin = () => String(1000 + rnd(9000));
 const colorOf = name => `hsl(${hash(name)%360} 70% 60%)`;
 const BASE = location.origin + location.pathname.replace(/index\.html$/,'');
 const qs = new URLSearchParams(location.search);
-const PRINT = qs.get('print') === '1';
+const PRINT = qs.get('print') === '1' || qs.get('print') === 'stations';
+const STATIONS = [
+  {id:'engineering',name:'Engineering'},
+  {id:'navigation',name:'Navigation'},
+  {id:'security',name:'Security'},
+  {id:'laboratory',name:'Laboratory'},
+  {id:'storage',name:'Storage'},
+  {id:'electrical',name:'Electrical'},
+  {id:'admin',name:'Admin'},
+  {id:'medbay',name:'MedBay'}
+];
+const stationForTask = id => STATIONS[TASKS.findIndex(t=>t.id===id)%STATIONS.length];
+const stationName = id => (STATIONS.find(x=>x.id===id)||{}).name || 'Unassigned station';
 const rolesOn = m => !m || m.roles !== false;
 const tname = (m, id) => (m && m.names && m.names[id]) || BYID[id].name;
 
@@ -1835,7 +1847,7 @@ async function makeFirebase(){
 
 /* ------------------------------ state ------------------------------ */
 let DB, store, unsub = null;
-const S = { session:null, g:undefined, tab:'host', reveal:false, shown:0, pendingTok:null,
+const S = { session:null, g:undefined, tab:'host', reveal:false, shown:0, pendingTok:null, pendingStation:null,
             ending:false, closing:false, timeUp:false, task:null, taskTimer:null, impScreen:false, sheriffScreen:false,
             meetInit:undefined, lastOpen:undefined, resultSeen:undefined };
 const saveSession = () => S.session ? store.setItem('irl.session', JSON.stringify(S.session)) : store.removeItem('irl.session');
@@ -2060,7 +2072,21 @@ function scanProblem(id){
   if(me.done && me.done[id]) return {ok:true, icon:'✔️', title:'Already done', msg:`${tname(g.meta,id)} is already complete.`};
   return null;
 }
-async function handleToken(tok){
+async function handleStation(stationId){
+  const station=STATIONS.find(x=>x.id===stationId);
+  if(!station) return showResult(false,'❓','Unknown station','This QR code is not a recognised campus station.');
+  const s=S.session,g=S.g;
+  if(!s||!s.me){S.pendingStation=stationId;sessionStorage.setItem('irl.pendingStation',stationId);toast('Join the game first — this station scan will be applied');render();return;}
+  if(!g||!g.meta){S.pendingStation=stationId;return;}
+  if(g.meta.status!=='playing') return showResult(false,'⏳','Game not active','Wait until the host starts the round.');
+  const me=g.players&&g.players[s.me];
+  if(!me) return showResult(false,'⚠️','Not in game','Join this game before scanning a station.');
+  const eligible=Object.keys(me.tasks||{}).filter(id=>BYID[id]&&!(me.done&&me.done[id])&&(g.meta.locs?.[id]||stationForTask(id).id)===stationId);
+  if(!eligible.length) return showResult(false,'📍','No puzzle here','You have no unfinished assigned puzzle at '+station.name+'. Try another station.');
+  const id=eligible[rnd(eligible.length)];
+  openTask(id);
+}
+function handleToken(tok){
   const id = TOKEN2TASK[tok];
   if(!id) return showResult(false,'❓','Unknown code',"That QR isn't part of this game.");
   const s = S.session;
@@ -2222,7 +2248,10 @@ async function openScanner(){
     await loadScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
     scanner = new Html5Qrcode('qr-reader');
     await scanner.start({facingMode:'environment'}, {fps:10, qrbox:{width:220,height:220}}, txt => {
-      const tok = parseToken(txt); if(tok){ closeScanner().then(()=>handleToken(tok)); }
+      let stationId=null;try{stationId=new URL(txt).searchParams.get('station');}catch(e){}
+      const tok = parseToken(txt);
+      if(stationId && STATIONS.some(x=>x.id===stationId)){ closeScanner().then(()=>handleStation(stationId)); }
+      else if(tok){ closeScanner().then(()=>handleToken(tok)); }
     }, () => {});
   }catch(e){
     const m = $('#scanmsg'); if(m) m.textContent = 'Camera unavailable – type the code printed under the QR, or use your phone’s normal camera app.';
@@ -2244,6 +2273,9 @@ function subscribe(){
 }
 function onData(){
   const g = S.g, s = S.session;
+  if(S.pendingStation && s?.me && g?.meta?.status==='playing' && g.players?.[s.me]){
+    const station=S.pendingStation;S.pendingStation=null;sessionStorage.removeItem('irl.pendingStation');setTimeout(()=>handleStation(station),0);
+  }
   if(g && g.meta){
     // removed from game
     if(s.me && !(g.players && g.players[s.me])){
@@ -2408,8 +2440,8 @@ function playView(g, d, me){
   if(!((imp && S.impScreen) || (me.role==='sheriff' && S.sheriffScreen))){
     html += `<h2>Your tasks (${myTasks.filter(i=>me.done&&me.done[i]).length}/${myTasks.length})</h2>`;
     html += myTasks.map(id => {
-      const t = BYID[id], done = me.done && me.done[id]; const loc = m.locs && m.locs[id];
-      return `<div class="task ${done?'done':''}"><div class="ic">${t.icon}</div><div class="tx"><b>${esc(tname(m,id))}</b><span>📍 ${esc(loc||'Find the QR code')}</span><small>${esc(t.desc)}</small></div><div class="st">${done?'✔':'○'}</div></div>`;
+      const t = BYID[id], done = me.done && me.done[id]; const loc = (m.locs && m.locs[id]) || stationForTask(id).id;
+      return `<div class="task ${done?'done':''}"><div class="ic">${t.icon}</div><div class="tx"><b>${esc(tname(m,id))}</b><span>📍 ${esc(stationName(loc))}</span><small>${esc(t.desc)}</small></div><div class="st">${done?'✔':'○'}</div></div>`;
     }).join('');
   }
   if(roles && !me.dead){
@@ -2477,7 +2509,9 @@ function hostView(g, d, me){
       <details><summary>Puzzle bank &amp; names (optional)</summary>
       <p class="small muted">Disable puzzles you don't want in this round, or rename them.</p>
       ${TASKS.map(t=>`<div class="trow"><div class="l1"><input type="checkbox" data-act="toggletask" data-v="${t.id}" ${m.off&&m.off[t.id]?'':'checked'}><span>${t.icon}</span><span class="tag">${t.category}</span><input type="text" data-name="${t.id}" value="${esc(tname(m,t.id))}" maxlength="28"></div>
-        <div class="l2"><input type="text" data-loc="${t.id}" value="${esc((m.locs&&m.locs[t.id])||'')}" placeholder="Where is it?" maxlength="40"></div></div>`).join('')}</details>
+        <div class="l2"><select data-loc="${t.id}" style="min-width:0;flex:1;background:#0e1430;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:8px">
+          ${STATIONS.map(st=>`<option value="${st.id}" ${((m.locs&&m.locs[t.id])||stationForTask(t.id).id)===st.id?'selected':''}>${st.name}</option>`).join('')}
+        </select></div></div>`).join('')}</details>
       <p class="small" style="margin-top:8px"><a href="?print=1&room=${esc(s.room)}" target="_blank">🖨 Open printable task QR sheet</a> <span class="muted">(print once, reuse for every game)</span></p>
       <button class="btn ok" style="margin-top:8px" data-act="start" ${d.players.length<2?'disabled':''}>▶ Start game</button></div>`;
   } else if(m.status==='playing'){
@@ -2568,7 +2602,7 @@ document.addEventListener('click', async e => {
 document.addEventListener('change', e => {
   const el = e.target, ds = el.dataset || {};
   if(!S.session) return;
-  if(ds.loc && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','locs',ds.loc), el.value.trim() || null); }
+  if(ds.loc && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','locs',ds.loc), el.value || null); }
   if(ds.name && S.session.host && S.g?.meta?.status==='lobby'){ const val = el.value.trim(); DB.set(path('meta','names',ds.name), val && val !== BYID[ds.name].name ? val : null); }
   if(ds.act==='toggletask' && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','off',ds.v), el.checked ? null : true); }
   if(ds.act==='toggleroles' && S.session.host && S.g?.meta?.status==='lobby'){ DB.set(path('meta','roles'), !!el.checked); }
@@ -2599,7 +2633,10 @@ document.addEventListener('submit', async e => {
   const t = qs.get('t'); const tok = t ? parseToken(t) : null;
   S.pendingTok = tok || sessionStorage.getItem('irl.pending') || null;
   if(tok) sessionStorage.setItem('irl.pending', tok);
-  if(qs.get('t') || qs.get('room')) history.replaceState(null,'',location.pathname + (qs.get('room') && !S.session ? '?room='+qs.get('room') : ''));
+  const stationParam=qs.get('station');
+  S.pendingStation=STATIONS.some(x=>x.id===stationParam)?stationParam:(sessionStorage.getItem('irl.pendingStation')||null);
+  if(stationParam) sessionStorage.setItem('irl.pendingStation',stationParam);
+  if(qs.get('t') || qs.get('room') || stationParam) history.replaceState(null,'',location.pathname + (qs.get('room') && !S.session ? '?room='+qs.get('room') : ''));
   subscribe();
 })();
 })();
