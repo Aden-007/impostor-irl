@@ -2408,7 +2408,7 @@ function homeView(){
       <button class="btn" style="margin-top:14px" type="submit">Join</button>
     </form>
     <div class="card"><h2>Organiser?</h2><button class="btn ghost" data-act="create">Host a new game</button>
-    <p class="small muted" style="margin-top:8px"><a href="?print=1" target="_blank">Open printable task QR sheet</a></p>
+    <p class="small muted" style="margin-top:8px"><a href="?print=stations" target="_blank">Print permanent station QR codes</a></p>
     <details><summary class="small">Resume hosting a game</summary>
       <form data-form="resume"><label>Room code</label><input type="text" name="room" maxlength="4" autocapitalize="characters" autocomplete="off">
       <label>Host PIN</label><input type="text" name="pin" maxlength="4" inputmode="numeric" autocomplete="off">
@@ -2507,12 +2507,12 @@ function hostView(g, d, me){
       ${roles ? `<div class="row" style="margin-top:10px"><span class="grow">Meeting timer</span><button class="btn ghost sm inline" data-act="meetinglimit" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.meetingLimit||60}s</b><button class="btn ghost sm inline" data-act="meetinglimit" data-v="1">+</button></div><div class="row" style="margin-top:10px"><span class="grow">Impostor kill cooldown</span><button class="btn ghost sm inline" data-act="killcooldown" data-v="-1">−</button><b style="min-width:64px;text-align:center">${m.killCooldown||30}s</b><button class="btn ghost sm inline" data-act="killcooldown" data-v="1">+</button></div><label class="chk"><input type="checkbox" data-act="toggleanonymous" ${m.anonymousVotes?'checked':''}> <span>Anonymous voting</span></label><p class="small muted">Sheriff, Medic and Mayor are randomly assigned to up to three crewmates.</p>`:''}
       <p class="small muted">${taskCount} puzzles per player, selected randomly. Every puzzle is unique within the round.${lim?(roles?' If time runs out, impostors win.':' If time runs out, the game is lost.'):''}</p>
       <details><summary>Puzzle bank &amp; names (optional)</summary>
-      <p class="small muted">Disable puzzles you don't want in this round, or rename them.</p>
+      <p class="small muted">Disable or rename puzzles, and choose which permanent station QR should open each puzzle. Every task defaults to a station; you can change these assignments before starting.</p>
       ${TASKS.map(t=>`<div class="trow"><div class="l1"><input type="checkbox" data-act="toggletask" data-v="${t.id}" ${m.off&&m.off[t.id]?'':'checked'}><span>${t.icon}</span><span class="tag">${t.category}</span><input type="text" data-name="${t.id}" value="${esc(tname(m,t.id))}" maxlength="28"></div>
         <div class="l2"><select data-loc="${t.id}" style="min-width:0;flex:1;background:#0e1430;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:8px">
           ${STATIONS.map(st=>`<option value="${st.id}" ${((m.locs&&m.locs[t.id])||stationForTask(t.id).id)===st.id?'selected':''}>${st.name}</option>`).join('')}
         </select></div></div>`).join('')}</details>
-      <p class="small" style="margin-top:8px"><a href="?print=1&room=${esc(s.room)}" target="_blank">🖨 Open printable task QR sheet</a> <span class="muted">(print once, reuse for every game)</span></p>
+      <p class="small" style="margin-top:8px"><a href="?print=stations" target="_blank">🖨 Print permanent station QR codes</a> <span class="muted">(print once; reuse every round)</span></p>
       <button class="btn ok" style="margin-top:8px" data-act="start" ${d.players.length<2?'disabled':''}>▶ Start game</button></div>`;
   } else if(m.status==='playing'){
     html += `<div class="card"><h2>Game controls</h2>
@@ -2535,21 +2535,15 @@ async function drawJoinQR(room){
   }catch(e){}
 }
 
-async function renderPrint(names, fetched){
+async function renderPrint(){
   document.body.classList.add('print');
-  names = names || {};
-  const nm = id => names[id] || BYID[id].name;
-  $('#app').innerHTML = `<div class="no-print row wrap" style="margin-bottom:10px"><div class="grow"><b>Task QR sheet</b><div class="small">QR codes point to: <code>${esc(BASE)}</code><br>Print from your <b>live website</b>, not from a local file. Cut out and stick up the ones you'll use (${PER}+ needed, 8–16 is ideal).</div></div>
-    <button class="btn inline" onclick="window.print()">🖨 Print</button></div>
-    <div class="sheetgrid">${TASKS.map(t=>`<div class="pcard"><div class="qrc" id="qr-${t.id}"></div><div class="pname">${t.icon} ${esc(nm(t.id))}</div><div class="pcode">${TOKENS[t.id]}</div><div class="psm">Scan with your phone camera or in the app</div></div>`).join('')}</div>`;
+  const isStations=qs.get('print')==='stations';
+  const items=isStations?STATIONS:TASKS.map(t=>({id:t.id,name:t.name,icon:t.icon}));
+  $('#app').innerHTML = \`<div class="no-print row wrap" style="margin-bottom:10px"><div class="grow"><b>\${isStations?'Permanent station QR sheet':'Legacy puzzle QR sheet'}</b><div class="small">These QR codes point to: <code>\${esc(BASE)}</code><br>\${isStations?'Print these once and place one at each matching campus station. They work across every round.':'Older puzzle-specific QR codes are no longer needed.'}</div></div><button class="btn inline" onclick="window.print()">🖨 Print</button></div><div class="sheetgrid">\${items.map(item=>\`<div class="pcard"><div class="qrc" id="qr-\${item.id}"></div><div class="pname">\${item.icon||'📍'} \${esc(item.name)}</div><div class="psm">\${isStations?'Permanent station QR':'Old puzzle QR'}</div></div>\`).join('')}</div>\`;
   try{
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js');
-    TASKS.forEach(t=> new QRCode(document.getElementById('qr-'+t.id),{text:`${BASE}?t=${TOKENS[t.id]}`,width:150,height:150,correctLevel:QRCode.CorrectLevel.M}));
-  }catch(e){ toast('Could not load the QR library (needs internet)'); }
-  const room = (qs.get('room')||'').toUpperCase();
-  if(!fetched && room && DB){          // use the host's custom task names for this room
-    try{ const n = await DB.get('games/'+room+'/meta/names'); if(n){ renderPrint(n, true); return; } }catch(e){}
-  }
+    items.forEach(item=>new QRCode(document.getElementById('qr-'+item.id),{text:isStations?\`\${BASE}?station=\${encodeURIComponent(item.id)}\`:\`\${BASE}?t=\${TOKENS[item.id]}\`,width:150,height:150,correctLevel:QRCode.CorrectLevel.M}));
+  }catch(e){toast('Could not load the QR library (needs internet)');}
 }
 
 /* ---------------------------- events ------------------------------- */
