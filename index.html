@@ -1770,7 +1770,14 @@ const STATIONS = [
   {id:'storage',name:'Storage'},
   {id:'electrical',name:'Electrical'},
   {id:'admin',name:'Admin'},
-  {id:'medbay',name:'MedBay'}
+  {id:'medbay',name:'MedBay'},
+  {id:'cafeteria',name:'Cafeteria'},
+  {id:'reactor',name:'Reactor'},
+  {id:'communications',name:'Communications'},
+  {id:'weapons',name:'Weapons'},
+  {id:'o2',name:'Oxygen'},
+  {id:'shields',name:'Shields'},
+  {id:'launchpad',name:'Launchpad'}
 ];
 const stationForTask = id => STATIONS[TASKS.findIndex(t=>t.id===id)%STATIONS.length];
 const stationName = id => (STATIONS.find(x=>x.id===id)||{}).name || 'Unassigned station';
