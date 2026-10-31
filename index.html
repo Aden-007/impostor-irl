@@ -2539,10 +2539,10 @@ async function renderPrint(){
   document.body.classList.add('print');
   const isStations=qs.get('print')==='stations';
   const items=isStations?STATIONS:TASKS.map(t=>({id:t.id,name:t.name,icon:t.icon}));
-  $('#app').innerHTML = \`<div class="no-print row wrap" style="margin-bottom:10px"><div class="grow"><b>\${isStations?'Permanent station QR sheet':'Legacy puzzle QR sheet'}</b><div class="small">These QR codes point to: <code>\${esc(BASE)}</code><br>\${isStations?'Print these once and place one at each matching campus station. They work across every round.':'Older puzzle-specific QR codes are no longer needed.'}</div></div><button class="btn inline" onclick="window.print()">🖨 Print</button></div><div class="sheetgrid">\${items.map(item=>\`<div class="pcard"><div class="qrc" id="qr-\${item.id}"></div><div class="pname">\${item.icon||'📍'} \${esc(item.name)}</div><div class="psm">\${isStations?'Permanent station QR':'Old puzzle QR'}</div></div>\`).join('')}</div>\`;
+  $('#app').innerHTML = `<div class="no-print row wrap" style="margin-bottom:10px"><div class="grow"><b>${isStations?'Permanent station QR sheet':'Legacy puzzle QR sheet'}</b><div class="small">These QR codes point to: <code>${esc(BASE)}</code><br>${isStations?'Print these once and place one at each matching campus station. They work across every round.':'Older puzzle-specific QR codes are no longer needed.'}</div></div><button class="btn inline" onclick="window.print()">🖨 Print</button></div><div class="sheetgrid">${items.map(item=>`<div class="pcard"><div class="qrc" id="qr-${item.id}"></div><div class="pname">${item.icon||'📍'} ${esc(item.name)}</div><div class="psm">${isStations?'Permanent station QR':'Old puzzle QR'}</div></div>`).join('')}</div>`;
   try{
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js');
-    items.forEach(item=>new QRCode(document.getElementById('qr-'+item.id),{text:isStations?\`\${BASE}?station=\${encodeURIComponent(item.id)}\`:\`\${BASE}?t=\${TOKENS[item.id]}\`,width:150,height:150,correctLevel:QRCode.CorrectLevel.M}));
+    items.forEach(item=>new QRCode(document.getElementById('qr-'+item.id),{text:isStations?`${BASE}?station=${encodeURIComponent(item.id)}`:`${BASE}?t=${TOKENS[item.id]}`,width:150,height:150,correctLevel:QRCode.CorrectLevel.M}));
   }catch(e){toast('Could not load the QR library (needs internet)');}
 }
 
