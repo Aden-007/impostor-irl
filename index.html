@@ -177,7 +177,7 @@ body.print #app{max-width:none;padding:10px}
 .puzzle-timer-track{height:6px;margin:8px 0;background:#263d54;border-radius:8px;overflow:hidden}
 .puzzle-timer-track div{height:100%;background:linear-gradient(90deg,#39d99a,#e8bd58);border-radius:8px;transition:width .2s linear}
 .puzzle-timer small{color:#849eb7;font-size:10px}
-.puzzle-timeout{text-align:center;padding:22px 10px;border:1px solid #81504b;border-radius:11px;background:#3b2028;color:#f8d9d5}
+.puzzle-answer-row{display:flex;gap:8px;margin-top:14px}.puzzle-answer-row input{flex:1;min-width:0;background:#091321;border:1px solid #405b76;border-radius:9px;color:#eef5ff;padding:12px;font:inherit}.puzzle-answer-row button{width:auto;min-width:92px}.puzzle-timeout{text-align:center;padding:22px 10px;border:1px solid #81504b;border-radius:11px;background:#3b2028;color:#f8d9d5}
 .puzzle-timeout b{font-size:16px;letter-spacing:1.5px}.puzzle-timeout p{font-size:12px;color:#d8b5b4}
 </style>
 </head>
@@ -203,53 +203,29 @@ const TASKS = [
   {
     "id": "q-01",
     "icon": "⚡",
-    "name": "Signal Check 01",
-    "desc": "Signal sequence: 8, 10, 12, ? Find the next number.",
+    "name": "The Silent Witness",
+    "desc": "I can fill a room but take up no space. I vanish when the lights go out. What am I?",
     "category": "Quick",
-    "answer": "14",
-    "options": [
-      "14",
-      "16",
-      "12",
-      "18"
-    ],
-    "v": [
-      "Signal sequence: 8, 10, 12, ? Find the next number."
-    ]
+    "answer": "LIGHT",
+    "v": ["I can fill a room but take up no space. I vanish when the lights go out. What am I?"]
   },
   {
     "id": "q-02",
     "icon": "⚡",
-    "name": "Power Sequence 02",
-    "desc": "Power sequence: 5, 8, 11, 14, ?",
+    "name": "The More You Take",
+    "desc": "The more you take from me, the bigger I become. What am I?",
     "category": "Quick",
-    "answer": "24",
-    "options": [
-      "24",
-      "27",
-      "21",
-      "30"
-    ],
-    "v": [
-      "Power sequence: 5, 8, 11, 14, ?"
-    ]
+    "answer": "A HOLE",
+    "v": ["The more you take from me, the bigger I become. What am I?"]
   },
   {
     "id": "q-03",
     "icon": "⚡",
-    "name": "Access Alphabet 03",
-    "desc": "Access alphabet: if A=1, B=2 and so on, what number represents G?",
+    "name": "The Keyless Lock",
+    "desc": "I have keys but open no locks, and space but no room. What am I?",
     "category": "Quick",
-    "answer": "7",
-    "options": [
-      "7",
-      "8",
-      "6",
-      "9"
-    ],
-    "v": [
-      "Access alphabet: if A=1, B=2 and so on, what number represents G?"
-    ]
+    "answer": "A KEYBOARD",
+    "v": ["I have keys but open no locks, and space but no room. What am I?"]
   },
   {
     "id": "q-04",
@@ -258,12 +234,6 @@ const TASKS = [
     "desc": "What gets wetter the more it dries?",
     "category": "Quick",
     "answer": "TOWEL",
-    "options": [
-      "TOWEL",
-      "SPONGE",
-      "CLOTH",
-      "SOAP"
-    ],
     "v": [
       "What gets wetter the more it dries?"
     ]
@@ -275,12 +245,6 @@ const TASKS = [
     "desc": "I speak without a mouth and hear without ears. I have no body, but I come alive with sound. What am I?",
     "category": "Quick",
     "answer": "ECHO",
-    "options": [
-      "ECHO",
-      "WIND",
-      "RADIO",
-      "SHADOW"
-    ],
     "v": [
       "I speak without a mouth and hear without ears. I have no body, but I come alive with sound. What am I?"
     ]
@@ -292,12 +256,6 @@ const TASKS = [
     "desc": "I have a face and two hands, but no arms or legs. What am I?",
     "category": "Quick",
     "answer": "CLOCK",
-    "options": [
-      "CLOCK",
-      "DOLL",
-      "ROBOT",
-      "PAINTING"
-    ],
     "v": [
       "I have a face and two hands, but no arms or legs. What am I?"
     ]
@@ -309,12 +267,6 @@ const TASKS = [
     "desc": "I grow shorter as I grow older, and I give light while slowly disappearing. What am I?",
     "category": "Quick",
     "answer": "CANDLE",
-    "options": [
-      "CANDLE",
-      "PENCIL",
-      "SHADOW",
-      "BATTERY"
-    ],
     "v": [
       "I grow shorter as I grow older, and I give light while slowly disappearing. What am I?"
     ]
@@ -326,12 +278,6 @@ const TASKS = [
     "desc": "The more light there is, the more of me you may see. I follow you around but disappear in darkness. What am I?",
     "category": "Quick",
     "answer": "SHADOW",
-    "options": [
-      "SHADOW",
-      "REFLECTION",
-      "FOOTPRINT",
-      "SILHOUETTE"
-    ],
     "v": [
       "The more light there is, the more of me you may see. I follow you around but disappear in darkness. What am I?"
     ]
@@ -339,223 +285,119 @@ const TASKS = [
   {
     "id": "q-09",
     "icon": "⚡",
-    "name": "Quick Count 09",
-    "desc": "Parity check: is 132 even or odd?",
+    "name": "The One-Way Journey",
+    "desc": "I go up but never come down. What am I?",
     "category": "Quick",
-    "answer": "EVEN",
-    "options": [
-      "EVEN",
-      "ODD",
-      "NEITHER",
-      "BOTH"
-    ],
-    "v": [
-      "Parity check: is 132 even or odd?"
-    ]
+    "answer": "YOUR AGE",
+    "v": ["I go up but never come down. What am I?"]
   },
   {
     "id": "q-10",
     "icon": "⚡",
-    "name": "Prime Alert 10",
-    "desc": "Letter shift: move N forward by 2 places. Which letter do you get?",
+    "name": "The Missing Letter",
+    "desc": "What appears once in a minute, twice in a moment, but never in a thousand years?",
     "category": "Quick",
-    "answer": "P",
-    "options": [
-      "P",
-      "Q",
-      "O",
-      "R"
-    ],
-    "v": [
-      "Letter shift: move N forward by 2 places. Which letter do you get?"
-    ]
+    "answer": "THE LETTER M",
+    "v": ["What appears once in a minute, twice in a moment, but never in a thousand years?"]
   },
   {
     "id": "q-11",
     "icon": "⚡",
-    "name": "Signal Check 11",
-    "desc": "Signal sequence: 28, 30, 32, ? Find the next number.",
+    "name": "The Paper Cut",
+    "desc": "What can be broken without being touched or held?",
     "category": "Quick",
-    "answer": "34",
-    "options": [
-      "34",
-      "36",
-      "32",
-      "38"
-    ],
-    "v": [
-      "Signal sequence: 28, 30, 32, ? Find the next number."
-    ]
+    "answer": "A PROMISE",
+    "v": ["What can be broken without being touched or held?"]
   },
   {
     "id": "q-12",
     "icon": "⚡",
-    "name": "Power Sequence 12",
-    "desc": "Power sequence: 15, 18, 21, 24, ?",
+    "name": "The Invisible Guest",
+    "desc": "You can hear me, but you cannot see or touch me. I answer when you call, though I have no voice of my own. What am I?",
     "category": "Quick",
-    "answer": "54",
-    "options": [
-      "54",
-      "57",
-      "51",
-      "60"
-    ],
-    "v": [
-      "Power sequence: 15, 18, 21, 24, ?"
-    ]
+    "answer": "AN ECHO",
+    "v": ["You can hear me, but you cannot see or touch me. I answer when you call, though I have no voice of my own. What am I?"]
   },
   {
     "id": "q-13",
     "icon": "⚡",
-    "name": "Access Alphabet 13",
-    "desc": "Access alphabet: if A=1, B=2 and so on, what number represents Q?",
+    "name": "The More You Share",
+    "desc": "The more of me you share, the less of me you have. What am I?",
     "category": "Quick",
-    "answer": "17",
-    "options": [
-      "17",
-      "18",
-      "16",
-      "19"
-    ],
-    "v": [
-      "Access alphabet: if A=1, B=2 and so on, what number represents Q?"
-    ]
+    "answer": "A SECRET",
+    "v": ["The more of me you share, the less of me you have. What am I?"]
   },
   {
     "id": "q-14",
     "icon": "⚡",
-    "name": "Odd Circuit 14",
-    "desc": "Fuel sum: a reserve has 51 units and receives 68 more. What is the total?",
+    "name": "The Empty Pocket",
+    "desc": "What has a neck but no head, and can wear a cap?",
     "category": "Quick",
-    "answer": "119",
-    "options": [
-      "119",
-      "123",
-      "115",
-      "127"
-    ],
-    "v": [
-      "Fuel sum: a reserve has 51 units and receives 68 more. What is the total?"
-    ]
+    "answer": "A BOTTLE",
+    "v": ["What has a neck but no head, and can wear a cap?"]
   },
   {
     "id": "q-15",
     "icon": "⚡",
-    "name": "Binary Ping 15",
-    "desc": "Shape scan: how many sides does a polygon with 6 sides have?",
+    "name": "The Silent Runner",
+    "desc": "I run all day but never move from my place. I have a bed but never sleep. What am I?",
     "category": "Quick",
-    "answer": "6",
-    "options": [
-      "6",
-      "7",
-      "5",
-      "8"
-    ],
-    "v": [
-      "Shape scan: how many sides does a polygon with 6 sides have?"
-    ]
+    "answer": "A RIVER",
+    "v": ["I run all day but never move from my place. I have a bed but never sleep. What am I?"]
   },
   {
     "id": "q-16",
     "icon": "⚡",
-    "name": "Fuel Sum 16",
-    "desc": "Square signal: what is 19 multiplied by itself?",
+    "name": "The Night Visitor",
+    "desc": "I appear at night without being called and disappear by day without being stolen. What am I?",
     "category": "Quick",
-    "answer": "361",
-    "options": [
-      "361",
-      "362",
-      "360",
-      "363"
-    ],
-    "v": [
-      "Square signal: what is 19 multiplied by itself?"
-    ]
+    "answer": "A STAR",
+    "v": ["I appear at night without being called and disappear by day without being stolen. What am I?"]
   },
   {
     "id": "q-17",
     "icon": "⚡",
-    "name": "Letter Shift 17",
-    "desc": "Final digit: what is the last digit of 20 × 4?",
+    "name": "The Hidden Room",
+    "desc": "What has many rooms but no doors, windows, or walls?",
     "category": "Quick",
-    "answer": "0",
-    "options": [
-      "0",
-      "1",
-      "-1",
-      "2"
-    ],
-    "v": [
-      "Final digit: what is the last digit of 20 × 4?"
-    ]
+    "answer": "A MUSHROOM",
+    "v": ["What has many rooms but no doors, windows, or walls?"]
   },
   {
     "id": "q-18",
     "icon": "⚡",
-    "name": "Shape Scan 18",
-    "desc": "Beacon rhythm: 21, 42, 63, 84, ?",
+    "name": "The Catch",
+    "desc": "What can you catch but cannot throw?",
     "category": "Quick",
-    "answer": "105",
-    "options": [
-      "105",
-      "110",
-      "100",
-      "115"
-    ],
-    "v": [
-      "Beacon rhythm: 21, 42, 63, 84, ?"
-    ]
+    "answer": "A COLD",
+    "v": ["What can you catch but cannot throw?"]
   },
   {
     "id": "q-19",
     "icon": "⚡",
-    "name": "Quick Count 19",
-    "desc": "Parity check: is 242 even or odd?",
+    "name": "The Growing Shadow",
+    "desc": "I am always in front of you but can never be seen. What am I?",
     "category": "Quick",
-    "answer": "EVEN",
-    "options": [
-      "EVEN",
-      "ODD",
-      "NEITHER",
-      "BOTH"
-    ],
-    "v": [
-      "Parity check: is 242 even or odd?"
-    ]
+    "answer": "THE FUTURE",
+    "v": ["I am always in front of you but can never be seen. What am I?"]
   },
   {
     "id": "q-20",
     "icon": "⚡",
-    "name": "Prime Alert 20",
-    "desc": "Letter shift: move X forward by 2 places. Which letter do you get?",
+    "name": "The Last Thing",
+    "desc": "What is always coming but never arrives?",
     "category": "Quick",
-    "answer": "Z",
-    "options": [
-      "Z",
-      "[",
-      "Y",
-      "\\"
-    ],
-    "v": [
-      "Letter shift: move X forward by 2 places. Which letter do you get?"
-    ]
+    "answer": "TOMORROW",
+    "v": ["What is always coming but never arrives?"]
   },
   {
     "id": "m-01",
-    "icon": "🧩",
-    "name": "Cargo Equation 01",
-    "desc": "Sequence lock: 25, 36, 49, ? Find the next square.",
+    "icon": "◆",
+    "name": "The Family Photograph",
+    "desc": "A woman has four daughters, and each daughter has one brother. How many children does she have?",
     "category": "Medium",
-    "answer": "64",
-    "options": [
-      "64",
-      "68",
-      "60",
-      "72"
-    ],
-    "v": [
-      "Sequence lock: 25, 36, 49, ? Find the next square."
-    ]
+    "answer": "FIVE",
+    "v": ["A woman has four daughters, and each daughter has one brother. How many children does she have?"]
   },
   {
     "id": "m-02",
@@ -564,12 +406,6 @@ const TASKS = [
     "desc": "I have towns but no houses, forests but no trees, and rivers but no water. What am I?",
     "category": "Medium",
     "answer": "MAP",
-    "options": [
-      "MAP",
-      "GLOBE",
-      "PHOTOGRAPH",
-      "PUZZLE"
-    ],
     "v": [
       "I have towns but no houses, forests but no trees, and rivers but no water. What am I?"
     ]
@@ -581,12 +417,6 @@ const TASKS = [
     "desc": "I have a bed but never sleep, a mouth but never eat, and I run but have no legs. What am I?",
     "category": "Medium",
     "answer": "RIVER",
-    "options": [
-      "RIVER",
-      "TRAIN",
-      "CLOCK",
-      "TAP"
-    ],
     "v": [
       "I have a bed but never sleep, a mouth but never eat, and I run but have no legs. What am I?"
     ]
@@ -598,12 +428,6 @@ const TASKS = [
     "desc": "I can travel around the world while staying in one corner. What am I?",
     "category": "Medium",
     "answer": "STAMP",
-    "options": [
-      "STAMP",
-      "COMPASS",
-      "POSTCARD",
-      "AIRPLANE"
-    ],
     "v": [
       "I can travel around the world while staying in one corner. What am I?"
     ]
@@ -615,12 +439,6 @@ const TASKS = [
     "desc": "The more you take, the more you leave behind. What are they?",
     "category": "Medium",
     "answer": "FOOTSTEPS",
-    "options": [
-      "FOOTSTEPS",
-      "PHOTOGRAPHS",
-      "BREATHS",
-      "MEMORIES"
-    ],
     "v": [
       "The more you take, the more you leave behind. What are they?"
     ]
@@ -632,12 +450,6 @@ const TASKS = [
     "desc": "I have one eye but cannot see. What am I?",
     "category": "Medium",
     "answer": "NEEDLE",
-    "options": [
-      "NEEDLE",
-      "STORM",
-      "POTATO",
-      "CAMERA"
-    ],
     "v": [
       "I have one eye but cannot see. What am I?"
     ]
@@ -649,12 +461,6 @@ const TASKS = [
     "desc": "I contain stories but never speak. I have a spine but no bones, and pages but no leaves. What am I?",
     "category": "Medium",
     "answer": "BOOK",
-    "options": [
-      "BOOK",
-      "TREE",
-      "NEWSPAPER",
-      "DIARY"
-    ],
     "v": [
       "I contain stories but never speak. I have a spine but no bones, and pages but no leaves. What am I?"
     ]
@@ -666,321 +472,172 @@ const TASKS = [
     "desc": "I have many teeth but cannot bite. I help make messy hair neat. What am I?",
     "category": "Medium",
     "answer": "COMB",
-    "options": [
-      "COMB",
-      "ZIPPER",
-      "SAW",
-      "GEAR"
-    ],
     "v": [
       "I have many teeth but cannot bite. I help make messy hair neat. What am I?"
     ]
   },
   {
     "id": "m-09",
-    "icon": "🧩",
-    "name": "Supply Split 09",
-    "desc": "Supply split: 78 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?",
+    "icon": "◆",
+    "name": "The Bus Driver",
+    "desc": "You are driving a bus. At the first stop two people get on; at the next, one gets off and three get on. What is the driver's name?",
     "category": "Medium",
-    "answer": "11",
-    "options": [
-      "11",
-      "12",
-      "10",
-      "13"
-    ],
-    "v": [
-      "Supply split: 78 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?"
-    ]
+    "answer": "YOUR NAME",
+    "v": ["You are driving a bus. At the first stop two people get on; at the next, one gets off and three get on. What is the driver's name?"]
   },
   {
     "id": "m-10",
-    "icon": "🧩",
-    "name": "Sensor Average 10",
-    "desc": "Sensor average: readings 14 and 18 are taken for equal time. What is their average?",
+    "icon": "◆",
+    "name": "The Two Coins",
+    "desc": "I have two coins that total 30 rupees. One of them is not a 10-rupee coin. What are the coins?",
     "category": "Medium",
-    "answer": "16",
-    "options": [
-      "16",
-      "17",
-      "15",
-      "18"
-    ],
-    "v": [
-      "Sensor average: readings 14 and 18 are taken for equal time. What is their average?"
-    ]
+    "answer": "A 20 RUPEE COIN AND A 10 RUPEE COIN",
+    "v": ["I have two coins that total 30 rupees. One of them is not a 10-rupee coin. What are the coins?"]
   },
   {
     "id": "m-11",
-    "icon": "🧩",
-    "name": "Cargo Equation 11",
-    "desc": "Sequence lock: 225, 256, 289, ? Find the next square.",
+    "icon": "◆",
+    "name": "The Calendar Clue",
+    "desc": "Which month has 28 days?",
     "category": "Medium",
-    "answer": "324",
-    "options": [
-      "324",
-      "328",
-      "320",
-      "332"
-    ],
-    "v": [
-      "Sequence lock: 225, 256, 289, ? Find the next square."
-    ]
+    "answer": "ALL MONTHS",
+    "v": ["Which month has 28 days?"]
   },
   {
     "id": "m-12",
-    "icon": "🧩",
-    "name": "Sequence Engine 12",
-    "desc": "Cargo equation: three identical crates and a 16 kg tool weigh 73 kg. What is one crate's weight?",
+    "icon": "◆",
+    "name": "The Dark Room",
+    "desc": "You enter a dark room with one match. There is a candle, an oil lamp, and a fireplace. What do you light first?",
     "category": "Medium",
-    "answer": "19",
-    "options": [
-      "19",
-      "20",
-      "18",
-      "21"
-    ],
-    "v": [
-      "Cargo equation: three identical crates and a 16 kg tool weigh 73 kg. What is one crate's weight?"
-    ]
+    "answer": "THE MATCH",
+    "v": ["You enter a dark room with one match. There is a candle, an oil lamp, and a fireplace. What do you light first?"]
   },
   {
     "id": "m-13",
-    "icon": "🧩",
-    "name": "Route Decoder 13",
-    "desc": "Deck route: a rover moves 17 m north, 17 m south, then 34 m east. How far is it from its start?",
+    "icon": "◆",
+    "name": "The Letter Box",
+    "desc": "What begins with T, ends with T, and has T inside it?",
     "category": "Medium",
-    "answer": "34",
-    "options": [
-      "34",
-      "36",
-      "32",
-      "38"
-    ],
-    "v": [
-      "Deck route: a rover moves 17 m north, 17 m south, then 34 m east. How far is it from its start?"
-    ]
+    "answer": "A TEAPOT",
+    "v": ["What begins with T, ends with T, and has T inside it?"]
   },
   {
     "id": "m-14",
-    "icon": "🧩",
-    "name": "Battery Balance 14",
-    "desc": "Battery balance: 126 credits buy seven identical batteries. What does one battery cost?",
+    "icon": "◆",
+    "name": "The Wrong Answer",
+    "desc": "What question can you never honestly answer yes to?",
     "category": "Medium",
-    "answer": "18",
-    "options": [
-      "18",
-      "19",
-      "17",
-      "20"
-    ],
-    "v": [
-      "Battery balance: 126 credits buy seven identical batteries. What does one battery cost?"
-    ]
+    "answer": "ARE YOU ASLEEP",
+    "v": ["What question can you never honestly answer yes to?"]
   },
   {
     "id": "m-15",
-    "icon": "🧩",
-    "name": "Crew Logic 15",
-    "desc": "Crew ages: one crew member is twice another's age. Together they are 57 years old. How old is the younger member?",
+    "icon": "◆",
+    "name": "The One-Eyed Object",
+    "desc": "What has one eye but cannot see, and is used to join things together?",
     "category": "Medium",
-    "answer": "19",
-    "options": [
-      "19",
-      "20",
-      "18",
-      "21"
-    ],
-    "v": [
-      "Crew ages: one crew member is twice another's age. Together they are 57 years old. How old is the younger member?"
-    ]
+    "answer": "A NEEDLE",
+    "v": ["What has one eye but cannot see, and is used to join things together?"]
   },
   {
     "id": "m-16",
-    "icon": "🧩",
-    "name": "Code Breaker 16",
-    "desc": "Code breaker: multiply 20 by 3. What is the result?",
+    "icon": "◆",
+    "name": "The Shortest Month",
+    "desc": "Which is the shortest month by name?",
     "category": "Medium",
-    "answer": "60",
-    "options": [
-      "60",
-      "63",
-      "57",
-      "66"
-    ],
-    "v": [
-      "Code breaker: multiply 20 by 3. What is the result?"
-    ]
+    "answer": "MAY",
+    "v": ["Which is the shortest month by name?"]
   },
   {
     "id": "m-17",
-    "icon": "🧩",
-    "name": "Clock Pulse 17",
-    "desc": "Clock pulse: how many seconds are there in 21 minutes?",
+    "icon": "◆",
+    "name": "The Broken Clock",
+    "desc": "A clock takes five seconds to strike six. How long will it take to strike twelve, at the same pace?",
     "category": "Medium",
-    "answer": "1260",
-    "options": [
-      "1260",
-      "1320",
-      "1200",
-      "1380"
-    ],
-    "v": [
-      "Clock pulse: how many seconds are there in 21 minutes?"
-    ]
+    "answer": "ELEVEN SECONDS",
+    "v": ["A clock takes five seconds to strike six. How long will it take to strike twelve, at the same pace?"]
   },
   {
     "id": "m-18",
-    "icon": "🧩",
-    "name": "Pattern Matrix 18",
-    "desc": "Pattern matrix: 2 maps to 8, 3 maps to 12, 5 maps to 20. What does 22 map to?",
+    "icon": "◆",
+    "name": "The Word Puzzle",
+    "desc": "What five-letter word becomes shorter when you add two letters to it?",
     "category": "Medium",
-    "answer": "88",
-    "options": [
-      "88",
-      "92",
-      "84",
-      "96"
-    ],
-    "v": [
-      "Pattern matrix: 2 maps to 8, 3 maps to 12, 5 maps to 20. What does 22 map to?"
-    ]
+    "answer": "SHORT",
+    "v": ["What five-letter word becomes shorter when you add two letters to it?"]
   },
   {
     "id": "m-19",
-    "icon": "🧩",
-    "name": "Supply Split 19",
-    "desc": "Supply split: 138 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?",
+    "icon": "◆",
+    "name": "The Room of Corners",
+    "desc": "A square room has a cat in each corner. Each cat sees three cats. How many cats are in the room?",
     "category": "Medium",
-    "answer": "21",
-    "options": [
-      "21",
-      "22",
-      "20",
-      "23"
-    ],
-    "v": [
-      "Supply split: 138 packs are shared equally among 6 decks. Each deck sends away 2. How many remain per deck?"
-    ]
+    "answer": "FOUR",
+    "v": ["A square room has a cat in each corner. Each cat sees three cats. How many cats are in the room?"]
   },
   {
     "id": "m-20",
-    "icon": "🧩",
-    "name": "Sensor Average 20",
-    "desc": "Sensor average: readings 24 and 28 are taken for equal time. What is their average?",
+    "icon": "◆",
+    "name": "The Three Apples",
+    "desc": "You take three apples from a basket containing five. How many apples do you have?",
     "category": "Medium",
-    "answer": "26",
-    "options": [
-      "26",
-      "27",
-      "25",
-      "28"
-    ],
-    "v": [
-      "Sensor average: readings 24 and 28 are taken for equal time. What is their average?"
-    ]
+    "answer": "THREE",
+    "v": ["You take three apples from a basket containing five. How many apples do you have?"]
   },
   {
     "id": "m-21",
-    "icon": "🧩",
-    "name": "Cargo Equation 21",
-    "desc": "Sequence lock: 625, 676, 729, ? Find the next square.",
+    "icon": "◆",
+    "name": "The Two Mothers",
+    "desc": "Two mothers and two daughters go shopping. Each buys one hat, but only three hats are bought. How is this possible?",
     "category": "Medium",
-    "answer": "784",
-    "options": [
-      "784",
-      "788",
-      "780",
-      "792"
-    ],
-    "v": [
-      "Sequence lock: 625, 676, 729, ? Find the next square."
-    ]
+    "answer": "GRANDMOTHER MOTHER AND DAUGHTER",
+    "v": ["Two mothers and two daughters go shopping. Each buys one hat, but only three hats are bought. How is this possible?"]
   },
   {
     "id": "m-22",
-    "icon": "🧩",
-    "name": "Sequence Engine 22",
-    "desc": "Cargo equation: three identical crates and a 26 kg tool weigh 113 kg. What is one crate's weight?",
+    "icon": "◆",
+    "name": "The Silent Alphabet",
+    "desc": "Which letter of the alphabet has the most water?",
     "category": "Medium",
-    "answer": "29",
-    "options": [
-      "29",
-      "30",
-      "28",
-      "31"
-    ],
-    "v": [
-      "Cargo equation: three identical crates and a 26 kg tool weigh 113 kg. What is one crate's weight?"
-    ]
+    "answer": "THE LETTER C",
+    "v": ["Which letter of the alphabet has the most water?"]
   },
   {
     "id": "m-23",
-    "icon": "🧩",
-    "name": "Route Decoder 23",
-    "desc": "Deck route: a rover moves 27 m north, 27 m south, then 54 m east. How far is it from its start?",
+    "icon": "◆",
+    "name": "The Unusual Race",
+    "desc": "A person finishes a race before the person who was in second place. What position are they in now?",
     "category": "Medium",
-    "answer": "54",
-    "options": [
-      "54",
-      "56",
-      "52",
-      "58"
-    ],
-    "v": [
-      "Deck route: a rover moves 27 m north, 27 m south, then 54 m east. How far is it from its start?"
-    ]
+    "answer": "SECOND PLACE",
+    "v": ["A person finishes a race before the person who was in second place. What position are they in now?"]
   },
   {
     "id": "m-24",
-    "icon": "🧩",
-    "name": "Battery Balance 24",
-    "desc": "Battery balance: 196 credits buy seven identical batteries. What does one battery cost?",
+    "icon": "◆",
+    "name": "The Doorless House",
+    "desc": "What kind of house weighs the least?",
     "category": "Medium",
-    "answer": "28",
-    "options": [
-      "28",
-      "29",
-      "27",
-      "30"
-    ],
-    "v": [
-      "Battery balance: 196 credits buy seven identical batteries. What does one battery cost?"
-    ]
+    "answer": "A LIGHTHOUSE",
+    "v": ["What kind of house weighs the least?"]
   },
   {
     "id": "m-25",
-    "icon": "🧩",
-    "name": "Crew Logic 25",
-    "desc": "Crew ages: one crew member is twice another's age. Together they are 87 years old. How old is the younger member?",
+    "icon": "◆",
+    "name": "The More You Remove",
+    "desc": "What is full of holes but still holds water?",
     "category": "Medium",
-    "answer": "29",
-    "options": [
-      "29",
-      "30",
-      "28",
-      "31"
-    ],
-    "v": [
-      "Crew ages: one crew member is twice another's age. Together they are 87 years old. How old is the younger member?"
-    ]
+    "answer": "A SPONGE",
+    "v": ["What is full of holes but still holds water?"]
   },
   {
     "id": "h-01",
-    "icon": "🧠",
-    "name": "Reactor Sequence 01",
-    "desc": "Reactor sequence: 6, 13, 25, 49. What is the next term?",
+    "icon": "✦",
+    "name": "The Prisoner and the Doors",
+    "desc": "A prisoner faces two doors: one leads to freedom and one to danger. Two guards stand there; one always lies and one always tells the truth. What single question can reveal the safe door?",
     "category": "Challenging",
-    "answer": "97",
-    "options": [
-      "97",
-      "105",
-      "89",
-      "113"
-    ],
-    "v": [
-      "Reactor sequence: 6, 13, 25, 49. What is the next term?"
-    ]
+    "answer": "ASK WHAT THE OTHER GUARD WOULD SAY AND CHOOSE THE OPPOSITE",
+    "answers": ["ASK WHAT THE OTHER GUARD WOULD SAY AND CHOOSE THE OPPOSITE", "ASK WHAT THE OTHER GUARD WOULD SAY ABOUT THIS DOOR THEN CHOOSE THE OTHER DOOR"],
+    "v": ["A prisoner faces two doors: one leads to freedom and one to danger. Two guards stand there; one always lies and one always tells the truth. What single question can reveal the safe door?"]
   },
   {
     "id": "h-02",
@@ -989,12 +646,6 @@ const TASKS = [
     "desc": "Three switches are outside a closed room. Only one controls a bulb inside. You may enter the room only once. What should you use to identify the correct switch?",
     "category": "Challenging",
     "answer": "HEAT AND LIGHT",
-    "options": [
-      "HEAT AND LIGHT",
-      "SOUND AND COLOUR",
-      "TWO MIRRORS",
-      "A PHONE CAMERA"
-    ],
     "v": [
       "Three switches are outside a closed room. Only one controls a bulb inside. You may enter the room only once. What should you use to identify the correct switch?"
     ]
@@ -1006,12 +657,6 @@ const TASKS = [
     "desc": "Three boxes are labelled APPLES, ORANGES, and MIXED. Every label is wrong. You may take one fruit from one box. Which box should you pick from to identify all three?",
     "category": "Challenging",
     "answer": "BOX LABELLED MIXED",
-    "options": [
-      "BOX LABELLED MIXED",
-      "BOX LABELLED APPLES",
-      "BOX LABELLED ORANGES",
-      "ANY BOX"
-    ],
     "v": [
       "Three boxes are labelled APPLES, ORANGES, and MIXED. Every label is wrong. You may take one fruit from one box. Which box should you pick from to identify all three?"
     ]
@@ -1023,12 +668,6 @@ const TASKS = [
     "desc": "Two fathers and two sons go on a trip. Each person gets one ticket, but only three tickets are needed. How is this possible?",
     "category": "Challenging",
     "answer": "THREE PEOPLE",
-    "options": [
-      "THREE PEOPLE",
-      "ONE TICKET IS SHARED",
-      "ONE PERSON HAS NO SEAT",
-      "THEY BUY A FAMILY PASS"
-    ],
     "v": [
       "Two fathers and two sons go on a trip. Each person gets one ticket, but only three tickets are needed. How is this possible?"
     ]
@@ -1040,12 +679,6 @@ const TASKS = [
     "desc": "Two doors lead to safety or danger. One guard always lies and the other always tells the truth. You may ask one guard one question. What should you ask to find the safe door?",
     "category": "Challenging",
     "answer": "ASK WHAT THE OTHER GUARD WOULD SAY",
-    "options": [
-      "ASK WHAT THE OTHER GUARD WOULD SAY",
-      "ASK WHICH GUARD IS LYING",
-      "ASK IF THIS DOOR IS SAFE",
-      "ASK BOTH GUARDS"
-    ],
     "v": [
       "Two doors lead to safety or danger. One guard always lies and the other always tells the truth. You may ask one guard one question. What should you ask to find the safe door?"
     ]
@@ -1057,12 +690,6 @@ const TASKS = [
     "desc": "A person looks at a photograph and says: “I have no brothers or sisters, but that person's father is my father's son.” Who is in the photograph?",
     "category": "Challenging",
     "answer": "THEIR SON",
-    "options": [
-      "THEIR SON",
-      "THEIR FATHER",
-      "THEIR COUSIN",
-      "THEMSELVES"
-    ],
     "v": [
       "A person looks at a photograph and says: “I have no brothers or sisters, but that person's father is my father's son.” Who is in the photograph?"
     ]
@@ -1074,12 +701,6 @@ const TASKS = [
     "desc": "You have nine identical-looking coins. One is heavier. Using a balance scale, what is the fewest number of weighings needed to guarantee finding it?",
     "category": "Challenging",
     "answer": "TWO",
-    "options": [
-      "TWO",
-      "ONE",
-      "THREE",
-      "FOUR"
-    ],
     "v": [
       "You have nine identical-looking coins. One is heavier. Using a balance scale, what is the fewest number of weighings needed to guarantee finding it?"
     ]
@@ -1091,12 +712,6 @@ const TASKS = [
     "desc": "A person leaves home, makes three left turns, and returns home. There they find two masked people waiting. Where are they?",
     "category": "Challenging",
     "answer": "A BASEBALL FIELD",
-    "options": [
-      "A BASEBALL FIELD",
-      "A BANK",
-      "A HOSPITAL",
-      "A TRAIN STATION"
-    ],
     "v": [
       "A person leaves home, makes three left turns, and returns home. There they find two masked people waiting. Where are they?"
     ]
@@ -1108,627 +723,333 @@ const TASKS = [
     "desc": "I am taken from a mine and locked inside a wooden case. I am never released, yet almost everyone uses me. What am I?",
     "category": "Challenging",
     "answer": "PENCIL LEAD",
-    "options": [
-      "PENCIL LEAD",
-      "GOLD",
-      "COAL",
-      "A DIAMOND"
-    ],
     "v": [
       "I am taken from a mine and locked inside a wooden case. I am never released, yet almost everyone uses me. What am I?"
     ]
   },
   {
     "id": "h-10",
-    "icon": "🧠",
-    "name": "Advanced Sequence 10",
-    "desc": "Advanced sequence: 240, 272, 306. What is the next term?",
+    "icon": "✦",
+    "name": "The Three Hats",
+    "desc": "Three people stand in a line. The last sees the two ahead, the middle sees the first, and the first sees nobody. They know there are two black hats and one white hat. The last says nothing; the middle says nothing. What colour must the first person's hat be?",
     "category": "Challenging",
-    "answer": "342",
-    "options": [
-      "342",
-      "348",
-      "336",
-      "354"
-    ],
-    "v": [
-      "Advanced sequence: 240, 272, 306. What is the next term?"
-    ]
+    "answer": "BLACK",
+    "v": ["Three people stand in a line. The last sees the two ahead, the middle sees the first, and the first sees nobody. They know there are two black hats and one white hat. The last says nothing; the middle says nothing. What colour must the first person's hat be?"]
   },
   {
     "id": "h-11",
-    "icon": "🧠",
-    "name": "Reactor Sequence 11",
-    "desc": "Reactor sequence: 16, 33, 65, 129. What is the next term?",
+    "icon": "✦",
+    "name": "The Bridge at Night",
+    "desc": "Four people need to cross a bridge at night with one torch. They take 1, 2, 7 and 10 minutes; at most two cross at once, and the torch must be carried. What is the minimum total time?",
     "category": "Challenging",
-    "answer": "257",
-    "options": [
-      "257",
-      "265",
-      "249",
-      "273"
-    ],
-    "v": [
-      "Reactor sequence: 16, 33, 65, 129. What is the next term?"
-    ]
+    "answer": "17 MINUTES",
+    "v": ["Four people need to cross a bridge at night with one torch. They take 1, 2, 7 and 10 minutes; at most two cross at once, and the torch must be carried. What is the minimum total time?"]
   },
   {
     "id": "h-12",
-    "icon": "🧠",
-    "name": "Vault Deduction 12",
-    "desc": "Vault deduction: two positive numbers add to 38. One number is 17. What is the other?",
+    "icon": "✦",
+    "name": "The Water Jugs",
+    "desc": "You have a 5-litre jug and a 3-litre jug, with no markings. How can you measure exactly 4 litres?",
     "category": "Challenging",
-    "answer": "21",
-    "options": [
-      "21",
-      "22",
-      "20",
-      "23"
-    ],
-    "v": [
-      "Vault deduction: two positive numbers add to 38. One number is 17. What is the other?"
-    ]
+    "answer": "FILL 5 LITRES, POUR INTO 3, EMPTY 3, POUR THE REMAINING 2 INTO 3, FILL 5 AGAIN AND POUR 1 LITRE INTO 3",
+    "v": ["You have a 5-litre jug and a 3-litre jug, with no markings. How can you measure exactly 4 litres?"]
   },
   {
     "id": "h-13",
-    "icon": "🧠",
-    "name": "Multi-stage Cipher 13",
-    "desc": "Multi-stage cipher: multiply 18 by 4, subtract 18, then subtract 3. What remains?",
+    "icon": "✦",
+    "name": "The Three Pellets",
+    "desc": "You have 8 identical-looking balls; one is heavier. What is the fewest balance-scale weighings needed to guarantee finding it?",
     "category": "Challenging",
-    "answer": "51",
-    "options": [
-      "51",
-      "54",
-      "48",
-      "57"
-    ],
-    "v": [
-      "Multi-stage cipher: multiply 18 by 4, subtract 18, then subtract 3. What remains?"
-    ]
+    "answer": "TWO",
+    "v": ["You have 8 identical-looking balls; one is heavier. What is the fewest balance-scale weighings needed to guarantee finding it?"]
   },
   {
     "id": "h-14",
-    "icon": "🧠",
-    "name": "Generator Logic 14",
-    "desc": "Generator logic: 19 generators produce 38 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "icon": "✦",
+    "name": "The Elevator Mystery",
+    "desc": "A short person lives on the 20th floor. Each morning they take the lift down. Coming home, they go to the 12th floor and walk the rest, except on rainy days. Why?",
     "category": "Challenging",
-    "answer": "95",
-    "options": [
-      "95",
-      "100",
-      "90",
-      "105"
-    ],
-    "v": [
-      "Generator logic: 19 generators produce 38 units in 2 minutes. How many units do they produce in 5 minutes?"
-    ]
+    "answer": "THEY ARE TOO SHORT TO REACH THE 20TH FLOOR BUTTON BUT USE AN UMBRELLA ON RAINY DAYS",
+    "v": ["A short person lives on the 20th floor. Each morning they take the lift down. Coming home, they go to the 12th floor and walk the rest, except on rainy days. Why?"]
   },
   {
     "id": "h-15",
-    "icon": "🧠",
-    "name": "Crew Scheduling 15",
-    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "icon": "✦",
+    "name": "The Two Ropes",
+    "desc": "You have two ropes. Each takes exactly one hour to burn, but they burn unevenly. How can you measure 45 minutes?",
     "category": "Challenging",
-    "answer": "YES",
-    "options": [
-      "YES",
-      "NO",
-      "UNKNOWN",
-      "ONLY SOMETIMES"
-    ],
-    "v": [
-      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
-    ]
+    "answer": "LIGHT ONE ROPE AT BOTH ENDS AND THE OTHER AT ONE END; WHEN THE FIRST FINISHES LIGHT THE OTHER END OF THE SECOND",
+    "v": ["You have two ropes. Each takes exactly one hour to burn, but they burn unevenly. How can you measure 45 minutes?"]
   },
   {
     "id": "h-16",
-    "icon": "🧠",
-    "name": "Double Signal 16",
-    "desc": "Prime network: what number is one more than twice 21?",
+    "icon": "✦",
+    "name": "The Poisoned Drink",
+    "desc": "Two people order the same iced drink. One drinks quickly and survives; the other drinks slowly and dies. The ice was poisoned. How?",
     "category": "Challenging",
-    "answer": "43",
-    "options": [
-      "43",
-      "45",
-      "41",
-      "47"
-    ],
-    "v": [
-      "Prime network: what number is one more than twice 21?"
-    ]
+    "answer": "THE POISON WAS IN THE ICE WHICH MELTED IN THE SLOW DRINKER'S GLASS",
+    "v": ["Two people order the same iced drink. One drinks quickly and survives; the other drinks slowly and dies. The ice was poisoned. How?"]
   },
   {
     "id": "h-17",
-    "icon": "🧠",
-    "name": "Cargo Conundrum 17",
-    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 73 kg. What is one crate's weight?",
+    "icon": "✦",
+    "name": "The Three Boxes",
+    "desc": "Three boxes are labelled red, blue, and mixed. All labels are wrong. You may draw one ball from one box. Which labelled box should you choose first?",
     "category": "Challenging",
-    "answer": "22",
-    "options": [
-      "22",
-      "23",
-      "21",
-      "24"
-    ],
-    "v": [
-      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 73 kg. What is one crate's weight?"
-    ]
+    "answer": "THE BOX LABELLED MIXED",
+    "v": ["Three boxes are labelled red, blue, and mixed. All labels are wrong. You may draw one ball from one box. Which labelled box should you choose first?"]
   },
   {
     "id": "h-18",
-    "icon": "🧠",
-    "name": "Power Grid 18",
-    "desc": "Power grid: 23 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "icon": "✦",
+    "name": "The Missing Dollar",
+    "desc": "Three friends pay 300 rupees for a room. The clerk returns 30; the helper keeps 10 and gives them 20. They each paid 93, totalling 279, and the helper has 10. Where is the missing rupee?",
     "category": "Challenging",
-    "answer": "168",
-    "options": [
-      "168",
-      "176",
-      "160",
-      "184"
-    ],
-    "v": [
-      "Power grid: 23 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
-    ]
+    "answer": "THERE IS NO MISSING RUPEE; 279 ALREADY INCLUDES THE 10",
+    "v": ["Three friends pay 300 rupees for a room. The clerk returns 30; the helper keeps 10 and gives them 20. They each paid 93, totalling 279, and the helper has 10. Where is the missing rupee?"]
   },
   {
     "id": "h-19",
-    "icon": "🧠",
-    "name": "Navigation Riddle 19",
-    "desc": "Navigation riddle: a shuttle travels 24 km, then twice that distance, then 24 km again. What is the total distance?",
+    "icon": "✦",
+    "name": "The Photograph Riddle",
+    "desc": "A man says, 'Brothers and sisters I have none, but this person's father is my father's son.' Who is in the photograph?",
     "category": "Challenging",
-    "answer": "96",
-    "options": [
-      "96",
-      "100",
-      "92",
-      "104"
-    ],
-    "v": [
-      "Navigation riddle: a shuttle travels 24 km, then twice that distance, then 24 km again. What is the total distance?"
-    ]
+    "answer": "HIS SON",
+    "v": ["A man says, 'Brothers and sisters I have none, but this person's father is my father's son.' Who is in the photograph?"]
   },
   {
     "id": "h-20",
-    "icon": "🧠",
-    "name": "Advanced Sequence 20",
-    "desc": "Advanced sequence: 650, 702, 756. What is the next term?",
+    "icon": "✦",
+    "name": "The Two Doors Again",
+    "desc": "One of two doors is safe. One guard always lies, one always tells truth. You may ask one guard one yes-or-no question. What do you ask?",
     "category": "Challenging",
-    "answer": "812",
-    "options": [
-      "812",
-      "818",
-      "806",
-      "824"
-    ],
-    "v": [
-      "Advanced sequence: 650, 702, 756. What is the next term?"
-    ]
+    "answer": "WOULD THE OTHER GUARD SAY THIS DOOR IS SAFE",
+    "v": ["One of two doors is safe. One guard always lies, one always tells truth. You may ask one guard one yes-or-no question. What do you ask?"]
   },
   {
     "id": "h-21",
-    "icon": "🧠",
-    "name": "Reactor Sequence 21",
-    "desc": "Reactor sequence: 26, 53, 105, 209. What is the next term?",
+    "icon": "✦",
+    "name": "The Sealed Room",
+    "desc": "A man is found hanging in a locked room. There is a puddle of water beneath him and no furniture. How did he reach the ceiling?",
     "category": "Challenging",
-    "answer": "417",
-    "options": [
-      "417",
-      "425",
-      "409",
-      "433"
-    ],
-    "v": [
-      "Reactor sequence: 26, 53, 105, 209. What is the next term?"
-    ]
+    "answer": "HE STOOD ON A BLOCK OF ICE",
+    "v": ["A man is found hanging in a locked room. There is a puddle of water beneath him and no furniture. How did he reach the ceiling?"]
   },
   {
     "id": "h-22",
-    "icon": "🧠",
-    "name": "Vault Deduction 22",
-    "desc": "Vault deduction: two positive numbers add to 58. One number is 27. What is the other?",
+    "icon": "✦",
+    "name": "The Restaurant Bill",
+    "desc": "A man pushes his car to a hotel and immediately knows he is bankrupt. Why?",
     "category": "Challenging",
-    "answer": "31",
-    "options": [
-      "31",
-      "32",
-      "30",
-      "33"
-    ],
-    "v": [
-      "Vault deduction: two positive numbers add to 58. One number is 27. What is the other?"
-    ]
+    "answer": "HE IS PLAYING MONOPOLY",
+    "v": ["A man pushes his car to a hotel and immediately knows he is bankrupt. Why?"]
   },
   {
     "id": "h-23",
-    "icon": "🧠",
-    "name": "Multi-stage Cipher 23",
-    "desc": "Multi-stage cipher: multiply 28 by 4, subtract 28, then subtract 3. What remains?",
+    "icon": "✦",
+    "name": "The Odd One Out",
+    "desc": "A man shaves several times a day but still has a beard. Who is he?",
     "category": "Challenging",
-    "answer": "81",
-    "options": [
-      "81",
-      "84",
-      "78",
-      "87"
-    ],
-    "v": [
-      "Multi-stage cipher: multiply 28 by 4, subtract 28, then subtract 3. What remains?"
-    ]
+    "answer": "A BARBER",
+    "v": ["A man shaves several times a day but still has a beard. Who is he?"]
   },
   {
     "id": "h-24",
-    "icon": "🧠",
-    "name": "Generator Logic 24",
-    "desc": "Generator logic: 29 generators produce 58 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "icon": "✦",
+    "name": "The Unusual Birth",
+    "desc": "A child is born in London to two parents born in London, yet the child is not a British citizen. How is this possible?",
     "category": "Challenging",
-    "answer": "145",
-    "options": [
-      "145",
-      "150",
-      "140",
-      "155"
-    ],
-    "v": [
-      "Generator logic: 29 generators produce 58 units in 2 minutes. How many units do they produce in 5 minutes?"
-    ]
+    "answer": "THE PARENTS ARE NOT BRITISH CITIZENS",
+    "v": ["A child is born in London to two parents born in London, yet the child is not a British citizen. How is this possible?"]
   },
   {
     "id": "h-25",
-    "icon": "🧠",
-    "name": "Crew Scheduling 25",
-    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "icon": "✦",
+    "name": "The Three Doctors",
+    "desc": "Three doctors say Robert is their brother. Robert says he has no brothers. Who is lying?",
     "category": "Challenging",
-    "answer": "YES",
-    "options": [
-      "YES",
-      "NO",
-      "UNKNOWN",
-      "ONLY SOMETIMES"
-    ],
-    "v": [
-      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
-    ]
+    "answer": "NOBODY; THE DOCTORS ARE HIS SISTERS",
+    "v": ["Three doctors say Robert is their brother. Robert says he has no brothers. Who is lying?"]
   },
   {
     "id": "h-26",
-    "icon": "🧠",
-    "name": "Double Signal 26",
-    "desc": "Prime network: what number is one more than twice 31?",
+    "icon": "✦",
+    "name": "The Silent Alarm",
+    "desc": "A man lives alone. One night he turns off the light and goes to bed. In the morning he learns that many people died. Why?",
     "category": "Challenging",
-    "answer": "63",
-    "options": [
-      "63",
-      "65",
-      "61",
-      "67"
-    ],
-    "v": [
-      "Prime network: what number is one more than twice 31?"
-    ]
+    "answer": "HE WAS A LIGHTHOUSE KEEPER",
+    "v": ["A man lives alone. One night he turns off the light and goes to bed. In the morning he learns that many people died. Why?"]
   },
   {
     "id": "h-27",
-    "icon": "🧠",
-    "name": "Cargo Conundrum 27",
-    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 103 kg. What is one crate's weight?",
+    "icon": "✦",
+    "name": "The Waterless Lake",
+    "desc": "What can travel around the world while staying in the same corner?",
     "category": "Challenging",
-    "answer": "32",
-    "options": [
-      "32",
-      "33",
-      "31",
-      "34"
-    ],
-    "v": [
-      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 103 kg. What is one crate's weight?"
-    ]
+    "answer": "A POSTAGE STAMP",
+    "v": ["What can travel around the world while staying in the same corner?"]
   },
   {
     "id": "h-28",
-    "icon": "🧠",
-    "name": "Power Grid 28",
-    "desc": "Power grid: 33 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "icon": "✦",
+    "name": "The Wordless Message",
+    "desc": "A message is sent around the world without being spoken, written, or recorded. What carries it?",
     "category": "Challenging",
-    "answer": "248",
-    "options": [
-      "248",
-      "256",
-      "240",
-      "264"
-    ],
-    "v": [
-      "Power grid: 33 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
-    ]
+    "answer": "A SMILE",
+    "v": ["A message is sent around the world without being spoken, written, or recorded. What carries it?"]
   },
   {
     "id": "h-29",
-    "icon": "🧠",
-    "name": "Navigation Riddle 29",
-    "desc": "Navigation riddle: a shuttle travels 34 km, then twice that distance, then 34 km again. What is the total distance?",
+    "icon": "✦",
+    "name": "The Bartender's Surprise",
+    "desc": "A man walks into a bar and asks for a glass of water. The bartender suddenly points a gun at him. The man says thank you and leaves. Why?",
     "category": "Challenging",
-    "answer": "136",
-    "options": [
-      "136",
-      "140",
-      "132",
-      "144"
-    ],
-    "v": [
-      "Navigation riddle: a shuttle travels 34 km, then twice that distance, then 34 km again. What is the total distance?"
-    ]
+    "answer": "HE HAD HICCUPS",
+    "v": ["A key is inside a locked drawer. You have no spare key and cannot break the drawer. How can you get the key?"]
   },
   {
     "id": "h-30",
-    "icon": "🧠",
-    "name": "Advanced Sequence 30",
-    "desc": "Advanced sequence: 1260, 1332, 1406. What is the next term?",
+    "icon": "✦",
+    "name": "The Two Fathers",
+    "desc": "A father and son are in a car crash. The father dies. At the hospital, the surgeon says, 'I cannot operate; this is my son.' How is this possible?",
     "category": "Challenging",
-    "answer": "1482",
-    "options": [
-      "1482",
-      "1488",
-      "1476",
-      "1494"
-    ],
-    "v": [
-      "Advanced sequence: 1260, 1332, 1406. What is the next term?"
-    ]
+    "answer": "THE SURGEON IS HIS MOTHER",
+    "v": ["A father and son are in a car crash. The father dies. At the hospital, the surgeon says, 'I cannot operate; this is my son.' How is this possible?"]
   },
   {
     "id": "h-31",
-    "icon": "🧠",
-    "name": "Reactor Sequence 31",
-    "desc": "Reactor sequence: 36, 73, 145, 289. What is the next term?",
+    "icon": "✦",
+    "name": "The Unanswerable Question",
+    "desc": "What can you hold in your right hand but never in your left hand?",
     "category": "Challenging",
-    "answer": "577",
-    "options": [
-      "577",
-      "585",
-      "569",
-      "593"
-    ],
-    "v": [
-      "Reactor sequence: 36, 73, 145, 289. What is the next term?"
-    ]
+    "answer": "YOUR LEFT ELBOW",
+    "v": ["What can you hold in your right hand but never in your left hand?"]
   },
   {
     "id": "h-32",
-    "icon": "🧠",
-    "name": "Vault Deduction 32",
-    "desc": "Vault deduction: two positive numbers add to 78. One number is 37. What is the other?",
+    "icon": "✦",
+    "name": "The Endless Staircase",
+    "desc": "A person climbs a staircase, but after every step they are still on the same floor. How?",
     "category": "Challenging",
-    "answer": "41",
-    "options": [
-      "41",
-      "42",
-      "40",
-      "43"
-    ],
-    "v": [
-      "Vault deduction: two positive numbers add to 78. One number is 37. What is the other?"
-    ]
+    "answer": "THEY ARE ON A STAIRMASTER OR ESCALATOR THAT RETURNS TO THE SAME FLOOR",
+    "v": ["A person climbs a staircase, but after every step they are still on the same floor. How?"]
   },
   {
     "id": "h-33",
-    "icon": "🧠",
-    "name": "Multi-stage Cipher 33",
-    "desc": "Multi-stage cipher: multiply 38 by 4, subtract 38, then subtract 3. What remains?",
+    "icon": "✦",
+    "name": "The Two Trains",
+    "desc": "Two trains start 100 km apart and move towards each other. A fly travels between them until they meet. What happens to the fly's journey?",
     "category": "Challenging",
-    "answer": "111",
-    "options": [
-      "111",
-      "114",
-      "108",
-      "117"
-    ],
-    "v": [
-      "Multi-stage cipher: multiply 38 by 4, subtract 38, then subtract 3. What remains?"
-    ]
+    "answer": "IT ENDS WHEN THE TRAINS MEET",
+    "v": ["Two trains start 100 km apart and move towards each other. A fly travels between them until they meet. What happens to the fly's journey?"]
   },
   {
     "id": "h-34",
-    "icon": "🧠",
-    "name": "Generator Logic 34",
-    "desc": "Generator logic: 39 generators produce 78 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "icon": "✦",
+    "name": "The Word That Disappears",
+    "desc": "What word is pronounced the same if you remove four of its five letters?",
     "category": "Challenging",
-    "answer": "195",
-    "options": [
-      "195",
-      "200",
-      "190",
-      "205"
-    ],
-    "v": [
-      "Generator logic: 39 generators produce 78 units in 2 minutes. How many units do they produce in 5 minutes?"
-    ]
+    "answer": "QUEUE",
+    "v": ["What word is pronounced the same if you remove four of its five letters?"]
   },
   {
     "id": "h-35",
-    "icon": "🧠",
-    "name": "Crew Scheduling 35",
-    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "icon": "✦",
+    "name": "The Three Switches",
+    "desc": "Three switches are outside a closed room. Only one controls a bulb inside. You may enter once. What clues can identify the switch?",
     "category": "Challenging",
-    "answer": "YES",
-    "options": [
-      "YES",
-      "NO",
-      "UNKNOWN",
-      "ONLY SOMETIMES"
-    ],
-    "v": [
-      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
-    ]
+    "answer": "THE BULB'S LIGHT AND HEAT",
+    "v": ["Three switches are outside a closed room. Only one controls a bulb inside. You may enter once. What clues can identify the switch?"]
   },
   {
     "id": "h-36",
-    "icon": "🧠",
-    "name": "Double Signal 36",
-    "desc": "Prime network: what number is one more than twice 41?",
+    "icon": "✦",
+    "name": "The Unusual Clock",
+    "desc": "A clock shows the correct time twice every day, despite being broken. What happened to it?",
     "category": "Challenging",
-    "answer": "83",
-    "options": [
-      "83",
-      "85",
-      "81",
-      "87"
-    ],
-    "v": [
-      "Prime network: what number is one more than twice 41?"
-    ]
+    "answer": "IT STOPPED",
+    "v": ["A clock shows the correct time twice every day, despite being broken. What happened to it?"]
   },
   {
     "id": "h-37",
-    "icon": "🧠",
-    "name": "Cargo Conundrum 37",
-    "desc": "Cargo conundrum: three identical crates plus a 7 kg tool weigh 133 kg. What is one crate's weight?",
+    "icon": "✦",
+    "name": "The Invisible Footprints",
+    "desc": "A person walks through fresh snow without leaving footprints. How?",
     "category": "Challenging",
-    "answer": "42",
-    "options": [
-      "42",
-      "43",
-      "41",
-      "44"
-    ],
-    "v": [
-      "Cargo conundrum: three identical crates plus a 7 kg tool weigh 133 kg. What is one crate's weight?"
-    ]
+    "answer": "THEY WALKED ON A CLEARED PATH OR WERE CARRIED",
+    "v": ["A person walks through fresh snow without leaving footprints. How?"]
   },
   {
     "id": "h-38",
-    "icon": "🧠",
-    "name": "Power Grid 38",
-    "desc": "Power grid: 43 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?",
+    "icon": "✦",
+    "name": "The Family Puzzle",
+    "desc": "A family has two parents and six sons. Each son has one sister. How many people are in the family?",
     "category": "Challenging",
-    "answer": "328",
-    "options": [
-      "328",
-      "336",
-      "320",
-      "344"
-    ],
-    "v": [
-      "Power grid: 43 panels each produce 8 units. Two panels fail. How many units do the remaining panels produce?"
-    ]
+    "answer": "TEN",
+    "v": ["A family has two parents and six sons. Each son has one sister. How many people are in the family?"]
   },
   {
     "id": "h-39",
-    "icon": "🧠",
-    "name": "Navigation Riddle 39",
-    "desc": "Navigation riddle: a shuttle travels 44 km, then twice that distance, then 44 km again. What is the total distance?",
+    "icon": "✦",
+    "name": "The One Match",
+    "desc": "You have one match and enter a room with a candle, a lantern, and a stove. What do you light first?",
     "category": "Challenging",
-    "answer": "176",
-    "options": [
-      "176",
-      "180",
-      "172",
-      "184"
-    ],
-    "v": [
-      "Navigation riddle: a shuttle travels 44 km, then twice that distance, then 44 km again. What is the total distance?"
-    ]
+    "answer": "THE MATCH",
+    "v": ["You have one match and enter a room with a candle, a lantern, and a stove. What do you light first?"]
   },
   {
     "id": "h-40",
-    "icon": "🧠",
-    "name": "Advanced Sequence 40",
-    "desc": "Advanced sequence: 2070, 2162, 2256. What is the next term?",
+    "icon": "✦",
+    "name": "The Impossible Sentence",
+    "desc": "What sentence becomes false as soon as you say it?",
     "category": "Challenging",
-    "answer": "2352",
-    "options": [
-      "2352",
-      "2358",
-      "2346",
-      "2364"
-    ],
-    "v": [
-      "Advanced sequence: 2070, 2162, 2256. What is the next term?"
-    ]
+    "answer": "I AM ASLEEP",
+    "v": ["What sentence becomes false as soon as you say it?"]
   },
   {
     "id": "h-41",
-    "icon": "🧠",
-    "name": "Reactor Sequence 41",
-    "desc": "Reactor sequence: 46, 93, 185, 369. What is the next term?",
+    "icon": "✦",
+    "name": "The Last Place",
+    "desc": "In a race, you pass the person in last place. What place are you in?",
     "category": "Challenging",
-    "answer": "737",
-    "options": [
-      "737",
-      "745",
-      "729",
-      "753"
-    ],
-    "v": [
-      "Reactor sequence: 46, 93, 185, 369. What is the next term?"
-    ]
+    "answer": "YOU CANNOT PASS THE PERSON IN LAST PLACE",
+    "v": ["In a race, you pass the person in last place. What place are you in?"]
   },
   {
     "id": "h-42",
-    "icon": "🧠",
-    "name": "Vault Deduction 42",
-    "desc": "Vault deduction: two positive numbers add to 98. One number is 47. What is the other?",
+    "icon": "✦",
+    "name": "The Missing Man",
+    "desc": "A man is outside in heavy rain with no umbrella or hat. Not one hair on his head gets wet. Why?",
     "category": "Challenging",
-    "answer": "51",
-    "options": [
-      "51",
-      "52",
-      "50",
-      "53"
-    ],
-    "v": [
-      "Vault deduction: two positive numbers add to 98. One number is 47. What is the other?"
-    ]
+    "answer": "HE IS BALD",
+    "v": ["A man is outside in heavy rain with no umbrella or hat. Not one hair on his head gets wet. Why?"]
   },
   {
     "id": "h-43",
-    "icon": "🧠",
-    "name": "Multi-stage Cipher 43",
-    "desc": "Multi-stage cipher: multiply 48 by 4, subtract 48, then subtract 3. What remains?",
+    "icon": "✦",
+    "name": "The Five Sisters",
+    "desc": "Five sisters are busy: one reads, one cooks, one plays chess, and one does laundry. What is the fifth sister doing?",
     "category": "Challenging",
-    "answer": "141",
-    "options": [
-      "141",
-      "144",
-      "138",
-      "147"
-    ],
-    "v": [
-      "Multi-stage cipher: multiply 48 by 4, subtract 48, then subtract 3. What remains?"
-    ]
+    "answer": "PLAYING CHESS WITH THE THIRD SISTER",
+    "v": ["Five sisters are busy: one reads, one cooks, one plays chess, and one does laundry. What is the fifth sister doing?"]
   },
   {
     "id": "h-44",
-    "icon": "🧠",
-    "name": "Generator Logic 44",
-    "desc": "Generator logic: 49 generators produce 98 units in 2 minutes. How many units do they produce in 5 minutes?",
+    "icon": "✦",
+    "name": "The Dark Journey",
+    "desc": "You are in a dark room with a candle, a wood stove, and a gas lamp. You have one match. What do you light first?",
     "category": "Challenging",
-    "answer": "245",
-    "options": [
-      "245",
-      "250",
-      "240",
-      "255"
-    ],
-    "v": [
-      "Generator logic: 49 generators produce 98 units in 2 minutes. How many units do they produce in 5 minutes?"
-    ]
+    "answer": "THE MATCH",
+    "v": ["You are in a dark room with a candle, a wood stove, and a gas lamp. You have one match. What do you light first?"]
   },
   {
     "id": "h-45",
-    "icon": "🧠",
-    "name": "Crew Scheduling 45",
-    "desc": "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?",
+    "icon": "✦",
+    "name": "The Final Riddle",
+    "desc": "I have cities but no buildings, forests but no trees, and rivers but no water. What am I?",
     "category": "Challenging",
-    "answer": "YES",
-    "options": [
-      "YES",
-      "NO",
-      "UNKNOWN",
-      "ONLY SOMETIMES"
-    ],
-    "v": [
-      "Crew logic: every engineer is trained. Rin is an engineer. Must that crew member be trained?"
-    ]
+    "answer": "A MAP",
+    "v": ["I have cities but no buildings, forests but no trees, and rivers but no water. What am I?"]
   }
 ];
 const BYID = Object.fromEntries(TASKS.map(t => [t.id, t]));
@@ -2113,7 +1434,7 @@ function handleToken(tok){
 
 function makeMiniGame(id){
   const puzzle=BYID[id];
-  if(puzzle) return {type:'puzzle',title:puzzle.name,station:puzzle.category.toUpperCase()+' PUZZLE BANK',prompt:puzzle.desc,answer:puzzle.answer,options:shuffle(puzzle.options),entry:'',solved:false,step:0,cleared:[]};
+  if(puzzle) return {type:'puzzle',title:puzzle.name,station:puzzle.category.toUpperCase()+' PUZZLE BANK',prompt:puzzle.desc,answer:puzzle.answer,answers:puzzle.answers||[puzzle.answer],entry:'',solved:false,step:0,cleared:[]};
   const shuffled = a => {const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
   const configs = {
     sample:{type:'choice',title:'Specimen analyser',station:'LAB / ANALYSIS',prompt:'The analyser has finished. The result indicator is NORMAL. Select the matching result.',options:['NORMAL','CONTAMINATED'],answer:'NORMAL',visual:'sample'},
@@ -2149,7 +1470,7 @@ function miniGameHtml(g){
     const timer='<div class="puzzle-timer"><div class="puzzle-timer-label"><span>TIME REMAINING</span><b id="puzzle-clock">'+Math.floor(left/60)+':'+String(left%60).padStart(2,'0')+'</b></div><div class="puzzle-timer-track"><div id="puzzle-time-fill" style="width:'+Math.max(0,left/(g.timeLimit||30)*100)+'%"></div></div><small>Incorrect answer: +15 seconds · Maximum: 2:00</small></div>';
     body=timer+(g.timedOut
       ? '<div class="puzzle-timeout"><b>TIME EXPIRED</b><p>Your attempt has ended. Try the puzzle again.</p><button class="btn ok" data-puzzle-retry>RETRY PUZZLE</button></div>'
-      : '<div class="choice-grid">'+g.options.map(x=>'<button class="task-choice" data-puzzle-choice="'+esc(x)+'"><span class="choice-icon">◈</span><b>'+esc(x)+'</b><span class="choice-arrow">›</span></button>').join('')+'</div>');
+      : '<form class="puzzle-answer-row" data-puzzle-answer><input type="text" name="answer" data-puzzle-entry value="'+esc(g.entry||'')+'" placeholder="Type your answer…" autocomplete="off" autocapitalize="sentences" spellcheck="false"><button class="btn ok" type="submit">SUBMIT</button></form>');
   }else if(g.type==='range'){
     const left=Math.max(0,g.target-g.tolerance),right=Math.min(100,g.target+g.tolerance);
     body='<div class="calibration"><div class="calibration-screen"><div class="calibration-cross">＋</div><div class="calibration-target" style="left:'+left+'%;width:'+(right-left)+'%"></div><div class="calibration-beam" style="left:'+g.value+'%"></div><span class="calibration-readout">'+Math.round(g.value)+'%</span></div><input class="task-range" data-mini-range type="range" min="0" max="100" value="'+g.value+'"><div class="range-ends"><span>LOW</span><span>CALIBRATE</span><span>HIGH</span></div></div>';
@@ -2183,7 +1504,7 @@ function miniAction(el){
       g.timedOut=true;clearInterval(S.taskTimer);renderTaskOverlay();return;
     }
     const norm=v=>String(v??'').trim().toUpperCase().replace(/\s+/g,' ');
-    if(norm(el.dataset.puzzleChoice)===norm(g.answer))g.solved=true;
+    if((g.answers||[g.answer]).some(a=>norm(g.entry)===norm(a)))g.solved=true;
     else{
       const extra=Math.min(15,Math.max(0,120-(g.timeLimit||30)));
       g.wrongCount=(g.wrongCount||0)+1;
@@ -2561,8 +1882,8 @@ async function renderPrint(){
 }
 
 /* ---------------------------- events ------------------------------- */
-document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit],[data-mini-key],[data-wire],[data-puzzle-choice],[data-puzzle-retry]'); if(mini){e.preventDefault();miniAction(mini);} });
-document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
+document.addEventListener('click', e => { const mini=e.target.closest('[data-mini],[data-mini-choice],[data-mini-submit],[data-mini-key],[data-wire],[data-puzzle-retry]'); if(mini){e.preventDefault();miniAction(mini);} });
+document.addEventListener('input', e => { if(e.target.matches('[data-mini-range]') && S.task?.game){const g=S.task.game;g.value=Number(e.target.value);const label=$('#mini-value');if(label)label.textContent=Math.round(g.value)+'%';if(Math.abs(g.value-g.target)<=g.tolerance){g.solved=true;}} if(e.target.matches('[data-mini-entry]') && S.task?.game)S.task.game.entry=e.target.value; if(e.target.matches('[data-puzzle-entry]') && S.task?.game)S.task.game.entry=e.target.value; });
 document.addEventListener('change', e => { if(e.target.matches('[data-mini-range]') && S.task?.game)renderTaskOverlay(); });
 document.addEventListener('click', async e => {
   const el = e.target.closest('[data-act]'); if(!el) return;
@@ -2620,6 +1941,7 @@ document.addEventListener('change', e => {
   if(['role-sheriff','role-medic','role-mayor'].includes(ds.act)){ if(S.session.host && S.g?.meta?.status==='lobby'){const key={'role-sheriff':'roleSheriff','role-medic':'roleMedic','role-mayor':'roleMayor'}[ds.act];DB.set(path('meta',key),!!el.checked);} }
 });
 document.addEventListener('submit', async e => {
+  const puzzleForm=e.target.closest('form[data-puzzle-answer]'); if(puzzleForm){e.preventDefault();const pg=S.task&&S.task.game;if(pg){pg.entry=puzzleForm.elements.answer.value;miniAction({hasAttribute:n=>false,dataset:{}});}return;}
   const f = e.target.closest('form[data-form]'); if(!f) return; e.preventDefault();
   const fd = new FormData(f);
   if(f.dataset.form==='join') await join(fd.get('room'), fd.get('name'), false);
